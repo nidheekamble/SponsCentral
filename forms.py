@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, RadioField, IntegerField, TextAreaField, SelectField, FileField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, Required,
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Required
 
 class SelectForm(FlaskForm):
     username = StringField('UserName',validators=[DataRequired(), Length(min=2, max=20)])
