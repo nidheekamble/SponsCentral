@@ -1,8 +1,36 @@
+
+{% block content %
+<!DOCTYPE html>
 <html>
 <head>
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 </head>
 <body>
-    {% block content %} {%  endblock content %}
+  <div class="header">
+    <h1>Spons.Central</h1>
+    <p>"Connecting you to the right people in a space designed to optimize your relationship-building and deal-making" </p>
+  </div>
+
+  <div class="topnav">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Feedback</a>
+    <a href="#" style="float:right">Contact</a>
+  </div>
+
+  <div class="row">
+    <div class="rightcolumn">
+    <div class="card">
+      <h2>Register / Login</h2>
+     <a href="#" class="button">Sign up</a>
+     <a href="#" class="button">Login</a>
+  </div>
+   
+  <div class="footer">
+     <h2>Footer</h2>
+  </div>
+
 </body>
 </html>
+
+{%  endblock content %}
