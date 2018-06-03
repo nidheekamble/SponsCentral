@@ -99,9 +99,9 @@ div {
 <body>
 
 <h3>Sign up</h3>
-
+<form method = "POST" action="">
 <div>
-  <form action="/action_page.php">
+
     <label for="Username">User Name</label>
     <input type="string" id="Username" name="name" placeholder="Enter your Username">
 </div>
@@ -117,19 +117,20 @@ div {
 <div>
     <label for="User Type">Fest Type</label>
     <label class="container">Sponsered Party
-  <input type="radio" checked="checked" name="radio">
-  <span class="checkmark"></span>
-</label>
-<label class="container">Sponserer
-  <input type="radio" name="radio">
-  <span class="checkmark"></span>
-</label>
-    
+  		<input type="radio" checked="checked" name="radio">
+  		<span class="checkmark"></span>
+	</label>
+	<label class="container">Sponserer
+  		<input type="radio" name="radio">
+  		<span class="checkmark"></span>
+	</label>
 </div>
+
 <div>
-    <input type="submit" value="Submit">
-  </form>
+
+	{{ form.submit }}
 </div>
+</form>
 </body>
 </html>
 

@@ -28,7 +28,7 @@ def register():
 
 @app.route("/register_party", methods=['GET', 'POST'])
 def registerParty():
-    form = RegistrationForm_Party()
+    form = RegistrationFormParty()
     return render_template('regParty.html', form=form)
 
 
