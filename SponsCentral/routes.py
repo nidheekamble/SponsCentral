@@ -19,10 +19,10 @@ def register():
     form= SelectForm()
     if form.validate_on_submit():
         if form.select.data == 'P':
-            return (url_for('register_party'))
+            return redirect(url_for('register_party'))
 
         elif form.select.data == 'S':
-            return (url_for('register_sponsor'))
+            return redirect(url_for('register_sponsor'))
     return render_template('selectForm.html', form=form)
 
 
