@@ -23,6 +23,7 @@ def register():
 
         elif form.select.data == 'S':
             return redirect(url_for('register_sponsor'))
+    else: print('halaaaa')
     return render_template('selectForm.html', form=form)
 
 
