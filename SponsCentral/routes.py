@@ -18,11 +18,12 @@ def about():
 def register():
     form= SelectForm()
     if form.validate_on_submit():
+        flash(f'Account created for {form.username.data}!', 'success')
         if form.select.data == 'P':
-            return redirect(url_for('register_party'))
+            return redirect(url_for('registerParty'))
 
         elif form.select.data == 'S':
-            return redirect(url_for('register_sponsor'))
+            return redirect(url_for('registerSponsor'))
     else: print('halaaaa')
     return render_template('selectForm.html', form=form)
 
