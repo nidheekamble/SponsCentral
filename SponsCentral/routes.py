@@ -18,7 +18,7 @@ def about():
 def register():
     form= SelectForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
+        flash(f'Account created for {form.email.data}!', 'success')#change the email later
         if form.select.data == 'P':
             return redirect(url_for('registerParty'))
 
