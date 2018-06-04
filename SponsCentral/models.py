@@ -3,7 +3,6 @@ from SponsCentral import db
 class PartyUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     party_name = db.Column(db.String(30), unique=True, nullable=False)
-    party_email= db.Column(db.String(120), unique=True, nullable=False)
     party_type = db.Column(db.String(20), unique= False, nullable= False)
     party_kind = db.Column(db.String(20), unique= False, nullable= False)
     party_contactNo1 = db.Column(db.Integer, unique = True , nullable = False)
@@ -20,7 +19,6 @@ class PartyUser(db.Model):
 class SponsorUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     party_name = db.Column(db.String(30), unique=True, nullable=False)
-    party_email= db.Column(db.String(120), unique=True, nullable=False)
     party_type = db.Column(db.String(20), unique= False, nullable= False)
     party_kind = db.Column(db.String(20), unique= False, nullable= False)
     party_contactNo1 = db.Column(db.Integer, unique = True , nullable = False)

@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Radio
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Required, NumberRange
 
 class SelectForm(FlaskForm):
-    username = StringField('UserName',validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Length(max=120) ,Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     select = RadioField('User Type',choices=[('P','sponsered Party'),('S','Sponserer')])
@@ -12,7 +12,6 @@ class SelectForm(FlaskForm):
 
 class RegistrationFormParty(FlaskForm):
     party_name = StringField('Name', validators=[DataRequired(), Length(min=2, max=30)] )
-    party_email = StringField('Email', validators=[DataRequired(), Length(max=120) ,Email()])
     party_choices = ['Technical','Sports','Cultural']#add "others"
     party_type = SelectField('Type', choices=party_choices, validators=[Required()])
     party_kind = SelectField('Accepting', choices=['Cash', 'Kind'], validators=[Required()])
@@ -28,7 +27,6 @@ class RegistrationFormParty(FlaskForm):
 class RegistrationFormSponser(FlaskForm):
     sponsor_name = StringField('Name', validators=[DataRequired(), Length(min=2, max=30)] )
     sponsor_about = TextAreaField('About', validators=[DataRequired()] )
-    sponsor_email = StringField('Email', validators=[DataRequired(), Email()])
     sponsor_choices = ['Finance','Information Technology','Others']#add "others"
     sponsor_type = SelectField('Type Of Sponser', choices=sponsor_choices, validators=[Required()])
     sponsor_kind = SelectField('Sponser With', choices=['Cash', 'Kind'], validators=[Required()])
