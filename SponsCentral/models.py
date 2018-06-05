@@ -3,6 +3,8 @@ from SponsCentral import db
 class PartyUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     party_name = db.Column(db.String(30), unique=True, nullable=False)
+    party_email= db.Column(db.String(120),unique=True,nullable=False)
+    party_password= db.Column(db.String(150),nullable=False)
     party_type = db.Column(db.String(20), unique= False, nullable= False)
     party_kind = db.Column(db.String(20), unique= False, nullable= False)
     party_contactNo1 = db.Column(db.Integer, unique = True , nullable = False)
@@ -15,12 +17,14 @@ class PartyUser(db.Model):
     party_latitude = db.Column(db.Float(precision=12,scale=7), nullable =False)
     party_longitude = db.Column(db.Float(precision= 12,scale =7), nullable = False)
     def __repr__(self):
-        return f"PartyUser('{self.party_name}','{self.party_email}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount}','{self.party_logo}')"
+        return f"PartyUser('{self.party_email}'),'{self.party_name}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount},{self.party_logo}')"
 
 
 class SponsorUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sponsor_name = db.Column(db.String(30), unique=True, nullable=False)
+    sponsor_email= db.Column(db.String(120),unique=True,nullable=False)
+    sponsor_password= db.Column(db.String(100),nullable=False)
     sponsor_type = db.Column(db.String(20), unique= False, nullable= False)
     sponsor_kind = db.Column(db.String(20), unique= False, nullable= False)
     sponsor_contactNo1 = db.Column(db.Integer, unique = True , nullable = False)
