@@ -2,7 +2,7 @@ from SponsCentral import app, db
 from flask import render_template, url_for, flash, redirect
 from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm
 from SponsCentral.models import PartyUser, SponsorUser, User
-from Crypto.Hash import SHA256 #using PyCrypto functions for hashing
+import hashlib
 
 
 @app.route("/")
@@ -23,20 +23,26 @@ def register():
 
         if form.select.data == 'P':
 
-            hash = SHA256.new() #object for PyCrypto SHA2
-            hash.update(form.password.data) #update feeds inputs into the function
-            hashed_password = hash.digest() #another name for hash value
-            user = User( email= form.email.data , password= hashed_password, type= form.select.data )
-            db.session.add(user)
-            db.session.commit()
-            flash(f'Success! Please fill in the remaining details', 'success')
-            return redirect(url_for('registerParty'))
+           pw = (form.password.data)
+           s = 0
+           for char in pw:
+               a = ord(c) #ASCII 
+               s = s+a
+           hashed_password = hashlib.sha512(s+(form.password.data.encode('utf8'))).hexdigest
+           user = User( email= form.email.data , password= hashed_password, type= form.select.data )
+           db.session.add(user)
+           db.session.commit()
+           flash(f'Success! Please fill in the remaining details', 'success')
+           return redirect(url_for('registerParty'))
 
         elif form.select.data == 'S':
-
-            hash = SHA256.new()
-            hash.update(form.password.data)
-            hashed_password = hash.digest()
+            
+            pw = (form.password.data)
+            s = 0
+            for char in pw:
+                a = ord(c) #ASCII 
+                s = s+a
+            hashed_password = hashlib.sha512(s+(form.password.data.encode('utf8'))).hexdigest
             user = user(email=form.email.data, password=hashed_password, type= form.select.data )
             db.session.add(user)
             db.session.commit()
