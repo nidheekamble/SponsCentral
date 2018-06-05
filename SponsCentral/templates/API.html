@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* this div element contains the map. Sets size of the div */
+      #map {
+        height: 100%;
+       }
+	    html, body {
+	    height: 100%;
+	    margin: 0;
+	    padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+// Initialize and add the map
+function initMap() {
+ 
+  var bombay = {lat: 19.0760, lng: 72.8777};
+  // maps opens, centered at this location
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 11, center: bombay});
+  // The marker, positioned at Bombay
+  var marker = new google.maps.Marker({position: uluru, map: map});
+}
+    </script>
+    <!--Loading API from the mentioned URL
+    async attribute allows the browser to render the page while the API loads
+    the 'callback' parameter will execute the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZShSU-ew_wZxGfZcPB8IkyLDq1FuSE0Q&callback=initMap">
+    </script>
+  </body>
+</html>
