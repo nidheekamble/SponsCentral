@@ -1,7 +1,8 @@
-from SponsCentral import app, db, bcrypt
+from SponsCentral import app, db
 from flask import render_template, url_for, flash, redirect
 from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm
 from SponsCentral.models import PartyUser, SponsorUser, User
+from Crypto.Cipher import SHA256 #using PyCrypto functions for hashing
 
 
 @app.route("/")
@@ -22,7 +23,9 @@ def register():
 
         if form.select.data == 'P':
 
-            hashed_password= bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            hash = SHA256.new() #object for PyCrypto SHA2
+            hash.update(form.password.data) #update feeds inputs into the function
+            hashed_password = hash.digest() #another name for hash value
             user = User( email= form.email.data , password= hashed_password, type= form.select.data )
             db.session.add(user)
             db.session.commit()
@@ -31,7 +34,9 @@ def register():
 
         elif form.select.data == 'S':
 
-            hashed_password= bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            hash = SHA256.new()
+            hash.update(form.password.data)
+            hashed_password = hash.digest()
             user = user(email=form.email.data, password=hashed_password, type= form.select.data )
             db.session.add(user)
             db.session.commit()
