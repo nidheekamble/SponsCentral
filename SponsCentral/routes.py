@@ -43,7 +43,7 @@ def register():
                 a = ord(char) #ASCII 
                 s = s+a
             hashed_password = hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest
-            user = user(email=form.email.data, password=hashed_password, type= form.select.data )
+            user = User(email=form.email.data, password=hashed_password, type= form.select.data )
             db.session.add(user)
             db.session.commit()
             flash(f'Success! Please fill in the remaining details', 'success')
