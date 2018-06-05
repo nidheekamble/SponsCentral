@@ -28,7 +28,7 @@ def register():
            for char in pw:
                a = ord(char) #ASCII 
                s = s+a #sum of ASCIIs acts as the salt
-           hashed_password = hashlib.sha512((str(s))+(form.password.data.encode)).hexdigest
+           hashed_password = hashlib.sha512((str(s))+(form.password.data)).hexdigest
            user = User( email= form.email.data , password= hashed_password, type= form.select.data )
            db.session.add(user)
            db.session.commit()
@@ -42,7 +42,7 @@ def register():
             for char in pw:
                 a = ord(char) #ASCII 
                 s = s+a
-            hashed_password = hashlib.sha512((str(s))+(form.password.data.encode)).hexdigest
+            hashed_password = hashlib.sha512((str(s))+(form.password.data)).hexdigest
             user = user(email=form.email.data, password=hashed_password, type= form.select.data )
             db.session.add(user)
             db.session.commit()
