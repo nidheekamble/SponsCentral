@@ -26,7 +26,7 @@ def register():
            pw = (form.password.data) 
            s = 0
            for char in pw:
-               a = ord(c) #ASCII 
+               a = ord(char) #ASCII 
                s = s+a #sum of ASCIIs acts as the salt
            hashed_password = hashlib.sha512(s+(form.password.data.encode('utf8'))).hexdigest
            user = User( email= form.email.data , password= hashed_password, type= form.select.data )
