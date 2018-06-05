@@ -36,7 +36,7 @@ def registerParty():
 
 @app.route("/register_sponsor", methods=['GET', 'POST'])
 def registerSponsor():
-    form = RegistrationFormSponsor()
+    form = RegistrationFormSponser()
     return render_template('regSponsor.html', form=form)
 
 

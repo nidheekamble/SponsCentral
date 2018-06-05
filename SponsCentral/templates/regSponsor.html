@@ -4,7 +4,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Register as Fest</legend>
+                <legend class="border-bottom mb-4">Register as a Sponsorer</legend>
                 <div class="form-group">
                     {{ form.sponsor_name.label(class="form-control-label") }}
                     {% if form.sponsor_name.errors %}
@@ -19,34 +19,6 @@
                     {% endif %}
                 </div>
 
-                <div class="form-group">
-                    {{ form.sponsor_about.label(class="form-control-label") }}
-                    {% if form.sponsor_about.errors %}
-                        {{ form.sponsor_about(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.sponsor_about.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.sponsor_about(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
-
-                <div class="form-group">
-                    {{ form.sponsor_choices.label(class="form-control-label") }}
-                    {% if form.sponsor_choices.errors %}
-                        {{ form.sponsor_choices(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.sponsor_choices.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.sponsor_choices(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
 
                 <div class="form-group">
                     {{ form.sponsor_type.label(class="form-control-label") }}
@@ -118,7 +90,20 @@
                     {% endif %}
                 </div>
 
-                
+                <div class="form-group">
+                    {{ form.sponsor_about.label(class="form-control-label") }}
+                    {% if form.sponsor_about.errors %}
+                        {{ form.sponsor_about(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.sponsor_about.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.sponsor_about(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
                 <div class="form-group">
                     {{ form.sponsor_fromAmount.label(class="form-control-label") }}
                     {% if form.sponsor_fromAmount.errors %}
@@ -147,20 +132,6 @@
                     {% endif %}
                 </div>
 
-                <div class="form-group">
-                    {{ form.sponsor_submit.label(class="form-control-label") }}
-                    {% if form.sponsor_submit.errors %}
-                        {{ form.sponsor_submit(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.sponsor_submit.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.sponsor_submit(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
                  <div class="form-group">
                     {{ form.sponsor_logo.label(class="form-control-label") }}
                     {% if form.sponsor_logo.errors %}
@@ -171,12 +142,12 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.party_logo(class="form-control form-control-lg") }}
+                        {{ form.sponsor_logo(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
             </fieldset>
             <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+                {{ form.sponsor_submit(class="btn btn-outline-info") }}
             </div>
         </form>
     </div>
