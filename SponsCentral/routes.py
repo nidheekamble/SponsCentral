@@ -2,7 +2,7 @@ from SponsCentral import app, db
 from flask import render_template, url_for, flash, redirect
 from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm
 from SponsCentral.models import PartyUser, SponsorUser, User
-import hashlib
+import hashlib #for SHA512
 
 
 @app.route("/")
@@ -23,11 +23,11 @@ def register():
 
         if form.select.data == 'P':
 
-           pw = (form.password.data)
+           pw = (form.password.data) 
            s = 0
            for char in pw:
                a = ord(c) #ASCII 
-               s = s+a
+               s = s+a #sum of ASCIIs acts as the salt
            hashed_password = hashlib.sha512(s+(form.password.data.encode('utf8'))).hexdigest
            user = User( email= form.email.data , password= hashed_password, type= form.select.data )
            db.session.add(user)
