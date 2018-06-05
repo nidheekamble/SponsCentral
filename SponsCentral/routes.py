@@ -2,7 +2,7 @@ from SponsCentral import app, db
 from flask import render_template, url_for, flash, redirect
 from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm
 from SponsCentral.models import PartyUser, SponsorUser, User
-from Crypto.Cipher import SHA256 #using PyCrypto functions for hashing
+from Crypto.Hash import SHA256 #using PyCrypto functions for hashing
 
 
 @app.route("/")
