@@ -27,8 +27,8 @@ class PartyUser(db.Model):
     party_fromAmount = db.Column(db.Integer, unique = False , nullable= False )
     party_toAmount = db.Column(db.Integer, unique = False , nullable= False )
     party_logo = db.Column(db.String(20), unique = False, default = 'default.jpeg' , nullable= True )# check on the nullable field
-    party_latitude = db.Column(db.Float(precision = 12  ,scale=7) , nullable= True)
-    party_longitude = db.Column(db.Float(precision = 12 , scale =7) , nullable= True)
+    #party_latitude = db.Column(db.Float(precision = 12  ,scale=7) , nullable= True)
+    #party_longitude = db.Column(db.Float(precision = 12 , scale =7) , nullable= True)
     def __repr__(self):
         return f"PartyUser('{self.party_name}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount},{self.party_logo}')"
 
@@ -47,7 +47,15 @@ class SponsorUser(db.Model):
     sponsor_fromAmount =db.Column(db.Integer, unique = False , nullable= False )
     sponsor_toAmount = db.Column(db.Integer, unique = False , nullable= False )
     sponsor_logo = db.Column(db.String(20), unique= False, default = 'default.jpeg' , nullable= True )
-    sponsor_latitude = db.Column(db.Float(precision=12,scale=7) , nullable= True)
-    sponsor_longitude = db.Column(db.Float(precision= 12,scale =7) , nullable= True)
+    #sponsor_latitude = db.Column(db.Float(precision=12,scale=7) , nullable= True)
+    #sponsor_longitude = db.Column(db.Float(precision= 12,scale =7) , nullable= True)
     def __repr__(self):
         return f"SponsorUser('{self.sponsor_name}','{self.sponsor_type}','{self.sponsor_kind}','{self.sponsor_contactNo1}','{self.sponsor_contactNo2}','{self.sponsor_address}','{self.sponsor_about}','{self.sponsor_fromAmount}','{self.sponsor_toAmount}','{self.sponsor_logo}')"
+
+class Region(db.Model):
+    region_id=db.Column(db.Integer,primary_key=True)
+    region_name=db.Column(db.String(50),nullable=False)
+    state=db.Column(db.String(40),nullable=False)
+    city=db.Column(db.String(40),nullable=False)
+    latitude = db.Column(db.Float(precision = 12  ,scale=7) , nullable= False)
+    longitude = db.Column(db.Float(precision = 12 , scale =7) , nullable= False)

@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, RadioField, IntegerField, TextAreaField, SelectField, FileField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Required, NumberRange, ValidationError
-from SponsCentral.models import User, PartyUser, SponsorUser
+from SponsCentral.models import User, PartyUser, SponsorUser,Region
 
 class SelectForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(max=120) ,Email()])
