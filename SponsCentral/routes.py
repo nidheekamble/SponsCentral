@@ -23,12 +23,12 @@ def register():
 
         if form.select.data == 'P':
 
-           pw = (form.password.data) 
+           pw = (form.password.data)
            s = 0
            for char in pw:
-               a = ord(char) #ASCII 
+               a = ord(char) #ASCII
                s = s+a #sum of ASCIIs acts as the salt
-           hashed_password = hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest
+           hashed_password = (str)(hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest)
            user = User( email= form.email.data , password= hashed_password, type= form.select.data )
            db.session.add(user)
            db.session.commit()
@@ -36,11 +36,11 @@ def register():
            return redirect(url_for('registerParty'))
 
         elif form.select.data == 'S':
-            
+
             pw = (form.password.data)
             s = 0
             for char in pw:
-                a = ord(char) #ASCII 
+                a = ord(char) #ASCII
                 s = s+a
             hashed_password = hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest
             user = User(email=form.email.data, password=hashed_password, type= form.select.data )
