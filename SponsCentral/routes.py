@@ -29,13 +29,13 @@ def register():
         if form.select.data == 'P':
             form = RegistrationFormParty()
             if form.validate_on_submit():
-                pw = (form.password.data)
+                '''pw = (form.password.data)
                 s = 0
                 for char in pw:
                     a = ord(char) #ASCII
                     s = s+a #sum of ASCIIs acts as the salt
-                hashed_password = (str)(hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest)
-                #hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+                hashed_password = (str)(hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest)'''
+                hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
                 user = User( email= form.email.data , password= hashed_password, type= form.select.data )
                 db.session.add(user)
                 db.session.commit()
@@ -45,13 +45,13 @@ def register():
         elif form.select.data == 'S':
             form = RegistrationFormParty()
             if form.validate_on_submit():
-                pw = (form.password.data)
+                '''pw = (form.password.data)
                 s = 0
                 for char in pw:
                     a = ord(char) #ASCII
                     s = s+a #sum of ASCIIs acts as the salt
-                hashed_password = (str)(hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest)
-                #hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+                hashed_password = (str)(hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest)'''
+                hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
                 user = User(email=form.email.data, password=hashed_password, type= form.select.data )
                 db.session.add(user)
                 db.session.commit()
@@ -95,13 +95,13 @@ def login():
 
         #modified to use SHA512
         
-        s = 0
+        '''s = 0
         for char in (form.password.data):
             a = ord(char)
             s = s+a
-        now_hash = (str)(hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest)
-        #if user and bcrypt.check_password_hash(user.password, form.password.data):
-        if user and (user.password==now_hash):
+        now_hash = (str)(hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest)'''
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        #if user and (user.password==now_hash):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
