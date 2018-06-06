@@ -8,7 +8,7 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email= db.Column(db.String(120), unique=True)
-    password= db.Column(db.Unicode)
+    password= db.Column(db.String(150),nullable=False)
     type = db.Column(db.String(1) )
     def __repr__(self):
         return f"User('{self.email}','{self.type}')"
