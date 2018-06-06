@@ -93,8 +93,15 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
-        #nidhee
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        #modified to use SHA512
+        
+        s = 0
+        for char in (form.password.data):
+            a = ord(char)
+            s = s+a
+        now_hash = (str)(hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest)
+        #if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if user and (user.password==now_hash):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
