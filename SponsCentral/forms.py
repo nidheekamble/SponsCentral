@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, RadioField, IntegerField, TextAreaField, SelectField, FileField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, Required, NumberRange
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Required, NumberRange, ValidationError
+from SponsCentral.models import User, PartyUser, SponsorUser
 
 class SelectForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(max=120) ,Email()])
@@ -8,6 +9,12 @@ class SelectForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     select = RadioField('User Type',choices=[('P','sponsered Party'),('S','Sponserer')])
     submit = SubmitField('Proceed')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('Tha email is taken. Please choose a different one.')
+
 
 class RegistrationFormParty(FlaskForm):
     party_name = StringField('Name', validators=[DataRequired(), Length(min=2, max=30)] )
@@ -23,6 +30,27 @@ class RegistrationFormParty(FlaskForm):
     party_submit = SubmitField('Sign Up')
     party_logo = FileField('Logo')#put validators
 
+    def validate_party_name(self, party_name):
+        partyUser = PartyUser.query.filter_by(party_name=party_name.data).first()
+        if partyUser:
+            raise ValidationError('That Name is taken. Please choose a different one.')
+
+    def validate_party_contactNo1(self, party_contactNo1):
+        partyUser = PartyUser.query.filter_by(party_contactNo1=party_contactNo1.data).first()
+        if partyUser:
+            raise ValidationError('Your primary Contact No. is already registered. Please choose a different one.')
+
+    def validate_party_contactNo2(self, party_contactNo2):
+        partyUser = PartyUser.query.filter_by(party_contactNo2=party_contactNo2.data).first()
+        if partyUser:
+            raise ValidationError('Your secondary Contact No. is registered. Please choose a different one.')
+
+    def validate_party_address(self, party_address):
+        partyUser = PartyUser.query.filter_by(party_address=party_address.data).first()
+        if partyUser:
+            raise ValidationError('The Address is already registered. Please choose a different one.')
+
+
 class RegistrationFormSponser(FlaskForm):
     sponsor_name = StringField('Name', validators=[DataRequired(), Length(min=2, max=30)] )
     sponsor_choices = [('F','Finance'),('IT','Information Technology'),('O','Others')]#add "others"
@@ -36,6 +64,28 @@ class RegistrationFormSponser(FlaskForm):
     sponsor_toAmount = IntegerField('To Amount', validators=[Required()])
     sponsor_submit = SubmitField('Sign Up')
     sponsor_logo = FileField('Logo')#put validators
+
+
+    def validate_sponsor_name(self, sponsor_name):
+        partyUser = SponsorUser.query.filter_by(party_=sponsor_name.data).first()
+        if partyUser:
+            raise ValidationError('That Name is taken. Please choose a different one.')
+
+    def validate_sponsor_contactNo1(self, sponsor_contactNo1):
+        partyUser = SponsorUser.query.filter_by(sponsor_contactNo1=sponsor_contactNo1.data).first()
+        if partyUser:
+            raise ValidationError('Your primary Contact No. is already registered. Please choose a different one.')
+
+    def validate_sponsor_contactNo2(self, sponsor_contactNo2):
+        partyUser = SponsorUser.query.filter_by(sponsor_contactNo2=sponsor_contactNo2.data).first()
+        if partyUser:
+            raise ValidationError('Your secondary Contact No. is registered. Please choose a different one.')
+
+    def validate_sponsor_address(self, sponsor_address):
+        partyUser = SponsorUser.query.filter_by(sponsor_address=sponsor_address.data).first()
+        if partyUser:
+            raise ValidationError('The Address is already registered. Please choose a different one.')
+
 
 
 class LoginForm(FlaskForm):
