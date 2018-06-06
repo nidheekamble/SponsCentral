@@ -67,23 +67,23 @@ class RegistrationFormSponser(FlaskForm):
 
 
     def validate_sponsor_name(self, sponsor_name):
-        partyUser = SponsorUser.query.filter_by(party_=sponsor_name.data).first()
-        if partyUser:
+        sponsorUser = SponsorUser.query.filter_by(sponsor_name=sponsor_name.data).first()
+        if sponsorUser:
             raise ValidationError('That Name is taken. Please choose a different one.')
 
     def validate_sponsor_contactNo1(self, sponsor_contactNo1):
-        partyUser = SponsorUser.query.filter_by(sponsor_contactNo1=sponsor_contactNo1.data).first()
-        if partyUser:
+        sponsorUser = SponsorUser.query.filter_by(sponsor_contactNo1=sponsor_contactNo1.data).first()
+        if sponsorUser:
             raise ValidationError('Your primary Contact No. is already registered. Please choose a different one.')
 
     def validate_sponsor_contactNo2(self, sponsor_contactNo2):
-        partyUser = SponsorUser.query.filter_by(sponsor_contactNo2=sponsor_contactNo2.data).first()
-        if partyUser:
+        sponsorUser = SponsorUser.query.filter_by(sponsor_contactNo2=sponsor_contactNo2.data).first()
+        if sponsorUser:
             raise ValidationError('Your secondary Contact No. is registered. Please choose a different one.')
 
     def validate_sponsor_address(self, sponsor_address):
-        partyUser = SponsorUser.query.filter_by(sponsor_address=sponsor_address.data).first()
-        if partyUser:
+        sponsorUser = SponsorUser.query.filter_by(sponsor_address=sponsor_address.data).first()
+        if sponsorUser:
             raise ValidationError('The Address is already registered. Please choose a different one.')
 
 

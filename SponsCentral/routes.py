@@ -77,8 +77,8 @@ def registerParty():
 def registerSponsor():
     form = RegistrationFormSponser()
     if form.validate_on_submit():
-        sponsoruser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.party_contactNo1.data,party_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data)
-        db.session.add(sponsoruser)
+        sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data)
+        db.session.add(sponsorUser)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
@@ -94,7 +94,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
 
         #modified to use SHA512
-        
+
         s = 0
         for char in (form.password.data):
             a = ord(char)
