@@ -34,6 +34,9 @@ def register():
                     a = ord(char) #ASCII
                     s = s+a #sum of ASCIIs acts as the salt
                 hashed_password = (str)(hashlib.sha512(((str(s)).encode('utf-8'))+((form.password.data).encode('utf-8'))).hexdigest())
+                
+                #SHA512 is has been confirmed to have been working properly for registration and login both.
+                
                 #hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
                 user = User( email= form.email.data , password= hashed_password, type= form.select.data )
                 db.session.add(user)
