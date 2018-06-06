@@ -32,7 +32,7 @@ def register():
                 pw = (form.password.data)
                 s = 0
                 for char in pw:
-                    a = ord(char) #ASCII
+                    a = ord(char) #ASCII value of teh character in the password
                     s = s+a #sum of ASCIIs acts as the salt
                 hashed_password = (str)(hashlib.sha512(((str(s)).encode('utf8'))+((form.password.data).encode('utf8'))).hexdigest)
                 #hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
