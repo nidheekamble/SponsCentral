@@ -10,12 +10,18 @@ class User(db.Model, UserMixin):
     email= db.Column(db.String(120), unique=True)
     password= db.Column(db.String(150), nullable=False)
     type= db.Column(db.String(1), nullable=False)
+    #p_email=db.relationship('PartyUser', backref='party_email', lazy=True)
+    #s_email= db.relationship('SponsorUser', backref='sponsor_email', lazy=True)
+
+
     def __repr__(self):
         return f"User('{self.email}','{self.type}')"
 
 class PartyUser(db.Model):
-    id = db.Column(db.Integer, primary_key=True )
+    id = db.Column(db.Integer, primary_key=True,  )
     party_name = db.Column(db.String(30), unique=True , nullable= False)
+    #party_email=  db.Column(db.String(120),unique=True, nullable=False)
+    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     party_type = db.Column(db.String(20), unique= False , nullable= False)
     party_kind = db.Column(db.String(20), unique= False , nullable= False)
     party_contactNo1 = db.Column(db.Integer, unique = True , nullable= False )
@@ -34,6 +40,8 @@ class PartyUser(db.Model):
 class SponsorUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sponsor_name =  db.Column(db.String(30), unique=True , nullable= False)
+    #sponsor_email=  db.Column(db.String(120), unique=True,nullable=False)
+    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     sponsor_type = db.Column(db.String(20), unique= False , nullable= False)
     sponsor_kind = db.Column(db.String(20), unique= False , nullable= False)
     sponsor_contactNo1 = db.Column(db.Integer, unique = True , nullable= False )

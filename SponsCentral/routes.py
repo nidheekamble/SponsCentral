@@ -3,7 +3,7 @@ import secrets
 from SponsCentral import app, db, bcrypt
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
-from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm
+from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountForm
 from SponsCentral.models import PartyUser, SponsorUser, User
 import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
@@ -37,7 +37,7 @@ def register():
                     a = ord(char) #ASCII
                     s = s+a #sum of ASCIIs acts as the salt
                 hashed_password = (str)((hashlib.sha512((str(s).encode('utf-8'))+((form.password.data).encode('utf-8')))).hexdigest())
-              
+
                 #hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
                 user = User( email= form.email.data , password= hashed_password, type= form.type.data )
                 db.session.add(user)
@@ -145,7 +145,38 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/account")
+@app.route("/account")    #THIS PART NEEDS WORK.IT IS UNDER DEVELOPMENT.
 @login_required
 def account():
-    return render_template('account.html', title='Account')
+    if current_user.type == 'P':
+        form = UpdateAccountForm()
+
+        if form.validate_on_submit():
+            if form.picture.data:
+                picture_file = save_picture(form.picture.data)
+                current_user.party_logo = picture_file
+            current_user.email = form.email.data
+
+            db.session.commit()
+            flash('Your account has been updated!', 'success')
+            return redirect(url_for('account'))
+        elif request.method == 'GET':
+            form.email.data = current_user.email
+        #party_logo = url_for('static', filename='profile_pics/' + .party_logo) I couldn't figure out the key thing. It will be required here.
+        return render_template('accountParty.html', title='Account',image_file=party_logo, form=form)
+    elif current_user.type == 'S':
+        form = UpdateAccountForm()
+        if form.validate_on_submit():
+            if form.picture.data:
+                picture_file = save_picture(form.picture.data)
+
+                current_user.sponsor_logo = picture_file
+            current_user.email = form.email.data
+            sponsorUser =current_user.email
+            db.session.commit()
+            flash('Your account has been updated!', 'success')
+            return redirect(url_for('account'))
+        elif request.method == 'GET':
+            form.email.data = current_user.email
+        #sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
+        return render_template('accountSponsor.html', title='Account',image_file=sponsor_logo, form=form)
