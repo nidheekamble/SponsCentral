@@ -122,7 +122,7 @@ def login():
         for char in (form.password.data):
             a = ord(char)
             s = s+a
-        now_hash = (str)((hashlib.sha512(((str(s)).encode('utf-8'))+((form.password.data).encode('utf-8'))).hexdigest())
+        now_hash = (str)((hashlib.sha512(((str(s)).encode('utf-8'))+((form.password.data).encode('utf-8'))).hexdigest()
         #if user and bcrypt.check_password_hash(user.password, form.password.data):
         if (user and  (user.password==now_hash)):
 
