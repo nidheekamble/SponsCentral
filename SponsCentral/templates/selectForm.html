@@ -48,15 +48,15 @@
 
 				<div>
 					>Select Account User Type
-						{% if form.select.errors %}
-	                        {{ form.select(class="form-control form-control-lg is-invalid") }}
+						{% if form.type.errors %}
+	                        {{ form.type(class="form-control form-control-lg is-invalid") }}
 	                        <div class="invalid-feedback">
-	                            {% for error in form.select.errors %}
+	                            {% for error in form.type.errors %}
 	                                <span>{{ error }}</span>
 	                            {% endfor %}
 	                        </div>
 	                    {% else %}
-	                        {{ form.select(class="form-control form-control-lg") }}
+	                        {{ form.type(class="form-control form-control-lg") }}
 	                    {% endif %}
 				</div>
 
