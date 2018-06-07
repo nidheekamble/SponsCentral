@@ -124,7 +124,7 @@ def login():
             s = s+a
         now_hash = (str)((hashlib.sha512((str(s).encode('utf-8'))+((form.password.data).encode('utf-8')))).hexdigest())
         #if user and bcrypt.check_password_hash(user.password, form.password.data):
-        if (user && (user.password==now_hash)):
+        if (user and (user.password==now_hash)):
 
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
