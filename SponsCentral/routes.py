@@ -29,7 +29,7 @@ def register():
         if current_user.is_authenticated:
             return redirect(url_for('home'))
 
-        if form.select.data == 'P':
+        if form.type.data == 'P':
             if form.validate_on_submit():
                 #pw = (form.password.data)
                 #s = 0
@@ -41,22 +41,22 @@ def register():
                 #SHA512 is has been confirmed to have been working properly for registration and login both.
 
                 hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-                user = User( email= form.email.data , password= hashed_password, type= form.select.data )
+                user = User( email= form.email.data , password= hashed_password, type= form.type.data )
                 db.session.add(user)
                 db.session.commit()
                 flash(f'Success! Please fill in the remaining details', 'success')
             return redirect(url_for('registerParty'))
 
-        elif form.select.data == 'S':
+        elif form.type.data == 'S':
             if form.validate_on_submit():
                 #pw = (form.password.data)
                 #s = 0
                 #for char in pw:
                 #   a = ord(char) #ASCII
                 #   s = s+a #sum of ASCIIs acts as the salt
-                hashed_password = (str)(hashlib.sha512(((str(s)).encode('utf-8'))+((form.password.data).encode('utf-8'))).hexdigest())
+                #hashed_password = (str)(hashlib.sha512(((str(s)).encode('utf-8'))+((form.password.data).encode('utf-8'))).hexdigest())
                 hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-                user = User(email=form.email.data, password=hashed_password, type= form.select.data )
+                user = User(email=form.email.data, password=hashed_password, type= form.type.data )
                 db.session.add(user)
                 db.session.commit()
                 flash(f'Success! Please fill in the remaining details', 'success')

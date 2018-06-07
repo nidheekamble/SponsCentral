@@ -19,11 +19,11 @@ def nearbyparty():
 	listp = PartyUser.query.all()
 	nearp = []
 	for party in listp:
-		if sqrt((party.party_latitude - lat ** 2) + (party.party_longitude - lng) ** 2) < extent: 
+		if sqrt((party.party_latitude - lat ** 2) + (party.party_longitude - lng) ** 2) < extent:
 	        listp.append(party.__dict__)
 
     return flask.jsonify(listp) #returns the filtered list
-     
+
 
 
 @app.route('/nearbysponsor', methods = 'POST') #parties looking for sponsors
@@ -39,4 +39,3 @@ def nearbysponsor():
 	        lists.append(sponsor.__dict__)
 
     return flask.jsonify(lists)
-     
