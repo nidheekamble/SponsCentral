@@ -24,7 +24,7 @@ def about():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    form= SelectForm()
+    form= SelectForm(request.form)
     if form.validate_on_submit():
         if current_user.is_authenticated:
             return redirect(url_for('home'))
@@ -112,7 +112,7 @@ def registerSponsor():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    form = LoginForm()
+    form = LoginForm(request.form)
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
