@@ -5,7 +5,7 @@ from googlemaps import GoogleMaps
 app = Flask(__name__)
 app.secret_key = '42755hfn'
 
-gmaps = GoogleMaps("AIzaSyCZShSU-ew_wZxGfZcPB8IkyLDq1FuSE0Q") #API key
+gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key
 
 @app.route('/nearbyparty', methods = 'POST') #sponsor looking for parties
 def nearbyparty():
