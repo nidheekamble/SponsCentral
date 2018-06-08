@@ -81,9 +81,11 @@ def registerParty():
     form = RegistrationFormParty()
     if form.validate_on_submit():
         partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data)
+        partyUser.userLink=current_user.id
         if form.party_logo.data:
             picture_file = save_picture(form.party_logo.data)
             partyUser.party_logo = picture_file
+
         db.session.add(partyUser)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
@@ -97,6 +99,7 @@ def registerSponsor():
     form = RegistrationFormSponser()
     if form.validate_on_submit():
         sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data)
+        sponsorUser.userLink=current_user.id
         if form.sponsor_logo.data:
             picture_file = save_picture(form.sponsor_logo.data)
             sponsorUser.sponsor_logo = picture_file
@@ -145,44 +148,35 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/account", methods= ['POST', 'GET'])    #THIS PART NEEDS WORK.IT IS UNDER DEVELOPMENT.
+@app.route("/account", methods= ['POST', 'GET'])
 @login_required
 def account():
     if current_user.type == 'P':
-        userLink = PartyUser()
+
         form = UpdateAccountForm()
-        #userLink=PartyUser()
-        #current_user.partyUser_key = PartyUser( user_id = user.id, id= userLink.id, party_logo = userLink.party_logo)
+        party_user = PartyUser.query.filter_by(userLink=current_user.id).first()
         if form.validate_on_submit():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
-                #partyUser = PartyUser()
-                #partyUser = PartyUser.query.get(current_user.partyUser_key.partyUser_id)
-                current_user.partyUser_key.party_logo = picture_file
-                userLink.party_logo = picture_file
+                party_user.party_logo = picture_file
             current_user.email = form.email.data
             db.session.commit()
             flash('Your account has been updated!', 'success')
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
-        #party_logo = url_for('static', filename='profile_pics/' + current_user.partyUser_key.party_logo)
-        return render_template('accountParty.html', title='Account',image_file=userLink.party_logo, form=form)
+        return render_template('accountParty.html', title='Account',image_file=party_user.party_logo, form=form)
     elif current_user.type == 'S':
         form = UpdateAccountForm()
-        userLink=SponsorUser()
-        current_user.sponsorUser_key.user = SponsorUser( user_id = user.id, sponsorUser_id= userLink.id, sponsor_logo=sponsorUser.sponsor_logo)
+        sponsor_user=SponsorUser.query.filter_by(userLink=current_user.id).first()
         if form.validate_on_submit():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
-                sponsorUser= SponsorUser.query.get(current_user.sponsorUser_key.sponsorUser_id)
-                current_user.sponsorUser_key.user.sponsor_logo = picture_file
+                sponsor_user.sponsor_logo = picture_file
             current_user.email = form.email.data
-            #sponsorUser =current_user.email
             db.session.commit()
             flash('Your account has been updated!', 'success')
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
-        sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
-        return render_template('accountSponsor.html', title='Account',image_file=current_user.sponsorUser_key.user.sponsor_logo, form=form)
+        return render_template('accountSponsor.html', title='Account',image_file=sponsor_user.sponsor_logo, form=form)

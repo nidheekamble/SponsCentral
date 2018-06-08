@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     password= db.Column(db.String(150), nullable=False)
     type= db.Column(db.String(1), nullable=False)
     partyUser_key= db.relationship("PartyUser", uselist=False, backref="userP")
-    sponsorUser_id=db.relationship("SponsorUser", uselist=False, backref="userS")
+    sponsorUser_key=db.relationship("SponsorUser", uselist=False, backref="userS")
 
 
     def __repr__(self):
@@ -34,6 +34,7 @@ class PartyUser(db.Model):
     party_latitude = db.Column(db.Float(precision = 12  ,scale=7) , nullable= True)
     party_longitude = db.Column(db.Float(precision = 12 , scale =7) , nullable= True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
+    userLink = db.Column(db.Integer, unique = True , nullable= False )
     def __repr__(self):
         return f"PartyUser('{self.party_name}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount},{self.party_logo}')"
 
