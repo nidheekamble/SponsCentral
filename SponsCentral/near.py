@@ -20,9 +20,9 @@ def nearbyparty():
 	nearbyParties = []
 	for party in list_Parties:
 		if sqrt((party.party_latitude - lat ** 2) + (party.party_longitude - lng) ** 2) < extent:
-	        nearby_Parties.append(party.__dict__)
+	        nearbyParties.append(party.__dict__)
 
-    return flask.jsonify(list_Parties) #returns the filtered list
+    return flask.jsonify(nearbyParties) #returns the filtered list
 
 
 
@@ -33,9 +33,9 @@ def nearbysponsor():
 	lat, lng = gmaps.address_to_latlng(location)
 
 	list_Sponsor = SponsorUser.query.all()
-	nearby_Sponsor = []
+	nearbySponsor = []
 	for sponsor in list_Sponsor:
 		if sqrt((sponsor.sponsor_latitude - lat ** 2) + (sponsor.sponsor_longitude - lng) ** 2) < extent:
-	        nearby_Sponsor.append(sponsor.__dict__)
+	        nearbySponsor.append(sponsor.__dict__)
 
-    return flask.jsonify(list_Sponsor)
+    return flask.jsonify(nearbySponsor)
