@@ -145,38 +145,44 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/account")    #THIS PART NEEDS WORK.IT IS UNDER DEVELOPMENT.
+@app.route("/account", methods= ['POST', 'GET'])    #THIS PART NEEDS WORK.IT IS UNDER DEVELOPMENT.
 @login_required
 def account():
     if current_user.type == 'P':
+        userLink = PartyUser()
         form = UpdateAccountForm()
-
+        #userLink=PartyUser()
+        #current_user.partyUser_key = PartyUser( user_id = user.id, id= userLink.id, party_logo = userLink.party_logo)
         if form.validate_on_submit():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
-                current_user.party_logo = picture_file
+                #partyUser = PartyUser()
+                #partyUser = PartyUser.query.get(current_user.partyUser_key.partyUser_id)
+                current_user.partyUser_key.party_logo = picture_file
+                userLink.party_logo = picture_file
             current_user.email = form.email.data
-
             db.session.commit()
             flash('Your account has been updated!', 'success')
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
-        #party_logo = url_for('static', filename='profile_pics/' + .party_logo) I couldn't figure out the key thing. It will be required here.
-        return render_template('accountParty.html', title='Account',image_file=party_logo, form=form)
+        #party_logo = url_for('static', filename='profile_pics/' + current_user.partyUser_key.party_logo)
+        return render_template('accountParty.html', title='Account',image_file=userLink.party_logo, form=form)
     elif current_user.type == 'S':
         form = UpdateAccountForm()
+        userLink=SponsorUser()
+        current_user.sponsorUser_key.user = SponsorUser( user_id = user.id, sponsorUser_id= userLink.id, sponsor_logo=sponsorUser.sponsor_logo)
         if form.validate_on_submit():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
-
-                current_user.sponsor_logo = picture_file
+                sponsorUser= SponsorUser.query.get(current_user.sponsorUser_key.sponsorUser_id)
+                current_user.sponsorUser_key.user.sponsor_logo = picture_file
             current_user.email = form.email.data
-            sponsorUser =current_user.email
+            #sponsorUser =current_user.email
             db.session.commit()
             flash('Your account has been updated!', 'success')
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
-        #sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
-        return render_template('accountSponsor.html', title='Account',image_file=sponsor_logo, form=form)
+        sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
+        return render_template('accountSponsor.html', title='Account',image_file=current_user.sponsorUser_key.user.sponsor_logo, form=form)
