@@ -11,14 +11,13 @@ class User(db.Model, UserMixin):
     email= db.Column(db.String(120), unique=True)
     password= db.Column(db.String(150), nullable=False)
     type= db.Column(db.String(1), nullable=False)
-    partyUser_key= db.relationship("PartyUser", uselist=False, backref="userP")
-    sponsorUser_key=db.relationship("SponsorUser", uselist=False, backref="userS")
-
+    partyUser= db.relationship("PartyUser", uselist=False, back_populates="user")
+    sponsorUser=db.relationship("SponsorUser", uselist=False, back_populates="user")
 
     def __repr__(self):
-        return f"User('{self.email}','{self.type}')"
+        return f"User('{self.email}','{self.type}','{self.userLink}')"
 
-class PartyUser(db.Model):
+class PartyUser(db.Model, UserMixin):
     __tablename__ = 'partyUser'
     id = db.Column(db.Integer, primary_key=True )
     party_name = db.Column(db.String(30), unique=True , nullable= False)
@@ -30,16 +29,16 @@ class PartyUser(db.Model):
     party_about = db.Column(db.String(1500), unique= False , nullable= False)
     party_fromAmount = db.Column(db.Integer, unique = False , nullable= False )
     party_toAmount = db.Column(db.Integer, unique = False , nullable= False )
-    party_logo = db.Column(db.String(20), unique = False, default = 'default.jpeg' , nullable= True )# check on the nullable field
+    party_logo = db.Column(db.String(20), unique = False, default = 'default.jpg' , nullable= True )# check on the nullable field
     party_latitude = db.Column(db.Float(precision = 12  ,scale=7) , nullable= True)
     party_longitude = db.Column(db.Float(precision = 12 , scale =7) , nullable= True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
-    userLink = db.Column(db.Integer, unique = True , nullable= False )
+    user = db.relationship("User", back_populates= "partyUser" )
     def __repr__(self):
-        return f"PartyUser('{self.party_name}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount},{self.party_logo}')"
+        return f"PartyUser('{self.party_name}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount},'{self.party_logo}', '{self.userLink}')"
 
 
-class SponsorUser(db.Model):
+class SponsorUser(db.Model, UserMixin):
     __tablename__ = 'sponsorUser'
     id = db.Column(db.Integer, primary_key=True)
     sponsor_name =  db.Column(db.String(30), unique=True , nullable= False)
@@ -51,12 +50,13 @@ class SponsorUser(db.Model):
     sponsor_about = db.Column(db.String(1500), unique=True , nullable= False)
     sponsor_fromAmount =db.Column(db.Integer, unique = False , nullable= False )
     sponsor_toAmount = db.Column(db.Integer, unique = False , nullable= False )
-    sponsor_logo = db.Column(db.String(20), unique= False, default = 'default.jpeg' , nullable= True )
+    sponsor_logo = db.Column(db.String(20), unique= False, default = 'default.jpg' , nullable= True )
     sponsor_latitude = db.Column(db.Float(precision=12,scale=7) , nullable= True)
     sponsor_longitude = db.Column(db.Float(precision= 12,scale =7) , nullable= True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
+    user = db.relationship("User", back_populates= "sponsorUser" )
     def __repr__(self):
-        return f"SponsorUser('{self.sponsor_name}','{self.sponsor_type}','{self.sponsor_kind}','{self.sponsor_contactNo1}','{self.sponsor_contactNo2}','{self.sponsor_address}','{self.sponsor_about}','{self.sponsor_fromAmount}','{self.sponsor_toAmount}','{self.sponsor_logo}')"
+        return f"SponsorUser('{self.sponsor_name}','{self.sponsor_type}','{self.sponsor_kind}','{self.sponsor_contactNo1}','{self.sponsor_contactNo2}','{self.sponsor_address}','{self.sponsor_about}','{self.sponsor_fromAmount}','{self.sponsor_toAmount}','{self.sponsor_logo}', '{self.userLink}')"
 
 class Region(db.Model):
     region_id=db.Column(db.Integer,primary_key=True)

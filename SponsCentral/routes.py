@@ -7,7 +7,7 @@ from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, L
 from SponsCentral.models import PartyUser, SponsorUser, User
 import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
-
+from sqlalchemy.orm import Session
 
 
 
@@ -80,8 +80,9 @@ def save_picture(form_picture):
 def registerParty():
     form = RegistrationFormParty()
     if form.validate_on_submit():
-        partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data)
-        partyUser.userLink=current_user.id
+        user = User.query.all().pop()
+        partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data, user_id=user.id)
+
         if form.party_logo.data:
             picture_file = save_picture(form.party_logo.data)
             partyUser.party_logo = picture_file
@@ -98,8 +99,8 @@ def registerParty():
 def registerSponsor():
     form = RegistrationFormSponser()
     if form.validate_on_submit():
-        sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data)
-        sponsorUser.userLink=current_user.id
+        user = User.query.all().pop()
+        sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data, user_id=user.id)
         if form.sponsor_logo.data:
             picture_file = save_picture(form.sponsor_logo.data)
             sponsorUser.sponsor_logo = picture_file
@@ -154,29 +155,32 @@ def account():
     if current_user.type == 'P':
 
         form = UpdateAccountForm()
-        party_user = PartyUser.query.filter_by(userLink=current_user.id).first()
+        partyUser = PartyUser.query.filter_by(user_id=current_user.id).first()
         if form.validate_on_submit():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
-                party_user.party_logo = picture_file
+                partyUser.party_logo = picture_file
             current_user.email = form.email.data
             db.session.commit()
             flash('Your account has been updated!', 'success')
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
-        return render_template('accountParty.html', title='Account',image_file=party_user.party_logo, form=form)
+        party_logo = url_for('static', filename='profile_pics/' + partyUser.party_logo)
+        return render_template('accountParty.html', title='Account',party_logo=party_logo, form=form)
+
     elif current_user.type == 'S':
         form = UpdateAccountForm()
-        sponsor_user=SponsorUser.query.filter_by(userLink=current_user.id).first()
+        sponsorUser=SponsorUser.query.filter_by(user_id=current_user.id).first()
         if form.validate_on_submit():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
-                sponsor_user.sponsor_logo = picture_file
+                sponsorUser.sponsor_logo = picture_file
             current_user.email = form.email.data
             db.session.commit()
             flash('Your account has been updated!', 'success')
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
-        return render_template('accountSponsor.html', title='Account',image_file=sponsor_user.sponsor_logo, form=form)
+        sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
+        return render_template('accountSponsor.html', title='Account',sponsor_logo=sponsor_logo, form=form)
