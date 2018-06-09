@@ -1,7 +1,6 @@
 from SponsCentral import db
 from SponsCentral.models import Region
 db.create_all()
-
 reg = "regionsData.csv"
 file = open(reg, "r")
 data = file.readlines()

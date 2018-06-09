@@ -11,7 +11,7 @@ class SelectForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     type = RadioField('User Type',choices=[('P','Sponsored Party'),('S','Sponsor')])
     submit = SubmitField('Proceed')
-
+    
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
