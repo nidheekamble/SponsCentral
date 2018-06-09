@@ -168,7 +168,8 @@ def account():
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
-        return render_template('accountParty.html', title='Account',image_file=partyUser.party_logo, form=form)
+        party_logo = url_for('static', filename='profile_pics/' + partyUser.party_logo)
+        return render_template('accountParty.html', title='Account',party_logo=party_logo, form=form)
 
     elif current_user.type == 'S':
         form = UpdateAccountForm()
@@ -183,4 +184,5 @@ def account():
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
-        return render_template('accountSponsor.html', title='Account',image_file=sponsorUser.sponsor_logo, form=form)
+        sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
+        return render_template('accountSponsor.html', title='Account',sponsor_logo=sponsor_logo, form=form)

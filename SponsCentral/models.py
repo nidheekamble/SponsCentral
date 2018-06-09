@@ -29,7 +29,7 @@ class PartyUser(db.Model, UserMixin):
     party_about = db.Column(db.String(1500), unique= False , nullable= False)
     party_fromAmount = db.Column(db.Integer, unique = False , nullable= False )
     party_toAmount = db.Column(db.Integer, unique = False , nullable= False )
-    party_logo = db.Column(db.String(20), unique = False, default = 'default.jpeg' , nullable= True )# check on the nullable field
+    party_logo = db.Column(db.String(20), unique = False, default = 'default.jpg' , nullable= True )# check on the nullable field
     party_latitude = db.Column(db.Float(precision = 12  ,scale=7) , nullable= True)
     party_longitude = db.Column(db.Float(precision = 12 , scale =7) , nullable= True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
@@ -50,7 +50,7 @@ class SponsorUser(db.Model, UserMixin):
     sponsor_about = db.Column(db.String(1500), unique=True , nullable= False)
     sponsor_fromAmount =db.Column(db.Integer, unique = False , nullable= False )
     sponsor_toAmount = db.Column(db.Integer, unique = False , nullable= False )
-    sponsor_logo = db.Column(db.String(20), unique= False, default = 'default.jpeg' , nullable= True )
+    sponsor_logo = db.Column(db.String(20), unique= False, default = 'default.jpg' , nullable= True )
     sponsor_latitude = db.Column(db.Float(precision=12,scale=7) , nullable= True)
     sponsor_longitude = db.Column(db.Float(precision= 12,scale =7) , nullable= True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
