@@ -1,41 +1,87 @@
 from flask import Flask, session, redirect, url_for, escape, request
 from math import sqrt
-from googlemaps import GoogleMaps
+from googlemaps import Client as GoogleMaps
+import requests
 
 app = Flask(__name__)
 app.secret_key = '42755hfn'
 
-gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key
+gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
-@app.route('/nearbyparty', methods = 'POST') #sponsor looking for parties
+#url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=lat,lng&destinations=region.latitude,region.longitude&key=AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA'
+# r = requests.get(url, data=None)
+#API key for Matrix API
+
+@app.route('/nearbyparty', methods = ['GET','POST']) #sponsor looking for parties
 def nearbyparty():
 
 	form = request.form()
 	location = form.sponsor_address.data
 	lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
 
-	extent = 3000 #radius distance in meters, centered at user address
+
+	extent = 2000 #radius distance in meters, centered at sponsor address
+
+	list_Regions = Region.query.all()
+	nearbyRegion = [] #finding regions nearest to sponsor
+
+	for reg in list_Regions:
+		if sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2) < extent:
+				nearbyRegion.append(reg.__dict__)
+
 
 	list_Parties = PartyUser.query.all()
-	nearbyParties = []
+	partyNearRegion = [] #finding parties in/near each of the close regions
 	for party in list_Parties:
-		if sqrt((party.party_latitude - lat ** 2) + (party.party_longitude - lng) ** 2) < extent:
-	        nearbyParties.append(party.__dict__)
-
-    return flask.jsonify(nearbyParties) #returns the filtered list
-
+		for reg in nearbyRegion:
+			if sqrt((party.party_latitude - reg.latitude ** 2) + (party.party_longitude - reg.longitude) ** 2) < extent:
+				partyNearRegion.append(party.__dict__)
 
 
-@app.route('/nearbysponsor', methods = 'POST') #parties looking for sponsors
+	nearbyParty = [] #final filter for further selecting those parties close to the sponsor
+	
+	PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':partyNearRegion,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
+	url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
+	r = requests.get(url, params=PARAMS)
+	if(r.json()<extent):
+		nearbyParty.append(party.__dict__)
+	#print(r.json())
+	return flask.jsonify(nearbyParty)
+
+
+
+@app.route('/nearbysponsor', methods = ['GET','POST']) #parties looking for sponsors
 def nearbysponsor():
 	form = request.form()
 	location = form.party_address.data
 	lat, lng = gmaps.address_to_latlng(location)
 
-	list_Sponsor = SponsorUser.query.all()
-	nearbySponsor = []
-	for sponsor in list_Sponsor:
-		if sqrt((sponsor.sponsor_latitude - lat ** 2) + (sponsor.sponsor_longitude - lng) ** 2) < extent:
-	        nearbySponsor.append(sponsor.__dict__)
 
-    return flask.jsonify(nearbySponsor)
+	extent = 2000 #radius distance in meters, centered at party address
+
+	list_Regions = Region.query.all()
+	nearbyRegion = [] #finding regions nearest to party
+
+	for reg in list_Regions:
+		if sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2) < extent:
+				nearbyRegion.append(reg.__dict__)
+
+
+	list_Sponsors = SponsorUser.query.all()
+	sponsorNearRegion = [] #finding Sponsors in/near each of the close regions
+	for sponsor in list_Sponsors:
+		for reg in nearbyRegion:
+			if sqrt((sponsor.sponsor_latitude - reg.latitude ** 2) + (sponsor.sponsor_longitude - reg.longitude) ** 2) < extent:
+				sponsorNearRegion.append(sponsor.__dict__)
+
+
+	nearbySponsor = [] #final filter for further selecting those Sponsors close to the party
+
+	PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':sponsorNearRegion,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
+	url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
+	r = requests.get(url, params=PARAMS)
+	if(r.json()<extent):
+		nearbySponsor.append(sponsor.__dict__)
+	#print(r.json())
+	return flask.jsonify(nearbySponsor)
+
