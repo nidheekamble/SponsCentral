@@ -184,3 +184,22 @@ def account():
             form.email.data = current_user.email
         sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
         return render_template('accountSponsor.html', title='Account',sponsor_logo=sponsor_logo, form=form)
+
+@app.route("/invites", methods= ['POST', 'GET'])
+@login_required
+def inviteRecieved():
+    for user in User:
+        invites= user.invites
+    return render_template('invitePage.html', title = 'invites', invites= invites)
+def inviteSent():
+    for user in User:
+        sent = user.sent
+    return render_template('requestsPage.html', title= 'requests', sent = sent)
+
+@app.route("/chatbox", methods= ['POST', 'GET'])
+@login_required
+def chatbox():
+    if current_user.type == 'P':
+        form = ChatBox()
+        if form.validate_on_submit():
+            chatBox= ChatBox(texts= form.text.data, )

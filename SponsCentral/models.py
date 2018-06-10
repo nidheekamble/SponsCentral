@@ -1,6 +1,6 @@
 from SponsCentral import db, login_manager
 from flask_login import UserMixin
-
+from datetime import datetime
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -13,11 +13,15 @@ class User(db.Model, UserMixin):
     type= db.Column(db.String(1), nullable=False)
     partyUser= db.relationship("PartyUser", uselist=False, back_populates="user")
     sponsorUser=db.relationship("SponsorUser", uselist=False, back_populates="user")
+    invites = db.Column(db.String(30), unique = True, nullable = False, default= 'none')
+    sent = db.Column(db.String(30), unique= True, nullable = False, default= 'none')
+    status = db.Column(db.String(30), nullable=False, default= 'none')
+    rating = db.Column(db.Float(precision=3, scale=2))
 
     def __repr__(self):
         return f"User('{self.email}','{self.type}','{self.userLink}')"
 
-class PartyUser(db.Model, UserMixin):
+class PartyUser(db.Model):
     __tablename__ = 'partyUser'
     id = db.Column(db.Integer, primary_key=True )
     party_name = db.Column(db.String(30), unique=True , nullable= False)
@@ -38,7 +42,7 @@ class PartyUser(db.Model, UserMixin):
         return f"PartyUser('{self.party_name}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount},'{self.party_logo}', '{self.userLink}')"
 
 
-class SponsorUser(db.Model, UserMixin):
+class SponsorUser(db.Model):
     __tablename__ = 'sponsorUser'
     id = db.Column(db.Integer, primary_key=True)
     sponsor_name =  db.Column(db.String(30), unique=True , nullable= False)
@@ -65,3 +69,15 @@ class Region(db.Model):
     city=db.Column(db.String(40),nullable=False)
     latitude = db.Column(db.Float(precision = 12  ,scale=7) , nullable= False)
     longitude = db.Column(db.Float(precision = 12 , scale =7) , nullable= False)
+
+class Conversing(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user1 = db.Column(db.Integer, nullable=False)
+    user2 = db.Column(db.Integer, nullable = False)
+    conversation=db.relationship("Conversation", uselist=False, backref ="conversation")
+
+class Conversation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    texts = db.Column(db.String(500), nullable=False)
+    time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    conversing_id = db.Column(db.Integer, db.ForeignKey('conversing.id'), nullable= False)

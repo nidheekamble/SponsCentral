@@ -11,7 +11,7 @@ class SelectForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     type = RadioField('User Type',choices=[('P','Sponsored Party'),('S','Sponsor')])
     submit = SubmitField('Proceed')
-    
+
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
@@ -109,3 +109,8 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('That email is taken. Please choose a different one.')
+
+class ChatBox(FlaskForm):
+    #partyUser = PartyUser.query.filter_by(user_id=current_user.id).first()
+    text = StringField('Enter Text', validators=[DataRequired(), Length(min=1, max=500)])
+    send = SubmitField('Send')
