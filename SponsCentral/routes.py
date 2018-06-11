@@ -193,7 +193,7 @@ def inviteRecieved():
     form=RequestAccept()
     for user in User:
         userList.append(user.requests)
-    
+
     return render_template ('requestsPage.html', title = 'requests', userList=userList)
 
 
@@ -213,13 +213,13 @@ def connection():
 @app.route("/chatbox", methods= ['POST', 'GET'])
 @login_required
 def chatbox():
-
+    conversing= Conversing.query.filter_by(user1=current_user.id)#just for now
     list=[""]
-    for conversation in Conversation.query.filter_by(conversing_id = conversing.id):
+    for conversation in Conversation.query.filter_by(conversing_id = current_user.id):#just for now
         list.append(conversation)
     form = ChatBoxText()
     if form.validate_on_submit():
-        conversation= Conversation(text = form.text.data, conversing_id= conversing.id )
+        conversation= Conversation(text = form.text.data, conversing_id= current_user.id )#just for now
         db.session.add(conversation)
         db.session.commit()
         list.append(conversation)
