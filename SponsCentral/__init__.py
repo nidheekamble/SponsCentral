@@ -2,13 +2,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from flask_app import app as application
+#from flask_app import app as application
 
 app = Flask(__name__)
 
-path = '/home/nidheekamble/mysite'
-if path not in sys.path:
-   sys.path.append(path)
+#ath = '/home/nidheekamble/mysite'
+#if path not in sys.path:
+#   sys.path.append(path)
 
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Central.db'
