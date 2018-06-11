@@ -1,3 +1,5 @@
+
+
 {% extends "layout.html" %}
 {% block content %}
 
@@ -188,18 +190,29 @@
         </div>
 
         <script>
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            console.log("ID: " + profile.getId()); //not be sent to the server/backend [we will still use normal user object for sending user data like we were originally doing]
-            console.log('Full Name: ' + profile.getName());
-            console.log('Given Name: ' + profile.getGivenName());
-            console.log('Family Name: ' + profile.getFamilyName());
-            console.log("Image URL: " + profile.getImageUrl());
-            console.log("Email: " + profile.getEmail());
 
-            // ID to be passed to he backend
-            var id_token = googleUser.getAuthResponse().id_token;
-            console.log("ID Token: " + id_token);
+        function onSignIn(googleUser) {
+            if (auth2.isSignedIn.get()) {
+                var profile = googleUser.getBasicProfile();
+                console.log("ID: " + profile.getId()); //not be sent to the server/backend [we will still use normal user object for sending user data like we were originally doing]
+                console.log('Full Name: ' + profile.getName());
+                console.log('Given Name: ' + profile.getGivenName());
+                console.log('Family Name: ' + profile.getFamilyName());
+                console.log("Image URL: " + profile.getImageUrl());
+                console.log("Email: " + profile.getEmail());
+
+                // ID to be passed to he backend
+                var id_token = googleUser.getAuthResponse().id_token;
+                console.log("ID Token: " + id_token);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'https://yourbackend.example.com/tokensignin');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                  console.log('Signed in as: ' + xhr.responseText);
+                };
+                xhr.send('idtoken=' + id_token);
+            }
         }
 
         function onSignOut(){
