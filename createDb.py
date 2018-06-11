@@ -1,9 +1,6 @@
 from SponsCentral import db
 from SponsCentral.models import Region
-from socket import gethostname
-
-if __name__ == '__main__':
-    db.create_all()
+db.create_all()
 
 reg = "regionsData.csv"
 file = open(reg, "r")
