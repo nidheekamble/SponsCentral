@@ -151,27 +151,6 @@
 
 
             
-
-
-            <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-            <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-            <script>
-              function onSignIn(googleUser) {
-
-                var profile = googleUser.getBasicProfile();
-                console.log("ID: " + profile.getId()); //not be sent to the server/backend [we will still use normal user object for sending user data like we were originally doing]
-                console.log('Full Name: ' + profile.getName());
-                console.log('Given Name: ' + profile.getGivenName());
-                console.log('Family Name: ' + profile.getFamilyName());
-                console.log("Image URL: " + profile.getImageUrl());
-                console.log("Email: " + profile.getEmail());
-
-                // ID to be passed to he backend
-                var id_token = googleUser.getAuthResponse().id_token;
-                console.log("ID Token: " + id_token);
-              };
-            </script> 
-
             <script>
             function attachClickHandler(){
 
@@ -179,7 +158,7 @@
                     var initClient = function() {
                         gapi.load('auth2', function(){
                             auth2 = gapi.auth2.init({
-                    client_id: '234892471054-m0oe9a0i9g64dokmeu6dj5hgd132896b.apps.googleusercontent.com'
+                    client_id: '234892471054-9eo6d6c41cjn4qvpe9lpj6od5m1f04n3.apps.googleusercontent.com'
                     auth2.attachClickHandler('signin-button', {}, onSuccess, onFailure);
                     });
                 };
@@ -194,7 +173,7 @@
             }
             </script>
 
-        -->
+        
 
         <meta name="google-signin-client_id" content="234892471054-9eo6d6c41cjn4qvpe9lpj6od5m1f04n3.apps.googleusercontent.com">
 
@@ -211,7 +190,16 @@
         <script>
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
-            var idToken = googleUser.getAuthResponse().id_token;
+            console.log("ID: " + profile.getId()); //not be sent to the server/backend [we will still use normal user object for sending user data like we were originally doing]
+            console.log('Full Name: ' + profile.getName());
+            console.log('Given Name: ' + profile.getGivenName());
+            console.log('Family Name: ' + profile.getFamilyName());
+            console.log("Image URL: " + profile.getImageUrl());
+            console.log("Email: " + profile.getEmail());
+
+            // ID to be passed to he backend
+            var id_token = googleUser.getAuthResponse().id_token;
+            console.log("ID Token: " + id_token);
         }
 
         function onSignOut(){
