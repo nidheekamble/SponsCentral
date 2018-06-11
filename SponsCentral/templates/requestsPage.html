@@ -1,4 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
+    {% for request in requests %}
+        {{request}}
+        <div class="form-group">
+            <p>{{request    form.submit(class="btn btn-outline-info") }}</p>
+            {% if form.submit %}
 
+        </div>
+    {% endfor %}
 {% endblock content %}

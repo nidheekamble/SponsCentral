@@ -110,7 +110,11 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('That email is taken. Please choose a different one.')
 
-class ChatBox(FlaskForm):
+class ChatBoxText(FlaskForm):
     #partyUser = PartyUser.query.filter_by(user_id=current_user.id).first()
     text = StringField('Enter Text', validators=[DataRequired(), Length(min=1, max=500)])
     send = SubmitField('Send')
+
+class RequestAccept(FlaskForm):
+    accept= SubmitField(accept)
+    

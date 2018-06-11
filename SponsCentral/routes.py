@@ -3,8 +3,8 @@ import secrets
 from SponsCentral import app, db, bcrypt
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
-from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountForm
-from SponsCentral.models import PartyUser, SponsorUser, User
+from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountForm, ChatBoxText
+from SponsCentral.models import PartyUser, SponsorUser, User, Region, Conversing, Conversation
 import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.orm import Session
@@ -101,9 +101,11 @@ def registerSponsor():
     if form.validate_on_submit():
         user = User.query.all().pop()
         sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data, user_id=user.id)
+
         if form.sponsor_logo.data:
             picture_file = save_picture(form.sponsor_logo.data)
             sponsorUser.sponsor_logo = picture_file
+
         db.session.add(sponsorUser)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
@@ -114,8 +116,6 @@ def registerSponsor():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
     form = LoginForm(request.form)
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -188,18 +188,37 @@ def account():
 @app.route("/invites", methods= ['POST', 'GET'])
 @login_required
 def inviteRecieved():
+    list = [""]
     for user in User:
-        invites= user.invites
-    return render_template('invitePage.html', title = 'invites', invites= invites)
-def inviteSent():
-    for user in User:
-        sent = user.sent
-    return render_template('requestsPage.html', title= 'requests', sent = sent)
+        userList.append(user.requests)
+
+    return render_template ('requestsPage.html', title = 'requests', userList=userList)
+
+
+@app.route("/requests", methods= ['POST', 'GET'])
+@login_required
+def connection():
+    if(current_user.type == 'P'):
+        for sponsorUser in SponsorUser.query.all():
+            userList.append(sponsorUser.name)
+
+    if(current_user.type == 'S'):
+        for partyUser in PartyUser.query.all():
+            userList.append(partyUser.name)
+
+    return render_template ('requestsPage.html', title = 'invites', invites = invites, userList=userList)
 
 @app.route("/chatbox", methods= ['POST', 'GET'])
 @login_required
 def chatbox():
-    if current_user.type == 'P':
-        form = ChatBox()
-        if form.validate_on_submit():
-            chatBox= ChatBox(texts= form.text.data, )
+
+    list=[""]
+    for conversation in Conversation.query.filter_by(conversing_id = conversing.id):
+        list.append(conversation)
+    form = ChatBoxText()
+    if form.validate_on_submit():
+        conversation= Conversation(text = form.text.data, conversing_id= conversing.id )
+        db.session.add(conversation)
+        db.session.commit()
+        list.append(conversation)
+    return render_template('chatbox.html', title= 'ChatBox', form=form, list=list)

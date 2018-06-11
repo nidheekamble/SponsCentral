@@ -1,4 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-
+<div class="content-section">
+    <div>
+        {% for invite in invites %}
+            <p>{{text.text}}</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock content %}
