@@ -3,7 +3,7 @@ import secrets
 from SponsCentral import app, db, bcrypt
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
-from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountForm, ChatBoxText
+from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountForm, ChatBoxText, RequestAccept
 from SponsCentral.models import PartyUser, SponsorUser, User, Region, Conversing, Conversation
 import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
@@ -185,28 +185,30 @@ def account():
         sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
         return render_template('accountSponsor.html', title='Account',sponsor_logo=sponsor_logo, form=form)
 
-@app.route("/invites", methods= ['POST', 'GET'])
+@app.route("/requests", methods= ['POST', 'GET'])
 @login_required
 def inviteRecieved():
     list = [""]
+    conversing = Conversing.filter_by(user2 = current_user.id).all()
+    form=RequestAccept()
     for user in User:
         userList.append(user.requests)
-
+    
     return render_template ('requestsPage.html', title = 'requests', userList=userList)
 
 
-@app.route("/requests", methods= ['POST', 'GET'])
+@app.route("/invites", methods= ['POST', 'GET'])
 @login_required
 def connection():
+    conversing = Conversing(user1 = current_user.id, status='sent', request= request)
     if(current_user.type == 'P'):
-        for sponsorUser in SponsorUser.query.all():
-            userList.append(sponsorUser.name)
+        user
 
     if(current_user.type == 'S'):
         for partyUser in PartyUser.query.all():
             userList.append(partyUser.name)
 
-    return render_template ('requestsPage.html', title = 'invites', invites = invites, userList=userList)
+    return render_template ('invitesPage.html', title = 'invites', request = request, userList=userList)
 
 @app.route("/chatbox", methods= ['POST', 'GET'])
 @login_required

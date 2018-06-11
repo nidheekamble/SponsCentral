@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for request in requests %}
+    {% for request in userlist %}
         {{request}}
         <div class="form-group">
             <p>{{request    form.submit(class="btn btn-outline-info") }}</p>

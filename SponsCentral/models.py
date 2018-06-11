@@ -13,9 +13,7 @@ class User(db.Model, UserMixin):
     type= db.Column(db.String(1), nullable=False)
     partyUser= db.relationship("PartyUser", uselist=False, back_populates="user")
     sponsorUser=db.relationship("SponsorUser", uselist=False, back_populates="user")
-    requests = db.Column(db.String(30), unique = True, nullable = False, default= 'none')
-    invites = db.Column(db.String(30), unique= True, nullable = False, default= 'none')
-    status = db.Column(db.String(30), nullable=False, default= 'none')
+    conversing = db.relationship("Conversing", back_populates ="user")
     rating = db.Column(db.Float(precision=3, scale=2))
 
     def __repr__(self):
@@ -72,16 +70,20 @@ class Region(db.Model):
 
 class Conversing(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user1 = db.Column(db.Integer, nullable=False)
-    user2 = db.Column(db.Integer, nullable = False)
-    conversation=db.relationship("Conversation", uselist=False, back_populates ="conversation")
-
+    user1 = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
+    user = db.relationship("User", back_populates ="conversing")
+    user2 = db.Column(db.Integer)
+    conversation=db.relationship("Conversation", uselist=False, back_populates ="conversing")
+    request = db.Column(db.String(30), unique = True, default= 'none')
+    status = db.Column(db.String(30), nullable=False, default= 'none')
+    def __repr__(self):
+        return f"Conversing('{self.user1}','{self.user2}','{self.request}','{self.status}')"
 
 class Conversation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(500), nullable=False)
     time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     conversing_id = db.Column(db.Integer, db.ForeignKey('conversing.id'))
-    conversing= db.relationship("Conversing", uselist=False, back_populates ="conversing" )
+    conversing= db.relationship("Conversing", uselist=False, back_populates ="conversation" )
     def __repr__(self):
         return f"Conversation('{self.text}','{self.time}','{self.conversing_id}')"
