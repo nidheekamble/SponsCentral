@@ -116,5 +116,5 @@ class ChatBoxText(FlaskForm):
     send = SubmitField('Send')
 
 class RequestAccept(FlaskForm):
-    choice =
+   # choice =
     accept= SubmitField('accept')
