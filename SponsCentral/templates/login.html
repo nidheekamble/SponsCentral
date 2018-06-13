@@ -9,7 +9,7 @@
 
   <script src="https://apis.google.com/js/platform.js" async defer></script> <!--SIGN IN WITH GOOGLE-->
 
-    <!-- GOOGLE API SIGN OUT
+    <!-- GOOGLE API SIGN OUT-->
 
     <a href="#" onclick="signOut();">Sign out</a>
     <script>
@@ -19,7 +19,7 @@
         console.log('User signed out.');
     });
   }
-    </script> -->
+    </script>
 
     <div class="content-section">
         <form method="POST" action="">
@@ -206,7 +206,7 @@
                 console.log("ID Token: " + id_token);
 
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'https://yourbackend.example.com/tokensignin');
+                xhr.open('POST', 'https://http://nidheekamble.pythonanywhere.com/tokensignin');
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 xhr.onload = function() {
                   console.log('Signed in as: ' + xhr.responseText);
