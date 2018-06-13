@@ -64,13 +64,8 @@
 
 
             <!--GOOGLE SIGN IN API--
-
-
-
             FOR CUSTOMIZED BUTTON:
-
             <script>
-
               function attachSignin(element) {
                 console.log(element.id);
                 auth2.attachClickHandler(element, {},
@@ -82,8 +77,6 @@
                     });
               }
             </script>
-
-
             <style type="text/css">
                 #customBtn {
                   display: inline-block;
@@ -120,8 +113,6 @@
                   font-family: 'Roboto', sans-serif;
                 }
             </style>
-
-
              <script>
               var googleUser = {};
               var startApp = function() {
@@ -137,8 +128,6 @@
                 });
               };
             </script>
-
-
             <div id="gSignInWrapper">
             <span class="label">Sign in with:</span>
             <div id="customBtn" class="customGPlusSignIn">
@@ -152,10 +141,9 @@
 
 
 
-            
+
             <script>
             function attachClickHandler(){
-
                 var auth2;
                     var initClient = function() {
                         gapi.load('auth2', function(){
@@ -164,23 +152,17 @@
                     auth2.attachClickHandler('signin-button', {}, onSuccess, onFailure);
                     });
                 };
-
                 var onSuccess = function(user) {
                     console.log('Signed in as ' + user.getBasicProfile().getName());
                  };
-
                  var onFailure = function(error) {
                     console.log(error);
                 };
             }
             </script>
 
-        
-
         <meta name="google-signin-client_id" content="234892471054-9eo6d6c41cjn4qvpe9lpj6od5m1f04n3.apps.googleusercontent.com">
-
         <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
-
         <div id="google-signin-button"
              class="g-signin2"
              data-width="190"
@@ -188,9 +170,7 @@
              data-onsuccess="onSignIn"
              data-onfailure="onSignInFailure">
         </div>
-
         <script>
-
         function onSignIn(googleUser) {
             if (auth2.isSignedIn.get()) {
                 var profile = googleUser.getBasicProfile();
@@ -200,11 +180,9 @@
                 console.log('Family Name: ' + profile.getFamilyName());
                 console.log("Image URL: " + profile.getImageUrl());
                 console.log("Email: " + profile.getEmail());
-
                 // ID to be passed to he backend
                 var id_token = googleUser.getAuthResponse().id_token;
                 console.log("ID Token: " + id_token);
-
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', 'https://http://nidheekamble.pythonanywhere.com/tokensignin');
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -214,24 +192,13 @@
                 xhr.send('idtoken=' + id_token);
             }
         }
-
         function onSignOut(){
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut();
         }
         </script>
-
 <!---END OF GOOGLE API SNIPPET-->
-
-
-
 <!--FACEBOOK LOGIN-->
-
-
-
-
-
-
             <small class="text-muted ml-2">
                 <a href="#">Forgot Password?</a>
             </small>

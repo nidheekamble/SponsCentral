@@ -23,8 +23,8 @@ class RegistrationFormParty(FlaskForm):
     party_choices = [('T','Technical'),('S', 'Sports'),('C', 'Cultural')]#add "others"
     party_type = SelectField('Type', choices=party_choices, validators=[Required()])
     party_kind = SelectField('Accepting', choices=[('C','Cash'), ('k','Kind')], validators=[Required()])
-    party_contactNo1 = IntegerField('Contact No.1', validators=[DataRequired(), NumberRange(min=10000000, max=99999999)])
-    party_contactNo2 = IntegerField('Contact No.2', validators=[DataRequired(), NumberRange(min=10000000, max=99999999)])
+    party_contactNo1 = IntegerField('Contact No.1', validators=[DataRequired(), NumberRange(min=1000000000, max=9999999999)])
+    party_contactNo2 = IntegerField('Contact No.2', validators=[DataRequired(), NumberRange(min=1000000000, max=9999999999)])
     party_address = TextAreaField('Address', validators=[DataRequired()])
     party_about = TextAreaField('About Your Organization', validators=[DataRequired()] )
     party_fromAmount = IntegerField('From Amount', validators=[DataRequired()])
@@ -58,8 +58,8 @@ class RegistrationFormSponser(FlaskForm):
     sponsor_choices = [('F','Finance'),('IT','Information Technology'),('O','Others')]#add "others"
     sponsor_type = SelectField('Type Of Sponser', choices=sponsor_choices, validators=[Required()])
     sponsor_kind = SelectField('Offering', choices=[('C','Cash'), ('k','Kind')], validators=[Required()])
-    sponsor_contactNo1 = IntegerField('Contact No.1', validators=[DataRequired(), NumberRange(min=10000000, max=99999999)])
-    sponsor_contactNo2 = IntegerField('Contact No.2', validators=[DataRequired(), NumberRange(min=10000000, max=99999999)])
+    sponsor_contactNo1 = IntegerField('Contact No.1', validators=[DataRequired(), NumberRange(min=1000000000, max=9999999999)])
+    sponsor_contactNo2 = IntegerField('Contact No.2', validators=[DataRequired(), NumberRange(min=1000000000, max=9999999999)])
     sponsor_address = TextAreaField('Address', validators=[DataRequired()])
     sponsor_about = TextAreaField('About Your Organization', validators=[DataRequired()])
     sponsor_fromAmount = IntegerField('From Amount', validators=[Required()])
@@ -116,4 +116,5 @@ class ChatBoxText(FlaskForm):
     send = SubmitField('Send')
 
 class RequestAccept(FlaskForm):
+    choice =
     accept= SubmitField('accept')

@@ -8,7 +8,9 @@ from SponsCentral.models import PartyUser, SponsorUser, User, Region, Conversing
 import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.orm import Session
-#from SponsCentral.near.py import nearbyParty, nearbySponsor
+#from SponsCentral import nearbyParty, nearbySponsor
+from math import sqrt
+from googlemaps import Client as GoogleMaps
 
 
 @app.route("/")
@@ -197,19 +199,25 @@ def inviteRecieved():
     list = [""]
     conversing = Conversing.filter_by(user2 = current_user.id).all()
     form=RequestAccept()
-    for user in User:
-        userList.append(user.requests)
+    if form.validate_on_submit():
+        conversing.status = 'accepted'
 
     return render_template ('requestsPage.html', title = 'requests', userList=userList)
 
 
+app.route("/invite", methods= ['POST', 'GET'])
+@login_required
+def invite(request=request):
+    conversing = Conversing(user1 = current_user.id, user2=request, status='sent')
+
 @app.route("/invites", methods= ['POST', 'GET'])
 @login_required
+
 def connection():
     conversing = Conversing(user1 = current_user.id, status='sent', request= request)
     if(current_user.type == 'P'):
-        user
-
+        for sponsorUser in SponsorUser.query.all():
+            userList.append(SponsorUser.name)
     if(current_user.type == 'S'):
         for partyUser in PartyUser.query.all():
             userList.append(partyUser.name)
@@ -219,13 +227,14 @@ def connection():
 @app.route("/chatbox", methods= ['POST', 'GET'])
 @login_required
 def chatbox():
-    conversing= Conversing.query.filter_by(user1=current_user.id)#just for now
+
+    conversing= Conversing.query.filter_by(user1=current_user.id )#just for now
     list=[""]
-    for conversation in Conversation.query.filter_by(conversing_id = current_user.id):#just for now
+    for conversation in Conversation.query.filter_by(conversing_id = conversing.id):#just for now
         list.append(conversation)
     form = ChatBoxText()
     if form.validate_on_submit():
-        conversation= Conversation(text = form.text.data, conversing_id= current_user.id )#just for now
+        conversation= Conversation(text = form.text.data, conversing_id= conversing.id )#just for now
         db.session.add(conversation)
         db.session.commit()
         list.append(conversation)
