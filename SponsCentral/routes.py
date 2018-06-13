@@ -8,7 +8,7 @@ from SponsCentral.models import PartyUser, SponsorUser, User, Region, Conversing
 import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.orm import Session
-
+#from SponsCentral.near.py import nearbyParty, nearbySponsor
 
 
 @app.route("/")
@@ -112,6 +112,12 @@ def registerSponsor():
         sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
         return redirect(url_for('login'))
     return render_template('regSponsor.html', form=form)
+
+
+
+@app.route("/maps", methods = ['GET', 'POST'])
+def maps():
+    return render_template('API.html')
 
 
 @app.route("/login", methods=['GET', 'POST'])

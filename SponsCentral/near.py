@@ -12,8 +12,8 @@ gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geoco
 # r = requests.get(url, data=None)
 #API key for Matrix API
 
-@app.route('/nearbyparty', methods = ['GET','POST']) #sponsor looking for parties
-def nearbyparty():
+@app.route('/nearbyParty', methods = ['GET','POST']) #sponsor looking for parties
+def nearbyParty():
 
 	form = request.form()
 	location = form.sponsor_address.data
@@ -50,8 +50,8 @@ def nearbyparty():
 
 
 
-@app.route('/nearbysponsor', methods = ['GET','POST']) #parties looking for sponsors
-def nearbysponsor():
+@app.route('/nearbySponsor', methods = ['GET','POST']) #parties looking for sponsors
+def nearbySponsor():
 	form = request.form()
 	location = form.party_address.data
 	lat, lng = gmaps.address_to_latlng(location)
