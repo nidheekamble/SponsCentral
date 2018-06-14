@@ -20,9 +20,9 @@ gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geoco
 def nearbyParty():
 
 	geolocator = Nominatim()
-    location = geolocator.geocode(sponsorUser.sponsor_address)
-    lat = location.latitude
-    lng = location.longitude #converting string address to coordinates
+	location = geolocator.geocode(sponsorUser.sponsor_address)
+	lat = location.latitude
+	lng = location.longitude #converting string address to coordinates
 
 
 	'''extent = 2000 #radius distance in meters, centered at sponsor address
