@@ -72,9 +72,9 @@ def nearbyParty():
 def nearbySponsor():
 
 	geolocator = Nominatim()
-    location = geolocator.geocode(partyUser.party_address)
-    lat = location.latitude
-    lng = location.longitude
+	location = geolocator.geocode(partyUser.party_address)
+	lat = location.latitude
+	lng = location.longitude
 
 	'''extent = 2000 #radius distance in meters, centered at party address
 
