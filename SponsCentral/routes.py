@@ -3,12 +3,11 @@ import secrets
 from SponsCentral import app, db, bcrypt
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
-from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountForm, ChatBoxText, RequestAccept
+from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountForm, ChatBoxText, RequestForm, InviteForm
 from SponsCentral.models import PartyUser, SponsorUser, User, Region, Conversing, Conversation
 import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.orm import Session
-#from SponsCentral import nearbyParty, nearbySponsor
 from math import sqrt
 from googlemaps import Client as GoogleMaps
 import requests
@@ -66,17 +65,16 @@ def register():
     else: print('halaaaa')
     return render_template('selectForm.html', form=form)
 
+
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path, 'static\profile_pics', picture_fn)
-
     output_size = (125, 125)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
-
     return picture_fn
 
 
@@ -90,8 +88,7 @@ def registerParty():
         #for region linking
         gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
-        form = request.form()
-        location = form.party_address.data
+        location = partyUser.party_address
         lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
 
         list_Regions = []
@@ -133,8 +130,7 @@ def registerSponsor():
        #for region linking
         gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
-        form = request.form()
-        location = form.sponsor_address.data
+        location = sponsorUser.sponsor_address
         lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
 
         list_Regions = []
@@ -166,11 +162,6 @@ def registerSponsor():
         return redirect(url_for('login'))
     return render_template('regSponsor.html', form=form)
 
-
-
-@app.route("/maps", methods = ['GET', 'POST'])
-def maps():
-    return render_template('API.html')
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -208,6 +199,7 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+
 @app.route("/account", methods= ['POST', 'GET'])
 @login_required
 def account():
@@ -244,49 +236,68 @@ def account():
         sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
         return render_template('accountSponsor.html', title='Account',sponsor_logo=sponsor_logo, form=form)
 
+
+
+@app.route("/maps", methods = ['GET', 'POST'])
+def maps():
+    return render_template('API.html')
+
+
+
 @app.route("/requests", methods= ['POST', 'GET'])
 @login_required
 def inviteRecieved():
-    list = [""]
+    form = RequestForm()
     conversing = Conversing.filter_by(user2 = current_user.id).all()
-    form=RequestAccept()
     if form.validate_on_submit():
-        conversing.status = 'accepted'
+        if form.accepted==True:
+            conversing.status="in-touch"
+        else:
+            conversing.status="Not Accepted"
+        for request in conversing.requests:
+            conversing
 
-    return render_template ('requestsPage.html', title = 'requests', userList=userList)
+    return render_template ('requestsPage.html', title = 'requests', form=form, conversing=conversing)
+
 
 
 app.route("/invite", methods= ['POST', 'GET'])
 @login_required
-def invite(request=request):
-    conversing = Conversing(user1 = current_user.id, user2=request, status='sent')
+def invite():
+    form=InviteForm()
+    if form.validate_on_submit:
+        conversing = Conversing(user1 = current_user.id, user2=form.user2_id, status='sent')
+        db.session.add(conversing)
+        db.session.commit()
+
+
 
 @app.route("/invites", methods= ['POST', 'GET'])
 @login_required
-
 def connection():
-    conversing = Conversing(user1 = current_user.id, status='sent', request= request)
+    userList=[]
+    conversing = Conversing.filter_by(user1 = current_user.id).all()
     if(current_user.type == 'P'):
-        for sponsorUser in SponsorUser.query.all():
-            userList.append(SponsorUser.name)
+        for sponsorUser in SponsorUser.query.filter_by(user_id=conversing.user2).all():
+            userList.append(sponsorUser.name)
     if(current_user.type == 'S'):
-        for partyUser in PartyUser.query.all():
+        for partyUser in PartyUser.query.filter_by(user_id=conversing.user2).all():
             userList.append(partyUser.name)
+    return render_template ('invitesPage.html', title = 'invites', userList=userList)
 
-    return render_template ('invitesPage.html', title = 'invites', request = request, userList=userList)
+
 
 @app.route("/chatbox", methods= ['POST', 'GET'])
 @login_required
 def chatbox():
-
-    conversing= Conversing.query.filter_by(user1=current_user.id )#just for now
-    list=[""]
+    conversing= Conversing.query.filter(or_(user1=current_user.id, user2= current_user.id )).all()#just for now
+    messages=[""]
     for conversation in Conversation.query.filter_by(conversing_id = conversing.id):#just for now
-        list.append(conversation)
+        messages.append(conversation)
     form = ChatBoxText()
     if form.validate_on_submit():
         conversation= Conversation(text = form.text.data, conversing_id= conversing.id )#just for now
         db.session.add(conversation)
         db.session.commit()
-        list.append(conversation)
-    return render_template('chatbox.html', title= 'ChatBox', form=form, list=list)
+        messages.append(conversation)
+    return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)

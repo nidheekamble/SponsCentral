@@ -3,8 +3,8 @@
 <div class="content-section">
     <div>
         {{conversation}}
-        {% for text in list %}
-            <p>{{text.text}}</p>
+        {% for message in messages %}
+            <p>{{message.text}}</p>
         {% endfor %}
     </div>
     <form method="POST" action="/chatbox" enctype="multipart/form-data">

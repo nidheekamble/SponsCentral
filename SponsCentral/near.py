@@ -1,5 +1,6 @@
 from flask import Flask, session, redirect, url_for, escape, request
 from math import sqrt
+from flask_login import login_user, current_user, logout_user, login_required
 from googlemaps import Client as GoogleMaps
 import requests
 
@@ -42,7 +43,7 @@ def nearbyParty():
 
 
 	nearbyParty = [] #final filter for further selecting those parties close to the sponsor
-	
+
 	PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':partyNearRegion,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
 	url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
 	r = requests.get(url, params=PARAMS)

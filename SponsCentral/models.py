@@ -74,7 +74,7 @@ class Conversing(db.Model):
     user = db.relationship("User", back_populates ="conversing")
     user2 = db.Column(db.Integer)
     conversation=db.relationship("Conversation", uselist=False, back_populates ="conversing")
-    request = db.Column(db.String(30), unique = True, default= 'none')
+    request = db.Column(db.Integer)
     status = db.Column(db.String(30), nullable=False, default= 'none')
     def __repr__(self):
         return f"Conversing('{self.user1}','{self.user2}','{self.request}','{self.status}')"
