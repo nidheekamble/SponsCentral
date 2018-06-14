@@ -9,9 +9,10 @@ import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.orm import Session
 from math import sqrt
-from googlemaps import GoogleMaps
+from googlemaps import Client as GoogleMaps
 import requests
 from SponsCentral.near import nearbyParty, nearbySponsor
+from geopy.geocoders import Nominatim
 
 
 @app.route("/")
@@ -88,17 +89,22 @@ def registerParty():
         #for region linking
         gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
-        location = partyUser.party_address
-        lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
+        geolocator = Nominatim()
+        location = geolocator.geocode(partyUser.party_address)
+        lat = location.latitude
+        lng = location.longitude
+
+        #location = partyUser.party_address
+        #lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
 
         list_Regions = []
         list_Regions = Region.query.all()
 
         reg = list_Regions[0]
-        nearestDistance = sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2)
+        nearestDistance = sqrt(((reg.latitude - lat)** 2) + ((reg.longitude - lng) ** 2))
         nearestRegion = reg
         for region in list_Regions:
-            extent = (sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2))
+            extent = sqrt(((reg.latitude - lat)** 2) + ((reg.longitude - lng) ** 2))
             if extent<nearestDistance:
                 nearestRegion = region
                 nearestDistance = extent
@@ -130,17 +136,22 @@ def registerSponsor():
        #for region linking
         gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
-        location = sponsorUser.sponsor_address
-        lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
+        geolocator = Nominatim()
+        location = geolocator.geocode(partyUser.party_address)
+        lat = location.latitude
+        lng = location.longitude
+
+        #location = sponsorUser.sponsor_address
+        #lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
 
         list_Regions = []
         list_Regions = Region.query.all()
 
         reg = list_Regions[0]
-        nearestDistance = sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2)
+        nearestDistance = sqrt(((reg.latitude - lat)** 2) + ((reg.longitude - lng) ** 2))
         nearestRegion = reg
         for region in list_Regions:
-            extent = (sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2))
+            extent = sqrt(((reg.latitude - lat)** 2) + ((reg.longitude - lng) ** 2))
             if extent<nearestDistance:
                 nearestRegion = region
                 nearestDistance = extent

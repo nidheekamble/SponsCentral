@@ -1,8 +1,9 @@
 from flask import Flask, session, redirect, url_for, escape, request
 from math import sqrt
 from flask_login import login_user, current_user, logout_user, login_required
-from googlemaps import GoogleMaps
+from googlemaps import Client as GoogleMaps
 import requests
+from geopy.geocoders import Nominatim
 
 app = Flask(__name__)
 app.secret_key = '42755hfn'
@@ -18,9 +19,10 @@ gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geoco
 
 def nearbyParty():
 
-	form = request.form()
-	location = form.sponsor_address.data
-	lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
+	geolocator = Nominatim()
+    location = geolocator.geocode(sponsorUser.sponsor_address)
+    lat = location.latitude
+    lng = location.longitude #converting string address to coordinates
 
 
 	'''extent = 2000 #radius distance in meters, centered at sponsor address
@@ -37,8 +39,8 @@ def nearbyParty():
 	list_Parties = PartyUser.query.all()
 	partyNearRegion = [] #finding parties in/near each of the close regions
 	for party in list_Parties:
-		for reg in nearbyRegion:
-			if sqrt((party.party_latitude - reg.latitude ** 2) + (party.party_longitude - reg.longitude) ** 2) < extent:
+		for reg in nearbyRegion: 
+			if sqrt(((party.party_latitude - reg.latitude) ** 2) + ((party.party_longitude - reg.longitude) ** 2)) < extent:
 				partyNearRegion.append(party.__dict__)
 
 
@@ -68,10 +70,11 @@ def nearbyParty():
 @login_required
 
 def nearbySponsor():
-	form = request.form()
-	location = form.party_address.data
-	lat, lng = gmaps.address_to_latlng(location)
 
+	geolocator = Nominatim()
+    location = geolocator.geocode(partyUser.party_address)
+    lat = location.latitude
+    lng = location.longitude
 
 	'''extent = 2000 #radius distance in meters, centered at party address
 
@@ -88,7 +91,7 @@ def nearbySponsor():
 	sponsorNearRegion = [] #finding Sponsors in/near each of the close regions
 	for sponsor in list_Sponsors:
 		for reg in nearbyRegion:
-			if sqrt((sponsor.sponsor_latitude - reg.latitude ** 2) + (sponsor.sponsor_longitude - reg.longitude) ** 2) < extent:
+			if sqrt(((sponsor.sponsor_latitude - reg.latitude) ** 2) + ((sponsor.sponsor_longitude - reg.longitude) ** 2)) < extent:
 				sponsorNearRegion.append(sponsor.__dict__)
 
 
