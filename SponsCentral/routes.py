@@ -11,6 +11,8 @@ from sqlalchemy.orm import Session
 #from SponsCentral import nearbyParty, nearbySponsor
 from math import sqrt
 from googlemaps import Client as GoogleMaps
+import requests
+from SponsCentral.near import nearbyParty, nearbySponsor
 
 
 @app.route("/")
@@ -85,6 +87,30 @@ def registerParty():
         user = User.query.all().pop()
         partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data, user_id=user.id)
 
+        #for region linking
+        gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
+
+        form = request.form()
+        location = form.party_address.data
+        lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
+
+        list_Regions = []
+        list_Regions = Region.query.all()
+
+        reg = list_Regions[0]
+        nearestDistance = sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2)
+        nearestRegion = reg
+        for region in list_Regions:
+            extent = (sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2))
+            if extent<nearestDistance:
+                nearestRegion = region
+                nearestDistance = extent
+
+        ###Shreyansh/Vidhi
+        #now this 'region' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
+        #This region has a region_id, which is to be linked with the user using a foreign key
+        #Please make the other changes as necessary
+
         if form.party_logo.data:
             picture_file = save_picture(form.party_logo.data)
             partyUser.party_logo = picture_file
@@ -103,6 +129,31 @@ def registerSponsor():
     if form.validate_on_submit():
         user = User.query.all().pop()
         sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data, user_id=user.id)
+
+       #for region linking
+        gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
+
+        form = request.form()
+        location = form.sponsor_address.data
+        lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
+
+        list_Regions = []
+        list_Regions = Region.query.all()
+
+        reg = list_Regions[0]
+        nearestDistance = sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2)
+        nearestRegion = reg
+        for region in list_Regions:
+            extent = (sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2))
+            if extent<nearestDistance:
+                nearestRegion = region
+                nearestDistance = extent
+
+        ###Shreyansh/Vidhi
+        #now this 'region' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
+        #This region has a region_id, which is to be linked with the user using a foreign key
+        #Please make the other changes as necessary
+
 
         if form.sponsor_logo.data:
             picture_file = save_picture(form.sponsor_logo.data)

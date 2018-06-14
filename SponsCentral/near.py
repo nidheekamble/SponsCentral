@@ -12,7 +12,9 @@ gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geoco
 # r = requests.get(url, data=None)
 #API key for Matrix API
 
-@app.route('/nearbyParty', methods = ['GET','POST']) #sponsor looking for parties
+@app.route('/nearbyParty', methods = ['POST']) #sponsor looking for parties
+@login_required
+
 def nearbyParty():
 
 	form = request.form()
@@ -20,8 +22,9 @@ def nearbyParty():
 	lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
 
 
-	extent = 2000 #radius distance in meters, centered at sponsor address
+	'''extent = 2000 #radius distance in meters, centered at sponsor address
 
+	list_Regions = []
 	list_Regions = Region.query.all()
 	nearbyRegion = [] #finding regions nearest to sponsor
 
@@ -29,7 +32,7 @@ def nearbyParty():
 		if sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2) < extent:
 				nearbyRegion.append(reg.__dict__)
 
-
+	list_Parties = []
 	list_Parties = PartyUser.query.all()
 	partyNearRegion = [] #finding parties in/near each of the close regions
 	for party in list_Parties:
@@ -46,19 +49,32 @@ def nearbyParty():
 	if(r.json()<extent):
 		nearbyParty.append(party.__dict__)
 	#print(r.json())
-	return flask.jsonify(nearbyParty)
+	return flask.jsonify(nearbyParty)'''
+
+	list_Parties = []
+	list_Parties = PartyUser.query.all()
+	destinations = [str(party.party_latitude)+','+str(party.party_longitude) for party in list_Parties]
+	destinations = '|'.join(destinations)
+
+	PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
+	url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
+	r = requests.get(url, params=PARAMS)
+	return(r.json())
 
 
 
-@app.route('/nearbySponsor', methods = ['GET','POST']) #parties looking for sponsors
+@app.route('/nearbySponsor', methods = ['POST']) #parties looking for sponsors
+@login_required
+
 def nearbySponsor():
 	form = request.form()
 	location = form.party_address.data
 	lat, lng = gmaps.address_to_latlng(location)
 
 
-	extent = 2000 #radius distance in meters, centered at party address
+	'''extent = 2000 #radius distance in meters, centered at party address
 
+	list_Regions = []
 	list_Regions = Region.query.all()
 	nearbyRegion = [] #finding regions nearest to party
 
@@ -66,7 +82,7 @@ def nearbySponsor():
 		if sqrt((reg.latitude - lat ** 2) + (reg.longitude - lng) ** 2) < extent:
 				nearbyRegion.append(reg.__dict__)
 
-
+	list_Sponsors = []
 	list_Sponsors = SponsorUser.query.all()
 	sponsorNearRegion = [] #finding Sponsors in/near each of the close regions
 	for sponsor in list_Sponsors:
@@ -83,5 +99,14 @@ def nearbySponsor():
 	if(r.json()<extent):
 		nearbySponsor.append(sponsor.__dict__)
 	#print(r.json())
-	return flask.jsonify(nearbySponsor)
+	return flask.jsonify(nearbySponsor)'''
 
+	list_Sponsors = []
+	list_Sponsors = PartyUser.query.all()
+	destinations = [str(sponsor.sponsor_latitude)+','+str(sponsor.sponsor_longitude) for sponsor in list_Parties]
+	destinations = '|'.join(destinations)
+
+	PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
+	url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
+	r = requests.get(url, params=PARAMS)
+	return(r.json())
