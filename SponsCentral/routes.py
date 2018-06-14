@@ -9,7 +9,7 @@ import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.orm import Session
 from math import sqrt
-from googlemaps import Client as GoogleMaps
+from googlemaps import GoogleMaps
 import requests
 from SponsCentral.near import nearbyParty, nearbySponsor
 

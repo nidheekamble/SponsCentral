@@ -1,7 +1,7 @@
 from flask import Flask, session, redirect, url_for, escape, request
 from math import sqrt
 from flask_login import login_user, current_user, logout_user, login_required
-from googlemaps import Client as GoogleMaps
+from googlemaps import GoogleMaps
 import requests
 
 app = Flask(__name__)
