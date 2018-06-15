@@ -35,6 +35,8 @@ function initMap() {
       {{ lat = location.latitude }}
       {{ lng = location.longitude }}
 
+  {% endif %}
+
    var loc = {lat: lat, lng: lng};
     // map opens, centered at this location
     var map = new google.maps.Map(
