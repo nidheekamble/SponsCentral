@@ -94,14 +94,11 @@ def registerParty():
         partyUser.party_latitude = location.latitude
         partyUser.party_longitude = location.longitude
 
-        list_regions = []
-        for region in Region.query.all():
-            list_regions.append()
 
-        first_region = list_regions[0]
+        first_region = Region.query.first()
         nearestDistance = sqrt(((first_region.latitude - partyUser.party_latitude)** 2) + ((first_region.longitude - partyUser.party_longitude) ** 2))
         nearestRegion = first_region
-        for region in list_regions:
+        for region in Region.query.all():
             extent = sqrt(((region.latitude - partyUser.party_latitude)** 2) + ((region.longitude - partyUser.party_longitude) ** 2))
             if extent<nearestDistance:
                 nearestRegion = region
@@ -109,9 +106,9 @@ def registerParty():
 
 
          ###Shreyansh/Vidhi
-        
+
         #now this 'nearestRegion' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
-        #This region has a region_id, which is to be linked with the user 
+        #This region has a region_id, which is to be linked with the user
 
         #Please make the other changes as necessary
 
@@ -143,14 +140,11 @@ def registerSponsor():
         sponsorUser.sponsor_latitude = location.latitude
         sponsorUser.sponsor_longitude = location.longitude
 
-        list_regions = []
-        for region in Region.query.all():
-            list_regions.append()
 
-        first_region = list_regions[0]
+        first_region = Region.query.first()
         nearestDistance = sqrt(((first_region.latitude - sponsorUser.sponsor_latitude)** 2) + ((first_region.longitude - sponsorUser.sponsor_longitude) ** 2))
         nearestRegion = first_region
-        for region in list_regions:
+        for region in Region.query.all():
             extent = sqrt(((region.latitude - sponsorUser.sponsor_latitude)** 2) + ((region.longitude - sponsorUser.sponsor_longitude) ** 2))
             if extent<nearestDistance:
                 nearestRegion = region
@@ -159,7 +153,7 @@ def registerSponsor():
         ###Shreyansh/Vidhi
 
         #now this 'nearestRegion' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
-        #This region has a region_id, which is to be linked with the user 
+        #This region has a region_id, which is to be linked with the user
 
         #Please make the other changes as necessary
 
@@ -258,12 +252,10 @@ def maps():
 
     if current_user.type == 'P':
         partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
-        print(lat)
         return render_template('API.html', lat = partyUser.party_latitude, lng = partyUser.party_longitude)
 
     else:
         sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
-        print(lng)
         return render_template('API.html', lat = sponsorUser.sponsor_latitude, lng = sponsorUser.sponsor_longitude)
 
 

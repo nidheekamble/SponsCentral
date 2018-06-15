@@ -1,10 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for request in userlist %}
-        {{request}}
         <div class="form-group">
-            <p>{{request    form.submit(class="btn btn-outline-info") }}</p>
-            {% if form.submit %}
+            {% for request in conversing.requests %}
+                {{ request }} 
 
         </div>
     {% endfor %}
