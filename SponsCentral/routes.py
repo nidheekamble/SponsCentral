@@ -87,31 +87,32 @@ def registerParty():
         partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data, user_id=user.id)
 
         #for region linking
-        gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
+        #gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
         geolocator = Nominatim()
         location = geolocator.geocode(partyUser.party_address)
-        lat = location.latitude
-        lng = location.longitude
+        partyUser.party_latitude = location.latitude
+        partyUser.party_longitude = location.longitude
 
-        #location = partyUser.party_address
-        #lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
+        list_regions = []
+        for region in Region.query.all():
+            list_regions.append()
 
-        list_Regions = []
-        list_Regions = Region.query.all()
-
-        reg = list_Regions[0]
-        nearestDistance = sqrt(((reg.latitude - lat)** 2) + ((reg.longitude - lng) ** 2))
-        nearestRegion = reg
-        for region in list_Regions:
-            extent = sqrt(((reg.latitude - lat)** 2) + ((reg.longitude - lng) ** 2))
+        first_region = list_regions[0]
+        nearestDistance = sqrt(((first_region.latitude - partyUser.party_latitude)** 2) + ((first_region.longitude - partyUser.party_longitude) ** 2))
+        nearestRegion = first_region
+        for region in list_regions:
+            extent = sqrt(((region.latitude - partyUser.party_latitude)** 2) + ((region.longitude - partyUser.party_longitude) ** 2))
             if extent<nearestDistance:
                 nearestRegion = region
                 nearestDistance = extent
 
-        ###Shreyansh/Vidhi
-        #now this 'region' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
-        #This region has a region_id, which is to be linked with the user using a foreign key
+
+         ###Shreyansh/Vidhi
+        
+        #now this 'nearestRegion' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
+        #This region has a region_id, which is to be linked with the user 
+
         #Please make the other changes as necessary
 
         if form.party_logo.data:
@@ -120,6 +121,7 @@ def registerParty():
 
         db.session.add(partyUser)
         db.session.commit()
+
         flash('Your account has been created! You are now able to log in', 'success')
         party_logo = url_for('static', filename='profile_pics/' + partyUser.party_logo)
         return redirect(url_for('login'))
@@ -133,32 +135,32 @@ def registerSponsor():
         user = User.query.all().pop()
         sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data, user_id=user.id)
 
-       #for region linking
-        gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
+        #for region linking
+        #gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
         geolocator = Nominatim()
         location = geolocator.geocode(sponsorUser.sponsor_address)
-        lat = location.latitude
-        lng = location.longitude
+        sponsorUser.sponsor_latitude = location.latitude
+        sponsorUser.sponsor_longitude = location.longitude
 
-        #location = sponsorUser.sponsor_address
-        #lat, lng = gmaps.address_to_latlng(location) #converting string address to coordinates
+        list_regions = []
+        for region in Region.query.all():
+            list_regions.append()
 
-        list_Regions = []
-        list_Regions = Region.query.all()
-
-        reg = list_Regions[0]
-        nearestDistance = sqrt(((reg.latitude - lat)** 2) + ((reg.longitude - lng) ** 2))
-        nearestRegion = reg
-        for region in list_Regions:
-            extent = sqrt(((reg.latitude - lat)** 2) + ((reg.longitude - lng) ** 2))
+        first_region = list_regions[0]
+        nearestDistance = sqrt(((first_region.latitude - sponsorUser.sponsor_latitude)** 2) + ((first_region.longitude - sponsorUser.sponsor_longitude) ** 2))
+        nearestRegion = first_region
+        for region in list_regions:
+            extent = sqrt(((region.latitude - sponsorUser.sponsor_latitude)** 2) + ((region.longitude - sponsorUser.sponsor_longitude) ** 2))
             if extent<nearestDistance:
                 nearestRegion = region
                 nearestDistance = extent
 
         ###Shreyansh/Vidhi
-        #now this 'region' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
-        #This region has a region_id, which is to be linked with the user using a foreign key
+
+        #now this 'nearestRegion' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
+        #This region has a region_id, which is to be linked with the user 
+
         #Please make the other changes as necessary
 
 
@@ -168,6 +170,7 @@ def registerSponsor():
 
         db.session.add(sponsorUser)
         db.session.commit()
+
         flash('Your account has been created! You are now able to log in', 'success')
         sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
         return redirect(url_for('login'))
@@ -255,20 +258,14 @@ def maps():
 
     if current_user.type == 'P':
         partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
-        geolocator = Nominatim()
-        location = geolocator.geocode(partyUser.party_address)
-        lat = location.latitude
-        lng = location.longitude
         print(lat)
+        return render_template('API.html', lat = partyUser.party_latitude, lng = partyUser.party_longitude)
+
     else:
         sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
-        geolocator = Nominatim()
-        location = geolocator.geocode(sponsorUser.sponsor_address)
-        lat = location.latitude
-        lng = location.longitude
         print(lng)
+        return render_template('API.html', lat = sponsorUser.sponsor_latitude, lng = sponsorUser.sponsor_longitude)
 
-    return render_template('API.html', lat = lat, lng=lng)
 
 
 
