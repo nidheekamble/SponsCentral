@@ -250,20 +250,25 @@ def account():
 
 
 @app.route("/maps", methods = ['GET', 'POST'])
+@login_required
 def maps():
-    if current_user.type == 'P'
+
+    if current_user.type == 'P':
+        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
         geolocator = Nominatim()
         location = geolocator.geocode(partyUser.party_address)
-        latitude = location.latitude 
-        longitude = location.longitude 
-
-    else
+        lat = location.latitude
+        lng = location.longitude
+        print(lat)
+    else:
+        sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
         geolocator = Nominatim()
         location = geolocator.geocode(sponsorUser.sponsor_address)
-        latitude = location.latitude
-        longitude = location.longitude
+        lat = location.latitude
+        lng = location.longitude
+        print(lng)
 
-    return render_template('API.html')
+    return render_template('API.html', lat = lat, lng=lng)
 
 
 
