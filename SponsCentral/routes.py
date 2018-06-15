@@ -137,7 +137,7 @@ def registerSponsor():
         gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
         geolocator = Nominatim()
-        location = geolocator.geocode(partyUser.party_address)
+        location = geolocator.geocode(sponsorUser.sponsor_address)
         lat = location.latitude
         lng = location.longitude
 
