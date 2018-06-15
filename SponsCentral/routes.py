@@ -251,6 +251,18 @@ def account():
 
 @app.route("/maps", methods = ['GET', 'POST'])
 def maps():
+    if current_user.type == 'P'
+        geolocator = Nominatim()
+        location = geolocator.geocode(partyUser.party_address)
+        latitude = location.latitude 
+        longitude = location.longitude 
+
+    else
+        geolocator = Nominatim()
+        location = geolocator.geocode(sponsorUser.sponsor_address)
+        latitude = location.latitude
+        longitude = location.longitude
+
     return render_template('API.html')
 
 

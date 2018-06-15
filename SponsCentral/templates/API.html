@@ -1,5 +1,3 @@
-{% from geopy.geocoders import Nominatim %}
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -18,25 +16,11 @@
   <body>
     <!--The div element for the map -->
     <div id="map"></div>
-    {% if current_user.type == 'P' %}
-
-      {{ geolocator = Nominatim() }}
-      {{ location = geolocator.geocode(partyUser.party_address) }}
-      {{ lat = location.latitude }}
-      {{ lng = location.longitude }}
-
-    {% else %}
-      {{ geolocator = Nominatim() }}
-      {{ location = geolocator.geocode(sponsorUser.sponsor_address) }}
-      {{ lat = location.latitude }}
-      {{ lng = location.longitude }}
-
-  {% endif %}
     <script>
 // Initialize and add the map
 function initMap() {
 
-    var loc = {lat: lat, lng: lng};
+    var loc = {lat: latitude, lng: longitude};
     // map opens, centered at this location
     var map = new google.maps.Map(
         document.getElementById('map'), {zoom: 12, center: loc});
