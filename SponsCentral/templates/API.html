@@ -24,16 +24,16 @@ function initMap() {
 
   {% if current_user.type == 'P' %}
 
-    {{ geolocator = Nominatim() }}
-    {{ location = geolocator.geocode(partyUser.party_address) }}
-    {{ lat = location.latitude }}
-    {{ lng = location.longitude }}
+      {{ geolocator = Nominatim() }}
+      {{ location = geolocator.geocode(partyUser.party_address) }}
+      {{ lat = location.latitude }}
+      {{ lng = location.longitude }}
 
   {% else %}
-    {{ geolocator = Nominatim() }}
-    {{ location = geolocator.geocode(sponsorUser.sponsor_address) }}
-    {{ lat = location.latitude }}
-    {{ lng = location.longitude }}
+      {{ geolocator = Nominatim() }}
+      {{ location = geolocator.geocode(sponsorUser.sponsor_address) }}
+      {{ lat = location.latitude }}
+      {{ lng = location.longitude }}
 
    var loc = {lat: lat, lng: lng};
     // map opens, centered at this location
