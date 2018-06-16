@@ -1,0 +1,59 @@
+<!-- This file has been written with the intention of displaying the contents of this file on the website page as it is.
+To be treated as the final draft; please make additions/modifications if required and rectify any inconsistencies if present. --> 
+<!--The separate paragraphs here indicate the separation that is to be there on the actual page as well. -->
+
+<!-- Please make the other necessary changes as you see fit. Comments have also been added. -->
+
+
+
+Congratulations on a successful deal!
+Time to seal it with a transaction.
+
+To make the process easier, here are some links for net banking (We're a new developing website, so we couldn't facilitate gateways. However, we try our best to give you as nice an experience as we can! We would be gladly grateful if you are willing to sponsor us here. Thanks! ) <!--'here' mein 'Contact Us' ka href laga dena-->
+
+
+The transaction may be made online by some of the following methods (these facilities are provided by every bank; user interface and limitations/charges may differ for different banks):
+
+<!--ordered/unordered list; names in bold. Adaquate spacing between list elements-->
+
+1 - Immediate Payment Service (IMPS):
+A 24x7 service.*
+
+2 - National Electronic Funds Transfer (NEFT):
+Normally, the minimum transaction amount required for NEFT is Rs 1 and the maximum amount allowed is Rs 10 Lakh. *
+
+3 - Real Time Gross Settlement (RTGS):
+The fund transfer limit through RTGS is usually from Rs 2 Lakh to Rs 10 Lakh. Can be made only during the bank's working hours and working days.*
+
+4 - Unified Payment Interface (UPI):
+UPI can be used fro immediate fund transfer. It uses the same system as IMPS, but is meant for mobile transfer using the bank’s app. The transaction may be made via the app downloaded on a phone by entering the payee ID and the amount detail. *
+
+
+
+<!--Links-->
+https://retail.onlinesbi.com/retail/login.htm
+https://infinity.icicibank.com/corp/Login.jsp
+https://www.bankofbaroda.co.in/login.htm [Choose from login options]
+https://www.obconline.co.in/ [For logging in, choose from Retail or Corporate]
+https://retail.axisbank.co.in/
+https://www.centralbank.net.in/jsp/startMain.jsp [For logging in, choose from Personal or Corporate]
+https://login.deutschebank.co.in/
+https://www.hdfcbank.com/personal/ways-to-bank/bank-online/netbanking [From the top pane, towards the right: From Ways to bank, choose Login]
+https://www.indusind.com/login-intermediary-page.html [On clicking on 'Continue to IndusNet', you will be redirected to the login page]
+https://www.kotak.com/j1001mp/netapp/MainPage.jsp
+https://www.online.citibank.co.in/products-services/online-services/internet-banking.htm [At the right-center of the screen, click on'Login Now'. A separate browser session will be opened for the same]
+https://www.iobnet.co.in/ibanking/login.do
+
+
+
+We wish you a successful deal. 
+We are happy that you chose Spons.Central. See you again!
+
+
+<!--Footer. Should still be visible-->
+
+*Please contact the respective bank(s) for further details.
+
+<!--one more footer at the bottom. Still visible -->
+
+The links provided on this webpage have been verified to be authentic as of June 2018. Spons.Central provides these links to third parties to facilitate a better user experience and shall not be held responsible for any activity that occurs beyond the domains of Spons.Central's official website.
