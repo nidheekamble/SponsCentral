@@ -1,60 +1,65 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <style>
-       /* this div element contains the map. Sets size of the div */
-      #map {
-        height: 100%;
-       }
-      html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      }
-    </style>
-  </head>
-  <body>
+    <head>
+        <style>
+            /* this div element contains the map. Sets size of the div */
+            #map
+            {
+                height: 100%;
+            }
+            html, body
+            {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
+    <body>
     <!--The div element for the map -->
-    <div id="map"></div>
+        <div id="map"></div>
+        <script>
+        // Initialize and add the map
+        function initMap()
+        {
 
-    <script>
-// Initialize and add the map
-function initMap() {
+            var loc = {lat: {{lat}}, lng: {{lng}}};
+            // map opens, centered at this location
+            var map = new google.maps.Map(
+                document.getElementById('map'), {zoom: 12, center: loc});
+            // The marker, positioned at loc
+            var marker = new google.maps.Marker({position: loc, map: map});
 
-   var loc = {lat: {{lat}}, lng: {{lng}}};
-    // map opens, centered at this location
-    var map = new google.maps.Map(
-        document.getElementById('map'), {zoom: 12, center: loc});
-    // The marker, positioned at loc
-    var marker = new google.maps.Marker({position: loc, map: map});
 
-    nearby_list = {{nearby_list}};
-    length = {{length}};
+            var infowindow = new google.maps.InfoWindow();
 
-      var infowindow = new google.maps.InfoWindow();
+            var marker, i;
 
-    var marker, i;
+            //for (i = 0; i < elements; i++)
+                //{
+                    marker = new google.maps.Marker
+                    (
+                        {
+                            position: new google.maps.LatLng({{nearby_list[1][1]}}, {{nearby_list[1][2]}}),map: map
+                        }
+                    );
 
-    for (i = 0; i < length; i++) {
-       marker = new google.maps.Marker({
-        position: new google.maps.LatLng(nearby_list[i][1], nearby_list[i][2]),
-        map: map
-      });
+                    google.maps.event.addListener(marker, 'click', (function(marker, i)
+                    {
+                        return function()
+                        {
+                            infowindow.setContent(nearby_list[1][0]);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
 
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(nearby_list[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i)); 
-    }  
-     
+
 </script>
- <!--Loading API from the mentioned URL
+    <!--Loading API from the mentioned URL
     async attribute allows the browser to render the page while the API loads
-    the 'callback' parameter will execute the initMap() function
-    -->
+    the 'callback' parameter will execute the initMap() function -->
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKlMl1HFw1wNG4sEDWzEe1Mnth9qWPyI8&callback=initMap">
     </script>

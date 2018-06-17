@@ -265,8 +265,6 @@ def maps():
 
 def nearbyParty():
 
-    form = RegistrationFormSponser()
-    user = User.query.all().pop()
     sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
 
     #sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data, user_id=user.id)
@@ -293,7 +291,7 @@ def nearbyParty():
     partyNearRegion = [] #finding parties in/near each of the close regions
 
     for party in list_parties:
-        for region in nearbyRegion: 
+        for region in nearbyRegion:
             if sqrt(((party.party_latitude - region.latitude) ** 2) + ((party.party_longitude - region.longitude) ** 2)) < extent:
                 partyNearRegion.append(party.__dict__)
 
@@ -319,7 +317,8 @@ def nearbyParty():
 
     for party in PartyUser.query.all():
         party_data = [party.party_name, party.party_latitude, party.party_longitude]
-        list_parties.append(party)
+        list_parties.append(party_data)
+        print(list_parties)
 
     '''destinations = [str(party.party_latitude)+','+str(party.party_longitude) for party in list_parties]
     destinations = '|'.join(destinations)
@@ -330,7 +329,7 @@ def nearbyParty():
 
     #return(r.json())'''
     elements = len(list_parties)
-    return render_template('nearList.html', nearby_list = list_parties, lat = sponsorUser.sponsor_latitude, lng = sponsorUser.sponsor_longitude, length = elements)
+    return render_template('nearList.html', nearby_list = list_parties, lat = lat, lng = lng, elements = elements)
 
 
 
@@ -339,8 +338,7 @@ def nearbyParty():
 
 def nearbySponsor():
 
-    form = RegistrationFormParty()
-    user = User.query.all().pop()
+
     partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
 
     #partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data, user_id=user.id)
@@ -393,7 +391,7 @@ def nearbySponsor():
     for sponsor in SponsorUser.query.all():
         sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude]
         list_sponsors.append(sponsor_data)
-
+        print(list_sponsors)
     '''destinations = [str(sponsor.sponsor_latitude)+','+str(sponsor.sponsor_longitude) for sponsor in list_sponsors]
     destinations = '|'.join(destinations)
 
@@ -403,7 +401,7 @@ def nearbySponsor():
 
     #return(r.json())'''
     elements = len(list_sponsors)
-    return render_template('nearList.html', nearby_list = list_sponsors, lat = partyUser.party_latitude, lng = partyUser.party_longitude, length = elements)
+    return render_template('nearList.html', nearby_list = list_sponsors, lat = lat, lng = lng, elements = elements)
 
 
 
