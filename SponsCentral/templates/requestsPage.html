@@ -1,9 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
-        <div class="form-group">
-            {% for request in conversing.requests %}
-                {{ request }} 
-
-        </div>
-    {% endfor %}
+    <div class="content-section">
+        <form method="POST" action=""enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {% for user1 in conversing.user1 %}
+                        {{ user1 }}
+                        {{ form.accept(class="btn btn-outline-info") }}
+                        {% if form.accept %}
+                            {% form.accepted=True %}
+                        {% endif %}
+                        {{ form.decline(class="btn btn-outline-info")}}
+                        {% if form.decline %}
+                            {% form.accepted=False %}
+                        {% endif %}
+                    {%e ndfor %}
+                </div>
+            </fieldset>
+        </form>
+    </div>
 {% endblock content %}

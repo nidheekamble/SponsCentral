@@ -286,6 +286,7 @@ def invite():
         conversing = Conversing(user1 = current_user.id, user2=form.user2_id, status='sent')
         db.session.add(conversing)
         db.session.commit()
+    return redirect(url_for('inviteRecieved'))
 
 
 
