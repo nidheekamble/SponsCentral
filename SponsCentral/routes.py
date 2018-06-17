@@ -2,7 +2,7 @@ import os
 import secrets
 from SponsCentral import app, db, bcrypt
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request
+from flask import Flask, session, escape, render_template, url_for, flash, redirect, request
 from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountForm, ChatBoxText, RequestForm, InviteForm
 from SponsCentral.models import PartyUser, SponsorUser, User, Region, Conversing, Conversation
 import hashlib #for SHA512
@@ -11,7 +11,6 @@ from sqlalchemy.orm import Session
 from math import sqrt
 from googlemaps import Client as GoogleMaps
 import requests
-from SponsCentral.near import nearbyParty, nearbySponsor
 from geopy.geocoders import Nominatim
 
 
@@ -257,6 +256,154 @@ def maps():
     else:
         sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
         return render_template('API.html', lat = sponsorUser.sponsor_latitude, lng = sponsorUser.sponsor_longitude)
+
+
+
+
+@app.route('/nearbyParty', methods = ['GET', 'POST']) #sponsor looking for parties
+@login_required
+
+def nearbyParty():
+
+    form = RegistrationFormSponser()
+    user = User.query.all().pop()
+    sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
+
+    #sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data, user_id=user.id)
+
+    lat = sponsorUser.sponsor_latitude
+    lng = sponsorUser.sponsor_longitude
+
+    '''extent = 2000 #radius distance in meters, centered at sponsor address
+
+    list_regions = []
+    for region in Region.query.all():
+        list_regions.append(region)
+
+    nearbyRegion = [] #finding regions nearest to sponsor
+
+    for region in list_regions:
+        if sqrt(((region.latitude - lat)** 2) + ((region.longitude - lng) ** 2)) < extent:
+                nearbyRegion.append(region.__dict__)
+
+    list_parties = []
+    for party in PartyUser.query.all():
+        list_parties.append(party)
+
+    partyNearRegion = [] #finding parties in/near each of the close regions
+
+    for party in list_parties:
+        for region in nearbyRegion: 
+            if sqrt(((party.party_latitude - region.latitude) ** 2) + ((party.party_longitude - region.longitude) ** 2)) < extent:
+                partyNearRegion.append(party.__dict__)
+
+    party_data = []
+    nearbyParties = []
+
+    for party in partyNearRegion:
+        destinations = [str(party.party_latitude)+','+str(party.party_longitude)]
+        if sqrt(((party.party_latitude - lat) ** 2) + ((party.party_longitude - lng) ** 2)) < extent:
+            party_data = [party.party_name, party.party_latitude, party.party_longitude]
+            nearbyParties.append(party_data)
+            destinations = '|'.join(destinations)
+
+    PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
+    r = requests.get(url, params=PARAMS)
+
+    return(r.json())
+    '''
+
+    list_parties = []
+    party_data = []
+
+    for party in PartyUser.query.all():
+        party_data = [party.party_name, party.party_latitude, party.party_longitude]
+        list_parties.append(party)
+
+    '''destinations = [str(party.party_latitude)+','+str(party.party_longitude) for party in list_parties]
+    destinations = '|'.join(destinations)
+
+    PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
+    r = requests.get(url, params=PARAMS)
+
+    #return(r.json())'''
+    elements = len(list_parties)
+    return render_template('nearList.html', nearby_list = list_parties, lat = sponsorUser.sponsor_latitude, lng = sponsorUser.sponsor_longitude, length = elements)
+
+
+
+@app.route('/nearbySponsor', methods = ['GET','POST']) #parties looking for sponsors
+@login_required
+
+def nearbySponsor():
+
+    form = RegistrationFormParty()
+    user = User.query.all().pop()
+    partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
+
+    #partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data, user_id=user.id)
+
+    lat = partyUser.party_latitude
+    lng = partyUser.party_longitude
+
+    '''extent = 2000 #radius distance in meters, centered at party address
+
+    list_regions = []
+    for region in Region.query.all():
+        list_regions.append(region)
+
+    nearbyRegion = [] #finding regions nearest to sponsor
+
+    for region in list_regions:
+        if sqrt(((region.latitude - lat)** 2) + ((region.longitude - lng) ** 2)) < extent:
+                nearbyRegion.append(region.__dict__)
+
+    list_sponsors = []
+    for sponsor in SponsorUser.query.all():
+        list_sponsors.append(sponsor)
+
+    sponsorNearRegion = [] #finding sponsors in/near each of the close regions
+
+    for sponsor in list_sponsors:
+        for region in nearbyRegion:
+            if sqrt(((sponsor.sponsor_latitude - region.latitude) ** 2) + ((sponsor.sponsor_longitude - region.longitude) ** 2)) < extent:
+                sponsorNearRegion.append(sponsor.__dict__)
+
+    sponsor_data = []
+    nearbySponsors = []
+
+    for sponsor in sponsorNearRegion:
+        destinations = [str(sponsor.sponsor_latitude)+','+str(sponsor.sponsor_longitude)]
+        if sqrt(((sponsor.sponsor_latitude - lat) ** 2) + ((sponsor.sponsor_longitude - lng) ** 2)) < extent:
+            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude]
+            nearbySponsors.append(sponsor_data)
+            destinations = '|'.join(destinations)
+
+    PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
+    r = requests.get(url, params=PARAMS)
+
+    return(r.json())'''
+
+    list_sponsors = []
+    sponsor_data = []
+
+    for sponsor in SponsorUser.query.all():
+        sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude]
+        list_sponsors.append(sponsor_data)
+
+    '''destinations = [str(sponsor.sponsor_latitude)+','+str(sponsor.sponsor_longitude) for sponsor in list_sponsors]
+    destinations = '|'.join(destinations)
+
+    PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
+    r = requests.get(url, params=PARAMS)
+
+    #return(r.json())'''
+    elements = len(list_sponsors)
+    return render_template('nearList.html', nearby_list = list_sponsors, lat = partyUser.party_latitude, lng = partyUser.party_longitude, length = elements)
 
 
 
