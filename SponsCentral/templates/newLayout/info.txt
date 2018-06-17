@@ -1,0 +1,13 @@
+Contains HTML5 codes for the new layout. Has the following 9 HTML-CSS files
+
+homepage/sitepage
+regitration (step 1)
+registration (step 2)
+login
+account
+background 
+background_with_logo (the background image that would be common to all website pages)
+designerSignature
+logo_spons.central (just the logo)
+
+ and 1 PDF file: ratio (was not converted to HTML since it was given only for reference)
