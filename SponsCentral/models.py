@@ -58,7 +58,7 @@ class SponsorUser(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
     user = db.relationship("User", back_populates= "sponsorUser" )
     def __repr__(self):
-        return f"SponsorUser('{self.sponsor_name}','{self.sponsor_type}','{self.sponsor_kind}','{self.sponsor_contactNo1}','{self.sponsor_contactNo2}','{self.sponsor_address}','{self.sponsor_about}','{self.sponsor_fromAmount}','{self.sponsor_toAmount}','{self.sponsor_logo}', '{self.userLink}')"
+        return f"SponsorUser('{self.sponsor_name}','{self.sponsor_type}','{self.sponsor_kind}','{self.sponsor_contactNo1}','{self.sponsor_contactNo2}','{self.sponsor_address}','{self.sponsor_about}','{self.sponsor_fromAmount}','{self.sponsor_toAmount}','{self.sponsor_logo}')"
 
 class Region(db.Model):
     region_id=db.Column(db.Integer,primary_key=True)
