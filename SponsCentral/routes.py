@@ -260,6 +260,7 @@ def maps():
 
 
 
+
 @app.route('/nearbyParty', methods = ['GET', 'POST']) #sponsor looking for parties
 @login_required
 
@@ -272,7 +273,7 @@ def nearbyParty():
     lat = sponsorUser.sponsor_latitude
     lng = sponsorUser.sponsor_longitude
 
-    '''extent = 2000 #radius distance in meters, centered at sponsor address
+    extent = 6000 #radius distance in meters, centered at sponsor address
 
     list_regions = []
     for region in Region.query.all():
@@ -282,7 +283,7 @@ def nearbyParty():
 
     for region in list_regions:
         if sqrt(((region.latitude - lat)** 2) + ((region.longitude - lng) ** 2)) < extent:
-                nearbyRegion.append(region.__dict__)
+                nearbyRegion.append(region)
 
     list_parties = []
     for party in PartyUser.query.all():
@@ -293,7 +294,7 @@ def nearbyParty():
     for party in list_parties:
         for region in nearbyRegion:
             if sqrt(((party.party_latitude - region.latitude) ** 2) + ((party.party_longitude - region.longitude) ** 2)) < extent:
-                partyNearRegion.append(party.__dict__)
+                partyNearRegion.append(party)
 
     party_data = []
     nearbyParties = []
@@ -303,14 +304,16 @@ def nearbyParty():
         if sqrt(((party.party_latitude - lat) ** 2) + ((party.party_longitude - lng) ** 2)) < extent:
             party_data = [party.party_name, party.party_latitude, party.party_longitude]
             nearbyParties.append(party_data)
-            destinations = '|'.join(destinations)
+            #destinations = '|'.join(destinations)
 
-    PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
+    print (nearbyParties)
+      
+    '''PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
     r = requests.get(url, params=PARAMS)
 
     return(r.json())
-    '''
+    
 
     list_parties = []
     party_data = []
@@ -318,18 +321,10 @@ def nearbyParty():
     for party in PartyUser.query.all():
         party_data = [party.party_name, party.party_latitude, party.party_longitude]
         list_parties.append(party_data)
-        print(list_parties)
+        print(list_parties)'''
 
-    '''destinations = [str(party.party_latitude)+','+str(party.party_longitude) for party in list_parties]
-    destinations = '|'.join(destinations)
-
-    PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
-    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
-    r = requests.get(url, params=PARAMS)
-
-    #return(r.json())'''
-    elements = len(list_parties)
-    return render_template('nearList.html', nearby_list = list_parties, lat = lat, lng = lng, elements = elements)
+    elements = len(nearbyParties)
+    return render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
 
 
 
@@ -346,7 +341,7 @@ def nearbySponsor():
     lat = partyUser.party_latitude
     lng = partyUser.party_longitude
 
-    '''extent = 2000 #radius distance in meters, centered at party address
+    extent = 6000 #radius distance in meters, centered at party address
 
     list_regions = []
     for region in Region.query.all():
@@ -356,7 +351,7 @@ def nearbySponsor():
 
     for region in list_regions:
         if sqrt(((region.latitude - lat)** 2) + ((region.longitude - lng) ** 2)) < extent:
-                nearbyRegion.append(region.__dict__)
+                nearbyRegion.append(region)
 
     list_sponsors = []
     for sponsor in SponsorUser.query.all():
@@ -367,7 +362,7 @@ def nearbySponsor():
     for sponsor in list_sponsors:
         for region in nearbyRegion:
             if sqrt(((sponsor.sponsor_latitude - region.latitude) ** 2) + ((sponsor.sponsor_longitude - region.longitude) ** 2)) < extent:
-                sponsorNearRegion.append(sponsor.__dict__)
+                sponsorNearRegion.append(sponsor)
 
     sponsor_data = []
     nearbySponsors = []
@@ -377,14 +372,10 @@ def nearbySponsor():
         if sqrt(((sponsor.sponsor_latitude - lat) ** 2) + ((sponsor.sponsor_longitude - lng) ** 2)) < extent:
             sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude]
             nearbySponsors.append(sponsor_data)
-            destinations = '|'.join(destinations)
+            #destinations = '|'.join(destinations)
+    print (sponsorNearRegion)
 
-    PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
-    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
-    r = requests.get(url, params=PARAMS)
-
-    return(r.json())'''
-
+    '''
     list_sponsors = []
     sponsor_data = []
 
@@ -392,18 +383,18 @@ def nearbySponsor():
         sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude]
         list_sponsors.append(sponsor_data)
         print(list_sponsors)
-    '''destinations = [str(sponsor.sponsor_latitude)+','+str(sponsor.sponsor_longitude) for sponsor in list_sponsors]
+    destinations = [str(sponsor.sponsor_latitude)+','+str(sponsor.sponsor_longitude) for sponsor in list_sponsors]
     destinations = '|'.join(destinations)
 
     PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
     r = requests.get(url, params=PARAMS)
 
-    #return(r.json())'''
-    elements = len(list_sponsors)
-    return render_template('nearList.html', nearby_list = list_sponsors, lat = lat, lng = lng, elements = elements)
+    return(r.json())'''
+    elements = len(nearbySponsors)
+    return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
 
-
+    
 
 
 @app.route("/requests", methods= ['POST', 'GET'])

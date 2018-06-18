@@ -24,36 +24,44 @@
         function initMap()
         {
 
+            var bounds  = new google.maps.LatLngBounds();
+
             var loc = {lat: {{lat}}, lng: {{lng}}};
             // map opens, centered at this location
             var map = new google.maps.Map(
-                document.getElementById('map'), {zoom: 12, center: loc});
+                document.getElementById('map'), {zoom: 7, center: loc});
             // The marker, positioned at loc
             var marker = new google.maps.Marker({position: loc, map: map});
 
 
             var infowindow = new google.maps.InfoWindow();
 
-            var marker, i;
+            var marker, i=0;
 
-            //for (i = 0; i < elements; i++)
-                //{
-                    marker = new google.maps.Marker
-                    (
-                        {
-                            position: new google.maps.LatLng({{nearby_list[1][1]}}, {{nearby_list[1][2]}}),map: map
-                        }
-                    );
-
-                    google.maps.event.addListener(marker, 'click', (function(marker, i)
+            {% for i in range (0,elements): %}
+            {
+                marker = new google.maps.Marker
+                (
                     {
-                        return function()
-                        {
-                            infowindow.setContent(nearby_list[1][0]);
-                            infowindow.open(map, marker);
-                        }
-                    })(marker, i));
-                }
+                        position: new google.maps.LatLng({{nearby_list[i][1]}}, {{nearby_list[i][2]}}),
+                        map: map
+                    }
+                );
+
+
+                google.maps.event.addListener(marker, 'click', (function(marker, i)
+                {
+                    return function()
+                    {
+                        infowindow.setContent({{nearby_list[i][0]}});
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+
+                i = i+1;
+            }
+            {% endfor %}
+        }
 
 
 </script>
