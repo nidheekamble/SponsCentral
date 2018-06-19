@@ -395,6 +395,11 @@ def nearbySponsor():
     return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
 
 
+@app.route('/banking', methods = ['GET','POST']) #parties looking for sponsors
+@login_required
+def banking():
+    return render_template('banking.html', title='banking')
+
 
 
 @app.route("/requests", methods= ['POST', 'GET'])

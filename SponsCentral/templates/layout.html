@@ -71,8 +71,12 @@
                         <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('connection') }}"><h6>Invites</h6></a></button></li>
                         <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('inviteRecieved') }}"><h6>Requests</h6></a></button></li>
                         <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('chatbox') }}"><h6>Chat</h6></a></button></li>
-                        <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('maps') }}"><h6>Maps</h6></a></button></li>
-                          <!--    <p><button class="button"><a href="{{ url_for('chatbox') }}"><h6>Banking</h6></a></button></p> -->
+                        {% if current_user.type == 'P' %}
+                            <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbySponsor') }}"><h6>Maps</h6></a></button></li>
+                        {% elif current_user.type == 'S' %}
+                            <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbyParty') }}"><h6>Maps</h6></a></button></li>
+                        {% endif %}
+                        <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('banking') }}"><h6>Banking</h6></a></button></li>
                       </ul>
                   </div>
               </div>
@@ -140,7 +144,7 @@
               <!-- Grid column -->
               <div class="col-md-2 col-lg-2 text-center mx-auto my-4">
 
-                <h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by places</h5>
+                s<h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by places</h5>
                             <div class='footer-list-item'>
                                 <a href ="/">Sponsorship in South Bombay</a>
                             </div>
@@ -150,7 +154,7 @@
 
 
 
-                <h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by streams</h5>
+                <p><h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by streams</h5></p>
                             <div class='footer-list-item'>
                                 <a href ="/">Information Technology</a>
                             </div>
