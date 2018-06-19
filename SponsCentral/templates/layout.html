@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='background.css') }}">
 
 
     {% if title %}
@@ -17,177 +18,178 @@
     {% else %}
         <title>Spons.Central</title>
     {% endif %}
+
 </head>
-<body>
+<body >
     <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-          <a class="navbar-brand mr-4" href="/">Spons.Central</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
-              <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
-            </div>
-            <!-- Navbar Right Side -->
-            <div class="navbar-nav">
-              {% if current_user.is_authenticated %}
-                <a class="nav-item nav-link" href="{{ url_for('chatbox') }}">Chat</a>
-                <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
-                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
-              {% else %}
-                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
-                <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </nav>
-    </header>
-    <main role="main" class="container">
-      <div class="row">
-        <div class="col-md-9">
-          {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-              {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                  {{ message }}
+          <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+            <div class="container">
+              <a class="navbar-brand mr-4" href="/">Spons.Central</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarToggle">
+                <div class="navbar-nav mr-auto">
+                  <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                  <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
                 </div>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-          {% block content %}{% endblock %}
-        </div>
-        <div class="col-md-3">
-          <div class="content-section">
-            <h3>Our Sidebar</h3>
-            <p class='text-muted'>Let's Socialize</p>
-              <div class="btn-group">
-                  <ul class="list-group">
-                    <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('connection') }}"><h6>Invites</h6></a></button></li>
-                    <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('inviteRecieved') }}"><h6>Requests</h6></a></button></li>
-                    <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('chatbox') }}"><h6>Chat</h6></a></button></li>
-                    <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('maps') }}"><h6>Maps</h6></a></button></li>
-                      <!--    <p><button class="button"><a href="{{ url_for('chatbox') }}"><h6>Banking</h6></a></button></p> -->
-                  </ul>
+                <!-- Navbar Right Side -->
+                <div class="navbar-nav">
+                  {% if current_user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{{ url_for('chatbox') }}">Chat</a>
+                    <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
+                    <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+                  {% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+                    <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                  {% endif %}
+                </div>
               </div>
+            </div>
+          </nav>
+        </header>
+        <main role="main" class="container">
+          <div class="row">
+            <div class="col-md-9">
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                  {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                      {{ message }}
+                    </div>
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+              {% block content %}{% endblock %}
+            </div>
+            <div class="col-md-3">
+              <div class="content-section">
+                <h3>Our Sidebar</h3>
+                <p class='text-muted'>Let's Socialize</p>
+                  <div class="btn-group">
+                      <ul class="list-group">
+                        <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('connection') }}"><h6>Invites</h6></a></button></li>
+                        <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('inviteRecieved') }}"><h6>Requests</h6></a></button></li>
+                        <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('chatbox') }}"><h6>Chat</h6></a></button></li>
+                        <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('maps') }}"><h6>Maps</h6></a></button></li>
+                          <!--    <p><button class="button"><a href="{{ url_for('chatbox') }}"><h6>Banking</h6></a></button></p> -->
+                      </ul>
+                  </div>
+              </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="page-footer font-small mdb-color lighten-3 pt-4 mt-4">
+
+          <!-- Footer Links -->
+          <div class="container text-center text-md-left">
+
+            <!-- Grid row -->
+            <div class="row">
+
+              <!-- Grid column -->
+              <div class="col-md-4 col-lg-3 mr-auto my-md-4 my-0 mt-4 mb-1">
+
+                <!-- Content -->
+                <h5 class="font-weight-bold text-uppercase mb-4">Connect. Select. Sponsor.</h5>
+                <p>We are here to help you boost your business through sponsorship.</p>
+                <p>We are here to connect right people to right people.</p>
+
+              </div>
+              <!-- Grid column -->
+
+              <hr class="clearfix w-100 d-md-none">
+
+              <!-- Grid column -->
+              <div class="col-md-2 col-lg-2 mx-auto my-md-4 my-0 mt-4 mb-1">
+
+                <!-- Links -->
+                <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
+
+                <ul class="list-unstyled">
+                  <li><p><a href="#!">ABOUT US</a></p></li>
+                  <li><p><a href="#!">MEET THE TEAM</a></p></li>
+                  <li><p><a href="#!">WHAT WE DO</a></p></li>
+                </ul>
+
+              </div>
+              <!-- Grid column -->
+
+              <hr class="clearfix w-100 d-md-none">
+
+              <!-- Grid column -->
+              <div class="col-md-4 col-lg-3 mx-auto my-md-4 my-0 mt-4 mb-1">
+
+                <!-- Contact details -->
+                <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
+
+                <ul class="list-unstyled">
+                  <li><p><i class="fa fa-home mr-3"></i>Mumbai, INDIA</p></li>
+                  <li><p><i class="fa fa-envelope mr-3"></i> sponscentral@gmail.com</p></li>
+                  <li><p><i class="fa fa-phone mr-3"></i> 9898989898 </p></li>
+                  <li><p><i class="fa fa-print mr-3"></i> 9696969696 </p></li>
+                </ul>
+
+              </div>
+              <!-- Grid column -->
+
+              <hr class="clearfix w-100 d-md-none">
+
+              <!-- Grid column -->
+              <div class="col-md-2 col-lg-2 text-center mx-auto my-4">
+
+                <h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by places</h5>
+                            <div class='footer-list-item'>
+                                <a href ="/">Sponsorship in South Bombay</a>
+                            </div>
+                            <div class='footer-list-item'>
+                                <a href ="/">Sponsorship in Thane</a><br>
+                            </div>
+
+
+
+                <h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by streams</h5>
+                            <div class='footer-list-item'>
+                                <a href ="/">Information Technology</a>
+                            </div>
+                            <div class='footer-list-item'>
+                                <a href ="">Electronics</a>
+                            </div>
+                            <div class='footer-list-item'>
+                                <a href ="">Merchandise</a>
+                            </div>
+                            <!--<div class='footer-list-item'>
+                                <a href =""></a>
+                            </div>
+                            <div class='footer-list-item'>
+                                <a href =""></a>
+                            </div> -->
+
+
+
+              </div>
+              <!-- Grid column -->
+
+            </div>
+            <!-- Grid row -->
+
           </div>
-        </div>
+          <!-- Footer Links -->
 
-    </main>
-
-    <!-- Footer -->
-    <footer class="page-footer font-small mdb-color lighten-3 pt-4 mt-4">
-
-      <!-- Footer Links -->
-      <div class="container text-center text-md-left">
-
-        <!-- Grid row -->
-        <div class="row">
-
-          <!-- Grid column -->
-          <div class="col-md-4 col-lg-3 mr-auto my-md-4 my-0 mt-4 mb-1">
-
-            <!-- Content -->
-            <h5 class="font-weight-bold text-uppercase mb-4">Connect. Select. Sponsor.</h5>
-            <p>We are here to help you boost your business through sponsorship.</p>
-            <p>We are here to connect right people to right people.</p>
-
+          <!-- Copyright -->
+          <div class="footer-copyright text-center py-3">© 2018 Copyright:Spons.Central
           </div>
-          <!-- Grid column -->
+          <!-- Copyright -->
 
-          <hr class="clearfix w-100 d-md-none">
+        </footer>
+        <!-- Footer -->
 
-          <!-- Grid column -->
-          <div class="col-md-2 col-lg-2 mx-auto my-md-4 my-0 mt-4 mb-1">
-
-            <!-- Links -->
-            <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
-
-            <ul class="list-unstyled">
-              <li><p><a href="#!">ABOUT US</a></p></li>
-              <li><p><a href="#!">MEET THE TEAM</a></p></li>
-              <li><p><a href="#!">WHAT WE DO</a></p></li>
-            </ul>
-
-          </div>
-          <!-- Grid column -->
-
-          <hr class="clearfix w-100 d-md-none">
-
-          <!-- Grid column -->
-          <div class="col-md-4 col-lg-3 mx-auto my-md-4 my-0 mt-4 mb-1">
-
-            <!-- Contact details -->
-            <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
-
-            <ul class="list-unstyled">
-              <li><p><i class="fa fa-home mr-3"></i>Mumbai, INDIA</p></li>
-              <li><p><i class="fa fa-envelope mr-3"></i> sponscentral@gmail.com</p></li>
-              <li><p><i class="fa fa-phone mr-3"></i> 9898989898 </p></li>
-              <li><p><i class="fa fa-print mr-3"></i> 9696969696 </p></li>
-            </ul>
-
-          </div>
-          <!-- Grid column -->
-
-          <hr class="clearfix w-100 d-md-none">
-
-          <!-- Grid column -->
-          <div class="col-md-2 col-lg-2 text-center mx-auto my-4">
-
-            <h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by places</h5>
-                        <div class='footer-list-item'>
-                            <a href ="/">Sponsorship in South Bombay</a>
-                        </div>
-                        <div class='footer-list-item'>
-                            <a href ="/">Sponsorship in Thane</a><br>
-                        </div>
-
-
-
-            <h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by streams</h5>
-                        <div class='footer-list-item'>
-                            <a href ="/">Information Technology</a>
-                        </div>
-                        <div class='footer-list-item'>
-                            <a href ="">Electronics</a>
-                        </div>
-                        <div class='footer-list-item'>
-                            <a href ="">Merchandise</a>
-                        </div>
-                        <!--<div class='footer-list-item'>
-                            <a href =""></a>
-                        </div>
-                        <div class='footer-list-item'>
-                            <a href =""></a>
-                        </div> -->
-
-
-
-          </div>
-          <!-- Grid column -->
-
-        </div>
-        <!-- Grid row -->
-
-      </div>
-      <!-- Footer Links -->
-
-      <!-- Copyright -->
-      <div class="footer-copyright text-center py-3">© 2018 Copyright:Spons.Central
-      </div>
-      <!-- Copyright -->
-
-    </footer>
-    <!-- Footer -->
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -5,17 +5,17 @@
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <div class="form-group">
-                    {% for user1 in conversing.user1 %}
-                        {{ user1 }}
+                    {% for user in userList %}
+                        {{ user }}
                         {{ form.accept(class="btn btn-outline-info") }}
                         {% if form.accept %}
-                            {% form.accepted=True %}
+                            {{ form.accepted(value = True) }}
                         {% endif %}
                         {{ form.decline(class="btn btn-outline-info")}}
                         {% if form.decline %}
-                            {% form.accepted=False %}
+                            {{ form.accepted(value = False) }}
                         {% endif %}
-                    {%e ndfor %}
+                    {% endfor %}
                 </div>
             </fieldset>
         </form>

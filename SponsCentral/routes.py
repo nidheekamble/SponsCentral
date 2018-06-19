@@ -12,7 +12,7 @@ from math import sqrt
 from googlemaps import Client as GoogleMaps
 import requests
 from geopy.geocoders import Nominatim
-
+from sqlalchemy import or_
 
 @app.route("/")
 @app.route("/home")
@@ -307,13 +307,13 @@ def nearbyParty():
             #destinations = '|'.join(destinations)
 
     print (nearbyParties)
-      
+
     '''PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
     r = requests.get(url, params=PARAMS)
 
     return(r.json())
-    
+
 
     list_parties = []
     party_data = []
@@ -394,23 +394,25 @@ def nearbySponsor():
     elements = len(nearbySponsors)
     return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
 
-    
+
 
 
 @app.route("/requests", methods= ['POST', 'GET'])
 @login_required
 def inviteRecieved():
+    userList=[]
     form = RequestForm()
-    conversing = Conversing.filter_by(user2 = current_user.id).all()
+    conversing = Conversing.query.filter_by(user2 = current_user.id).all()
+    for user in conversing:
+        userList.append(user)
+        print(user)
     if form.validate_on_submit():
-        if form.accepted==True:
+        if form.accepted.data==True:
             conversing.status="in-touch"
         else:
             conversing.status="Not Accepted"
-        for request in conversing.requests:
-            conversing
 
-    return render_template ('requestsPage.html', title = 'requests', form=form, conversing=conversing)
+    return render_template ('requestsPage.html', title = 'requests', form=form, userList=userList)
 
 
 
@@ -430,14 +432,19 @@ def invite():
 @login_required
 def connection():
     userList=[]
-    conversing = Conversing.filter_by(user1 = current_user.id).all()
     if(current_user.type == 'P'):
-        for sponsorUser in SponsorUser.query.filter_by(user_id=conversing.user2).all():
-            userList.append(sponsorUser.name)
+        for sponsorUser in SponsorUser.query.all():
+            userList.append(sponsorUser)
     if(current_user.type == 'S'):
-        for partyUser in PartyUser.query.filter_by(user_id=conversing.user2).all():
-            userList.append(partyUser.name)
-    return render_template ('invitesPage.html', title = 'invites', userList=userList)
+        for partyUser in PartyUser.query.all():
+            userList.append(partyUser)
+    form = InviteForm()
+    if form.validate_on_submit:
+        conversing = Conversing(user1 = current_user.id, user2=form.user2_id.data, status='sent')
+        db.session.add(conversing)
+        db.session.commit()
+    return render_template ('invitesPage.html', title = 'invites', userList=userList, form=form)
+
 
 
 
