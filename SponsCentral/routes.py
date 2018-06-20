@@ -9,9 +9,9 @@ import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.orm import Session
 from math import sqrt
-from googlemaps import Client as GoogleMaps
+#from googlemaps import Client as GoogleMaps
 import requests
-from geopy.geocoders import Nominatim
+#from geopy.geocoders import Nominatim
 from sqlalchemy import or_
 
 @app.route("/")
@@ -306,7 +306,7 @@ def nearbyParty():
             nearbyParties.append(party_data)
             #destinations = '|'.join(destinations)
 
-    print (nearbyParties)
+   # print (nearbyParties)
 
     '''PARAMS = {'units': imperial,'origins':(lat,lng),'destinations':destinations,'key':AIzaSyBGpPXl5E1bWDxU6vaU7BZm8JKWWasGzCA} #API key for matrix API
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?' #API key for matrix API
@@ -373,7 +373,7 @@ def nearbySponsor():
             sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude]
             nearbySponsors.append(sponsor_data)
             #destinations = '|'.join(destinations)
-    print (sponsorNearRegion)
+ #  print (sponsorNearRegion)
 
     '''
     list_sponsors = []
