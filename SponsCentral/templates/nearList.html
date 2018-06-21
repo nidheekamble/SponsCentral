@@ -7,6 +7,9 @@
             #map
             {
                 height: 100%;
+                width: 50%;
+                left: 25%;
+                right: 25%;
             }
             html, body
             {
@@ -18,7 +21,7 @@
     </head>
     <body>
     <!--The div element for the map -->
-        <div id="map"></div>
+        <div id="map" class="content-section" style="position: center"></div>
         <script>
         // Initialize and add the map
         function initMap()
@@ -29,7 +32,7 @@
             var loc = {lat: {{lat}}, lng: {{lng}}};
             // map opens, centered at this location
             var map = new google.maps.Map(
-                document.getElementById('map'), {zoom: 7, center: loc});
+                document.getElementById('map'), {zoom: 9, center: loc});
             // The marker, positioned at loc
             var marker = new google.maps.Marker({position: loc, map: map});
 
