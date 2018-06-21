@@ -474,3 +474,7 @@ def chatbox():
         db.session.commit()
         messages.append(conversation)
     return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
+
+@app.route("/MeetTheTeam")
+def team():
+    return render_template('MeetTheTeam.html')
