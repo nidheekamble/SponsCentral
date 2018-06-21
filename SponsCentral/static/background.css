@@ -1,4 +1,7 @@
 body
 {
     background-image: url("nologo.gif");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
 }

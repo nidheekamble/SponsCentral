@@ -11,6 +11,8 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sidebar.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='background.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='footer.css') }}">
+    
 
 
     {% if title %}
@@ -84,111 +86,21 @@
 
         </main>
 
-        <!-- Footer -->
-        <footer class="page-footer font-small mdb-color lighten-3 pt-4 mt-4">
+         <footer class="footer-basic-centered">
 
-          <!-- Footer Links -->
-          <div class="container text-center text-md-left">
+          <p class="footer-company-motto">Connect. Select. Sponsor.</p>
 
-            <!-- Grid row -->
-            <div class="row">
+          <p class="footer-links">
+            <a href="#">ABOUT US</a>
+            ·
+            <a href="{{ url_for('team') }}">MEET THE TEAM</a>
+            ·
+            <a href="#">WHAT WE DO</a>
+          </p>
 
-              <!-- Grid column -->
-              <div class="col-md-4 col-lg-3 mr-auto my-md-4 my-0 mt-4 mb-1">
-
-                <!-- Content -->
-                <h5 class="font-weight-bold text-uppercase mb-4">Connect. Select. Sponsor.</h5>
-                <p>We are here to help you boost your business through sponsorship.</p>
-                <p>We are here to connect right people to right people.</p>
-
-              </div>
-              <!-- Grid column -->
-
-              <hr class="clearfix w-100 d-md-none">
-
-              <!-- Grid column -->
-              <div class="col-md-2 col-lg-2 mx-auto my-md-4 my-0 mt-4 mb-1">
-
-                <!-- Links -->
-                <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
-
-                <ul class="list-unstyled">
-                  <li><p><a href="#!">ABOUT US</a></p></li>
-                  <li><p><a href="#!">MEET THE TEAM</a></p></li>
-                  <li><p><a href="#!">WHAT WE DO</a></p></li>
-                </ul>
-
-              </div>
-              <!-- Grid column -->
-
-              <hr class="clearfix w-100 d-md-none">
-
-              <!-- Grid column -->
-              <div class="col-md-4 col-lg-3 mx-auto my-md-4 my-0 mt-4 mb-1">
-
-                <!-- Contact details -->
-                <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
-
-                <ul class="list-unstyled">
-                  <li><p><i class="fa fa-home mr-3"></i>Mumbai, INDIA</p></li>
-                  <li><p><i class="fa fa-envelope mr-3"></i> sponscentral@gmail.com</p></li>
-                  <li><p><i class="fa fa-phone mr-3"></i> 9898989898 </p></li>
-                  <li><p><i class="fa fa-print mr-3"></i> 9696969696 </p></li>
-                </ul>
-
-              </div>
-              <!-- Grid column -->
-
-              <hr class="clearfix w-100 d-md-none">
-
-              <!-- Grid column -->
-              <div class="col-md-2 col-lg-2 text-center mx-auto my-4">
-
-                s<h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by places</h5>
-                            <div class='footer-list-item'>
-                                <a href ="/">Sponsorship in South Bombay</a>
-                            </div>
-                            <div class='footer-list-item'>
-                                <a href ="/">Sponsorship in Thane</a><br>
-                            </div>
-
-
-
-                <p><h5 class="font-weight-bold text-uppercase mb-4">Sponsorships by streams</h5></p>
-                            <div class='footer-list-item'>
-                                <a href ="/">Information Technology</a>
-                            </div>
-                            <div class='footer-list-item'>
-                                <a href ="">Electronics</a>
-                            </div>
-                            <div class='footer-list-item'>
-                                <a href ="">Merchandise</a>
-                            </div>
-                            <!--<div class='footer-list-item'>
-                                <a href =""></a>
-                            </div>
-                            <div class='footer-list-item'>
-                                <a href =""></a>
-                            </div> -->
-
-
-
-              </div>
-              <!-- Grid column -->
-
-            </div>
-            <!-- Grid row -->
-
-          </div>
-          <!-- Footer Links -->
-
-          <!-- Copyright -->
-          <div class="footer-copyright text-center py-3">© 2018 Copyright:Spons.Central
-          </div>
-          <!-- Copyright -->
+          <p class="footer-company-name">© 2018 Copyright:Spons.Central</p>
 
         </footer>
-        <!-- Footer -->
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -196,4 +108,4 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
-</html>
+</html

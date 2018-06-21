@@ -17,7 +17,7 @@ class User(db.Model, UserMixin):
     rating = db.Column(db.Float(precision=3, scale=2))
 
     def __repr__(self):
-        return f"User('{self.email}','{self.type}','{self.userLink}')"
+        return f"User('{self.email}','{self.type}')"
 
 class PartyUser(db.Model):
     __tablename__ = 'partyUser'
@@ -37,7 +37,7 @@ class PartyUser(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
     user = db.relationship("User", back_populates= "partyUser" )
     def __repr__(self):
-        return f"PartyUser('{self.party_name}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount},'{self.party_logo}', '{self.userLink}')"
+        return f"PartyUser('{self.party_name}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount},'{self.party_logo}')"
 
 
 class SponsorUser(db.Model):

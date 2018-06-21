@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="content-section">
-        <form method="POST" action=""enctype="multipart/form-data">
+        <form method="POST" action="connection"enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <div class="form-group">
@@ -9,11 +9,11 @@
                         {{ user }}
                         {{ form.accept(class="btn btn-outline-info") }}
                         {% if form.accept %}
-                            {{ form.accepted(value = True) }}
+                            {{ form.accepted(value = 0) }}
                         {% endif %}
                         {{ form.decline(class="btn btn-outline-info")}}
                         {% if form.decline %}
-                            {{ form.accepted(value = False) }}
+                            {{ form.accepted(value = 1) }}
                         {% endif %}
                     {% endfor %}
                 </div>

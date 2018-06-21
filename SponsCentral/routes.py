@@ -407,12 +407,13 @@ def banking():
 def inviteRecieved():
     userList=[]
     form = RequestForm()
-    conversing = Conversing.query.filter_by(user2 = current_user.id).all()
+    conversing = Conversing.query.filter_by(user2d = current_user.id).all()
+    print(conversing)
     for user in conversing:
         userList.append(user)
         print(user)
     if form.validate_on_submit():
-        if form.accepted.data==True:
+        if form.accepted.data==0:
             conversing.status="in-touch"
         else:
             conversing.status="Not Accepted"
@@ -426,7 +427,7 @@ app.route("/invite", methods= ['POST', 'GET'])
 def invite():
     form=InviteForm()
     if form.validate_on_submit:
-        conversing = Conversing(user1 = current_user.id, user2=form.user2_id, status='sent')
+        conversing = Conversing(user1 = current_user.id, user2=form.user2_id.data, status='sent')
         db.session.add(conversing)
         db.session.commit()
     return redirect(url_for('inviteRecieved'))
@@ -437,15 +438,21 @@ def invite():
 @login_required
 def connection():
     userList=[]
+    form = InviteForm()
+
     if(current_user.type == 'P'):
         for sponsorUser in SponsorUser.query.all():
             userList.append(sponsorUser)
+
     if(current_user.type == 'S'):
         for partyUser in PartyUser.query.all():
             userList.append(partyUser)
-    form = InviteForm()
+
     if form.validate_on_submit:
-        conversing = Conversing(user1 = current_user.id, user2=form.user2_id.data, status='sent')
+        conversing = Conversing(user1 = current_user.id, user2 = form.user2_id.data, status='sent')
+        print(conversing)
+        print(request.form)
+
         db.session.add(conversing)
         db.session.commit()
     return render_template ('invitesPage.html', title = 'invites', userList=userList, form=form)
@@ -467,3 +474,7 @@ def chatbox():
         db.session.commit()
         messages.append(conversation)
     return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
+
+@app.route("/MeetTheTeam")
+def team():
+    return render_template('MeetTheTeam.html')

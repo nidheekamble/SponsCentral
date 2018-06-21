@@ -3,7 +3,7 @@ from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, RadioField, IntegerField, TextAreaField, SelectField, HiddenField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Required, NumberRange, ValidationError
-from SponsCentral.models import User, PartyUser, SponsorUser,Region
+from SponsCentral.models import User, PartyUser, SponsorUser,Region, Conversing, Conversation
 
 class SelectForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(max=120) ,Email()])
@@ -117,7 +117,6 @@ class ChatBoxText(FlaskForm):
 
 class RequestForm(FlaskForm):
     accepted = HiddenField()
-    
     accept= SubmitField('Accept')
     decline = SubmitField('Decline')
 
