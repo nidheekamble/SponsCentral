@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from math import sqrt
 #from googlemaps import Client as GoogleMaps
 import requests
-#from geopy.geocoders import Nominatim
+from geopy.geocoders import Nominatim
 from sqlalchemy import or_
 
 @app.route("/")
