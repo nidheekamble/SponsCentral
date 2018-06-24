@@ -1,4 +1,78 @@
-{% extends 'layout.html' %}
-{% block content %}
-    <h1>home page</h1>
-{%  endblock content %}
+<!DOCTYPE html>
+<html>
+<title>Home</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='footer.css') }}">
+
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-card" id="myNavbar">
+    <a href="#home" class="w3-bar-item w3-button w3-wide">Spons.Central</a>
+    <!-- Right-sided navbar links -->
+    <!--<div class="w3-right w3-hide-small">
+      <a href="{{ url_for('login') }}" class="w3-bar-item w3-button">LOGIN</a>
+      <a href="{{ url_for('register') }}" class="w3-bar-item w3-button">REGISTER</a>-->
+     <!-- <a href="#team" class="w3-bar-item w3-button"><i class="fa fa-user"></i> TEAM</a>
+      <a href="#work" class="w3-bar-item w3-button"><i class="fa fa-th"></i> WORK</a>
+      <a href="#pricing" class="w3-bar-item w3-button"><i class="fa fa-usd"></i> PRICING</a>
+      <a href="#contact" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> CONTACT</a>-->
+    </div>
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Header with full-height image -->
+<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
+  <div class="w3-display-left w3-text-white" style="padding:48px">
+    <span class="w3-jumbo w3-hide-small">Sponsorships that matters</span><br>
+    <span class="w3-xxlarge w3-hide-large w3-hide-medium">Start something that matters</span><br>
+    <span class="w3-large">Stop wasting valuable time in gate crashing.</span>
+    <p><a href="{{ url_for('register') }}" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Start today</a>
+    <a href="{{ url_for('login') }}" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Login</a></p>
+  </div> 
+  
+</header>
+<!-- Footer-->
+<footer class="w3-center w3-black w3-padding-64">
+  <h3> Connect. Select. Sponsor.</h3>
+  <a href="{{ url_for('about') }}" class="footer-links"></i>ABOUT US</a>  •
+  <a href="{{ url_for('team') }}" class="footer-links"></i>MEET THE TEAM</a>  •
+  <a href="{{ url_for('about') }}" class="footer-links"></i>WHAT WE DO</a> 
+  
+  <p>© 2018 Copyright:Spons.Central</p>
+</footer>
+<!--<footer class="footer-basic-centered">
+
+          <p class="footer-company-motto">Connect. Select. Sponsor.</p>
+
+          <p class="footer-links">
+            <a href="#">ABOUT US</a>
+            ·
+            <a href="{{ url_for('team') }}">MEET THE TEAM</a>
+            ·
+            <a href="#">WHAT WE DO</a>
+          </p>
+
+          <p class="footer-company-name">© 2018 Copyright:Spons.Central</p>
+
+        </footer>-->
+ 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
+<!--
+To use this code on your website, get a free API key from Google.
+Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
+-->
+
+</body>
+</html>
