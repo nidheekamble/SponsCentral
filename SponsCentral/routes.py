@@ -260,11 +260,7 @@ def maps():
 
 
 
-
-@app.route('/nearbyParty', methods = ['GET', 'POST']) #sponsor looking for parties
-@login_required
-
-def nearbyParty():
+def nearbyPartyFunc():
 
     sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
 
@@ -302,7 +298,7 @@ def nearbyParty():
     for party in partyNearRegion:
         destinations = [str(party.party_latitude)+','+str(party.party_longitude)]
         if sqrt(((party.party_latitude - lat) ** 2) + ((party.party_longitude - lng) ** 2)) < extent:
-            party_data = [party.party_name, party.party_latitude, party.party_longitude]
+            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id]
             nearbyParties.append(party_data)
             #destinations = '|'.join(destinations)
 
@@ -324,15 +320,12 @@ def nearbyParty():
         print(list_parties)'''
 
     elements = len(nearbyParties)
-    return render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
+    return nearbyParties
 
 
 
-@app.route('/nearbySponsor', methods = ['GET','POST']) #parties looking for sponsors
-@login_required
 
-def nearbySponsor():
-
+def nearbySponsorFunc():
 
     partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
 
@@ -370,11 +363,9 @@ def nearbySponsor():
     for sponsor in sponsorNearRegion:
         destinations = [str(sponsor.sponsor_latitude)+','+str(sponsor.sponsor_longitude)]
         if sqrt(((sponsor.sponsor_latitude - lat) ** 2) + ((sponsor.sponsor_longitude - lng) ** 2)) < extent:
-            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude]
+            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id]
             nearbySponsors.append(sponsor_data)
             #destinations = '|'.join(destinations)
- #  print (sponsorNearRegion)
-
     '''
     list_sponsors = []
     sponsor_data = []
@@ -392,7 +383,24 @@ def nearbySponsor():
 
     return(r.json())'''
     elements = len(nearbySponsors)
+    return nearbySponsors
+
+
+
+@app.route('/nearbyParty', methods = ['GET', 'POST']) #sponsor looking for parties
+@login_required
+
+    nearbyParties = nearbyPartyFunc()
+    render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
+
+
+
+@app.route('/nearbySponsor', methods = ['GET','POST']) #parties looking for sponsors
+@login_required
+
+    nearbySponsors = nearbySponsorFunc()
     return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
+
 
 
 @app.route('/banking', methods = ['GET','POST']) #parties looking for sponsors

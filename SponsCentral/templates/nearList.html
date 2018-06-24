@@ -51,16 +51,6 @@
                     }
                 );
 
-
-                google.maps.event.addListener(marker, 'click', (function(marker, i)
-                {
-                    return function()
-                    {
-                        infowindow.setContent({{nearby_list[i][0]}});
-                        infowindow.open(map, marker);
-                    }
-                })(marker, i));
-
                 i = i+1;
             }
             {% endfor %}
