@@ -98,11 +98,23 @@ class LoginForm(FlaskForm):
 
 
 
+
 class UpdateAccountForm(FlaskForm):
 
     email = StringField('Email', validators=[DataRequired(), Email()])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
+    party_name = StringField('Name', validators=[DataRequired(), Length(min=2, max=30)] )
+    party_choices = [('T','Technical'),('S', 'Sports'),('C', 'Cultural')]#add "others"
+    party_type = SelectField('Type', choices=party_choices, validators=[Required()])
+    party_kind = SelectField('Accepting', choices=[('C','Cash'), ('k','Kind')], validators=[Required()])
+    party_contactNo1 = IntegerField('Contact No.1', validators=[DataRequired(), NumberRange(min=1000000000, max=9999999999)])
+    party_contactNo2 = IntegerField('Contact No.2', validators=[DataRequired(), NumberRange(min=1000000000, max=9999999999)])
+    party_address = TextAreaField('Address', validators=[DataRequired()])
+    party_about = TextAreaField('About Your Organization', validators=[DataRequired()] )
+    party_fromAmount = IntegerField('From Amount', validators=[DataRequired()])
+    party_toAmount = IntegerField('To Amount', validators=[DataRequired()])
+
 
     def validate_email(self, email):
         if email.data != current_user.email:

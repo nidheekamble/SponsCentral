@@ -49,7 +49,7 @@ class SponsorUser(db.Model):
     sponsor_contactNo1 = db.Column(db.Integer, unique = True , nullable= False )
     sponsor_contactNo2= db.Column(db.Integer, unique = True , nullable= True )
     sponsor_address = db.Column(db.String(300), unique=True , nullable= False)
-    sponsor_about = db.Column(db.String(1500), unique=True , nullable= False)
+    sponsor_about = db.Column(db.String(1500), unique=False , nullable= False)
     sponsor_fromAmount =db.Column(db.Integer, unique = False , nullable= False )
     sponsor_toAmount = db.Column(db.Integer, unique = False , nullable= False )
     sponsor_logo = db.Column(db.String(20), unique= False, default = 'default.jpg' , nullable= True )
