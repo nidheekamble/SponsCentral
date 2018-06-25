@@ -390,16 +390,18 @@ def nearbySponsorFunc():
 @app.route('/nearbyParty', methods = ['GET', 'POST']) #sponsor looking for parties
 @login_required
 
-    nearbyParties = nearbyPartyFunc()
-    render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
+def nearbySponsorRoute():
+	nearbyParties = nearbyPartyFunc()
+	render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
 
 
 
 @app.route('/nearbySponsor', methods = ['GET','POST']) #parties looking for sponsors
 @login_required
 
-    nearbySponsors = nearbySponsorFunc()
-    return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
+def nearbyPartyRoute():
+	nearbySponsors = nearbySponsorFunc()
+	return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
 
 
 

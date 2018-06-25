@@ -74,9 +74,9 @@
                         <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('inviteRecieved') }}"><h6>Requests</h6></a></button></li>
                         <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('chatbox') }}"><h6>Chat</h6></a></button></li>
                         {% if current_user.type == 'P' %}
-                            <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbySponsor') }}"><h6>Maps</h6></a></button></li>
+                            <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbySponsorRoute') }}"><h6>Maps</h6></a></button></li>
                         {% elif current_user.type == 'S' %}
-                            <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbyParty') }}"><h6>Maps</h6></a></button></li>
+                            <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbyPartyRoute') }}"><h6>Maps</h6></a></button></li>
                         {% endif %}
                         <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('banking') }}"><h6>Banking</h6></a></button></li>
                       </ul>
