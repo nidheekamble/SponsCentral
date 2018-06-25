@@ -320,7 +320,7 @@ def nearbyPartyFunc():
         print(list_parties)'''
 
     elements = len(nearbyParties)
-    return nearbyParties
+    return nearbyParties, lat, lng, elements
 
 
 
@@ -344,7 +344,7 @@ def nearbySponsorFunc():
 
     for region in list_regions:
         if sqrt(((region.latitude - lat)** 2) + ((region.longitude - lng) ** 2)) < extent:
-                nearbyRegion.append(region)
+            nearbyRegion.append(region)
 
     list_sponsors = []
     for sponsor in SponsorUser.query.all():
@@ -361,7 +361,7 @@ def nearbySponsorFunc():
     nearbySponsors = []
 
     for sponsor in sponsorNearRegion:
-        destinations = [str(sponsor.sponsor_latitude)+','+str(sponsor.sponsor_longitude)]
+        #destinations = [str(sponsor.sponsor_latitude)+','+str(sponsor.sponsor_longitude)]
         if sqrt(((sponsor.sponsor_latitude - lat) ** 2) + ((sponsor.sponsor_longitude - lng) ** 2)) < extent:
             sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id]
             nearbySponsors.append(sponsor_data)
@@ -383,25 +383,26 @@ def nearbySponsorFunc():
 
     return(r.json())'''
     elements = len(nearbySponsors)
-    return nearbySponsors
+    return nearbySponsors, lat, lng, elements
 
 
 
 @app.route('/nearbyParty', methods = ['GET', 'POST']) #sponsor looking for parties
 @login_required
 
-def nearbySponsorRoute():
-	nearbyParties = nearbyPartyFunc()
-	render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
+def nearbyPartyRoute():
+    nearbyParties, lat, lng, elements = nearbyPartyFunc()
+    render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
 
 
 
 @app.route('/nearbySponsor', methods = ['GET','POST']) #parties looking for sponsors
 @login_required
 
-def nearbyPartyRoute():
-	nearbySponsors = nearbySponsorFunc()
-	return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
+def nearbySponsorRoute():
+    nearbySponsors, lat, lng, elements = nearbySponsorFunc()
+    #print (elements)
+    return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
 
 
 
@@ -488,3 +489,23 @@ def chatbox():
 @app.route("/MeetTheTeam")
 def team():
     return render_template('MeetTheTeam.html')
+
+
+
+@app.route("/ViewAccount", methods = ['GET', 'POST'])
+@login_required
+def user2_account():
+    if current_user.type == 'P':
+
+        sponsorUser=SponsorUser.query.filter_by(user_id=current_user.id).first()
+        db.session.commit()
+        ####### Vidhi ########
+        #Ye wala part dekhna padega ki kya kya pass karna hai
+        #I wasn't able to write this render_template properly, toh tu dekh le
+        return render_template('User2Account_sponsor.html', title='Account',party_logo=party_logo, form=form)
+
+    elif current_user.type == 'S':
+
+        partyUser = PartyUser.query.filter_by(user_id=current_user.id).first()
+        db.session.commit()
+        return render_template('User2Account_party.html', title='Account',sponsor_logo=sponsor_logo, form=form)

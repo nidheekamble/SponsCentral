@@ -32,7 +32,7 @@
             var loc = {lat: {{lat}}, lng: {{lng}}};
             // map opens, centered at this location
             var map = new google.maps.Map(
-                document.getElementById('map'), {zoom: 9, center: loc});
+                document.getElementById('map'), {zoom: 11, center: loc});
             // The marker, positioned at loc
             var marker = new google.maps.Marker({position: loc, map: map});
 
@@ -57,7 +57,15 @@
         }
 
 
-</script>
+        </script>
+
+    <ol>
+        {% for place in nearby_list %}
+          <li><a href="{{ url_for('user2_account') }}">{{ place[0] }} </a>
+            <br> Address: {{ place[3] }} </li> <br>
+        {% endfor %}
+    </ol>
+
     <!--Loading API from the mentioned URL
     async attribute allows the browser to render the page while the API loads
     the 'callback' parameter will execute the initMap() function -->
