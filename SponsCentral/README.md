@@ -1,9 +1,10 @@
 # FlaskApp
 Website files. Includes:
 
-Templates folder [html pages], 
-central.db, 
-forms.py, 
-models.py, 
-near.py [for finding nearby events], 
-routes.py
+ * static folder [CSS files],
+ * templates folder [html pages],
+ * central.db, 
+ * forms.py, 
+ * models.py,  
+ * routes.py,
+ * verifyToken.py
