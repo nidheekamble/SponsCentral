@@ -103,13 +103,8 @@ def registerParty():
                 nearestRegion = region
                 nearestDistance = extent
 
+        partyUser.region_id = nearestRegion.region_id #region linked
 
-         ###Shreyansh/Vidhi
-
-        #now this 'nearestRegion' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
-        #This region has a region_id, which is to be linked with the user
-
-        #Please make the other changes as necessary
 
         if form.party_logo.data:
             picture_file = save_picture(form.party_logo.data)
@@ -149,12 +144,7 @@ def registerSponsor():
                 nearestRegion = region
                 nearestDistance = extent
 
-        ###Shreyansh/Vidhi
-
-        #now this 'nearestRegion' that we have is the region from the Regions table (having the data from CSV files) to which the user's address belongs
-        #This region has a region_id, which is to be linked with the user
-
-        #Please make the other changes as necessary
+        sponsorUser.region_id = nearestRegion.region_id #region linked
 
 
         if form.sponsor_logo.data:
@@ -392,7 +382,7 @@ def nearbySponsorFunc():
 
 def nearbyPartyRoute():
     nearbyParties, lat, lng, elements = nearbyPartyFunc()
-    render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
+    return render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
 
 
 
@@ -492,20 +482,17 @@ def team():
 
 
 
-@app.route("/ViewAccount", methods = ['GET', 'POST'])
+@app.route("/user/<user2_id>", methods = ['GET', 'POST'])
 @login_required
-def user2_account():
+def user2_account(user2_id):
     if current_user.type == 'P':
 
-        sponsorUser=SponsorUser.query.filter_by(user_id=current_user.id).first()
+        sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
-        ####### Vidhi ########
-        #Ye wala part dekhna padega ki kya kya pass karna hai
-        #I wasn't able to write this render_template properly, toh tu dekh le
-        return render_template('User2Account_sponsor.html', title='Account',party_logo=party_logo, form=form)
+        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user)
 
     elif current_user.type == 'S':
 
-        partyUser = PartyUser.query.filter_by(user_id=current_user.id).first()
+        partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
-        return render_template('User2Account_party.html', title='Account',sponsor_logo=sponsor_logo, form=form)
+        return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user)
