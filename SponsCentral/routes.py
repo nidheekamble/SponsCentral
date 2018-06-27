@@ -380,6 +380,9 @@ def chatbox():
 def team():
     return render_template('MeetTheTeam.html')
 
+@app.route("/WhatWeDo")
+def work():
+    return render_template('WhatWeDo.html')
 
 
 @app.route("/user/<user2_id>", methods = ['GET', 'POST'])
