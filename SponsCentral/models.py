@@ -36,7 +36,6 @@ class PartyUser(db.Model):
     party_longitude = db.Column(db.Float(precision = 12 , scale =7) , nullable= True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
     user = db.relationship("User", back_populates= "partyUser" )
-    region_id=db.Column(db.Integer, db.ForeignKey('region.region_id'), nullable=False)
     def __repr__(self):
         return f"PartyUser('{self.party_name}','{self.party_type}','{self.party_kind}','{self.party_contactNo1}','{self.party_contactNo2}','{self.party_address}','{self.party_about}','{self.party_fromAmount}','{self.party_toAmount},'{self.party_logo}')"
 
@@ -56,7 +55,6 @@ class SponsorUser(db.Model):
     sponsor_logo = db.Column(db.String(20), unique= False, default = 'default.jpg' , nullable= True )
     sponsor_latitude = db.Column(db.Float(precision=12,scale=7) , nullable= True)
     sponsor_longitude = db.Column(db.Float(precision= 12,scale =7) , nullable= True)
-    region_id=db.Column(db.Integer, db.ForeignKey('region.region_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= True)
     user = db.relationship("User", back_populates= "sponsorUser" )
     def __repr__(self):
@@ -64,8 +62,6 @@ class SponsorUser(db.Model):
 
 class Region(db.Model):
     region_id=db.Column(db.Integer,primary_key=True)
-    partyUser = db.relationship('PartyUser', backref='regionid', lazy=True)
-    sponsorUser = db.relationship('SponsorUser', backref='regionid', lazy=True)
     region_name=db.Column(db.String(50),nullable=False)
     state=db.Column(db.String(40),nullable=False)
     city=db.Column(db.String(40),nullable=False)

@@ -85,8 +85,6 @@ def registerParty():
         user = User.query.all().pop()
         partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data, user_id=user.id)
 
-        #for region linking
-        #gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
         geolocator = Nominatim()
         location = geolocator.geocode(partyUser.party_address)
@@ -112,9 +110,6 @@ def registerSponsor():
     if form.validate_on_submit():
         user = User.query.all().pop()
         sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data, user_id=user.id)
-
-        #for region linking
-        #gmaps = GoogleMaps("AIzaSyCQP9mlZC1VIO7J5J5wZensClSVDfDSfxE") #API key for geocoding
 
         geolocator = Nominatim()
         location = geolocator.geocode(sponsorUser.sponsor_address)
@@ -206,21 +201,6 @@ def account():
             form.email.data = current_user.email
         sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
         return render_template('accountSponsor.html', title='Account',sponsor_logo=sponsor_logo, form=form)
-
-
-
-@app.route("/maps", methods = ['GET', 'POST'])
-@login_required
-def maps():
-
-    if current_user.type == 'P':
-        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
-        return render_template('API.html', lat = partyUser.party_latitude, lng = partyUser.party_longitude)
-
-    else:
-        sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
-        return render_template('API.html', lat = sponsorUser.sponsor_latitude, lng = sponsorUser.sponsor_longitude)
-
 
 
 
@@ -399,3 +379,178 @@ def user2_account(user2_id):
         partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
         return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user)
+
+
+
+
+@app.route("/filterType/<type>", methods = ['GET', 'POST'])
+@login_required
+def filterType(type):
+
+    if current_user.type == 'P':
+
+        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
+
+        lat = partyUser.party_latitude
+        lng = partyUser.party_longitude
+
+        nearbySponsors = nearbySponsorFunc()
+        filteredList = SponsorUser.query.filter_by(sponsor_type=type).all()
+        filteredSponsors = []
+
+        for sponsor in filteredList:
+            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id]
+            filteredSponsors.append(sponsor_data)
+
+        elements = len(filteredSponsors)
+        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements)
+
+    elif current_user.type == 'S':
+
+        sponsorUser = SponsorUser.query.filter_by(user_id=current_user.id).first()
+
+        lat = sponsorUser.sponsor_latitude
+        lng = sponsorUser.sponsor_longitude
+
+        nearbyParties = nearbyPartyFunc()
+        filteredList = PartyUser.query.filter_by(party_type=type).all()
+        filteredParties = []
+
+        for party in filteredList:
+            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id]
+            filteredParties.append(party_data)
+
+        elements = len(filteredParties)
+        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+
+
+
+
+@app.route("/filterFrom/<lowerBound>", methods = ['GET', 'POST'], endpoint='filterFrom')
+@login_required
+def filterFrom(lowerBound):
+
+    if current_user.type == 'P':
+
+        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
+
+        lat = partyUser.party_latitude
+        lng = partyUser.party_longitude
+
+        nearbySponsors = nearbySponsorFunc()
+        filteredList = SponsorUser.query.filter_by(sponsor_fromAmount=lowerBound).all()
+        filteredSponsors = []
+
+        for sponsor in filteredList:
+            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id]
+            filteredSponsors.append(sponsor_data)
+
+        elements = len(filteredSponsors)
+        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements)
+
+
+    elif current_user.type == 'S':
+
+        sponsorUser = SponsorUser.query.filter_by(user_id=current_user.id).first()
+
+        lat = sponsorUser.sponsor_latitude
+        lng = sponsorUser.sponsor_longitude
+
+        nearbyParties = nearbyPartyFunc()
+        filteredList = PartyUser.query.filter_by(party_fromAmount=lowerBound).all()
+        filteredParties = []
+
+        for party in filteredList:
+            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id]
+            filteredParties.append(party_data)
+
+        elements = len(filteredParties)
+        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+
+
+
+
+@app.route("/filterTo/<upperBound>", methods = ['GET', 'POST'])
+@login_required
+def filterTo(upperBound):
+
+    if current_user.type == 'P':
+
+        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
+
+        lat = partyUser.party_latitude
+        lng = partyUser.party_longitude
+
+        nearbySponsors = nearbySponsorFunc()
+        filteredList = SponsorUser.query.filter_by(sponsor_toAmount=upperBound).all()
+        filteredSponsors = []
+
+        for sponsor in filteredList:
+            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id]
+            filteredSponsors.append(sponsor_data)
+
+        elements = len(filteredSponsors)
+        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements)
+
+
+    elif current_user.type == 'S':
+
+        sponsorUser = SponsorUser.query.filter_by(user_id=current_user.id).first()
+
+        lat = sponsorUser.sponsor_latitude
+        lng = sponsorUser.sponsor_longitude
+
+        nearbyParties = nearbyPartyFunc()
+        filteredList = PartyUser.query.filter_by(party_toAmount=upperBound).all()
+        filteredParties = []
+
+        for party in filteredList:
+            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id]
+            filteredParties.append(party_data)
+
+        elements = len(filteredParties)
+        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+
+
+
+
+@app.route("/filterKind/<kind>", methods = ['GET', 'POST'])
+@login_required
+def filterKind(kind):
+
+    if current_user.type == 'P':
+
+        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
+
+        lat = partyUser.party_latitude
+        lng = partyUser.party_longitude
+
+        nearbySponsors = nearbySponsorFunc()
+        filteredList = SponsorUser.query.filter_by(sponsor_kind=kind).all()
+        filteredSponsors = []
+
+        for sponsor in filteredList:
+            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id]
+            filteredSponsors.append(sponsor_data)
+
+        elements = len(filteredSponsors)
+        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements)
+
+
+    elif current_user.type == 'S':
+
+        sponsorUser = SponsorUser.query.filter_by(user_id=current_user.id).first()
+
+        lat = sponsorUser.sponsor_latitude
+        lng = sponsorUser.sponsor_longitude
+
+        nearbyParties = nearbyPartyFunc()
+        filteredList = PartyUser.query.filter_by(party_kind=kind).all()
+        filteredParties = []
+
+        for party in filteredList:
+            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id]
+            filteredParties.append(party_data)
+
+        elements = len(filteredParties)
+        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
