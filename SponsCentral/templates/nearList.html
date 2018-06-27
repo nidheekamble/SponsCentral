@@ -71,8 +71,8 @@
 
     <ol>
         {% for place in nearby_list %}
-          <li><a href="user/{{ place[4] }}">{{ place[0] }} </a>
-            <br> Address: {{ place[3] }} </li> <br>
+          <li><a href="user/{{ place[4] }}"><h5> {{ place[0] }} </h5></a>
+            <b>Address: </b> {{ place[3] }} </li> <br>
         {% endfor %}
     </ol>
 

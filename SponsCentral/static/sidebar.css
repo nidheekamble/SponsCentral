@@ -16,5 +16,5 @@ display: block;
     border-bottom: none; /* Prevent double borders */
 }
 .btn-group .button:hover {
-    background-color: #cbd5db;
+    background-color: #29abe2;
 }

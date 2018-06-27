@@ -4,7 +4,7 @@
       <div class="media">
         <img class="rounded-circle account-img" src="{{ party_logo }}">
         <div class="media-body">
-          <h2 class="account-heading">{{ current_user.party_name }}</h2>
+          <h3 class="account-heading">Welcome, {{ current_user.party_name }}</h3>
           <p class="text-secondary">{{ current_user.email }}</p>
         </div>
       </div>
@@ -15,19 +15,6 @@
                 {{
                     image_file
                 }}
-                <div class="form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
                 <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}
                     {% if form.email.errors %}
