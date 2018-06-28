@@ -288,55 +288,70 @@ def banking():
 def inviteRecieved():
     userList=[]
     form = RequestForm()
-    conversing = Conversing.query.filter_by(user2d = current_user.id).all()
+    conversing = Conversing.query.filter_by(user2 = current_user.id).all()
     print(conversing)
-    for user in conversing:
-        userList.append(user)
-        print(user)
+    if current_user.type == 'S'
+        for user in conversing:
+            user_invitee=PartyUser.query.filter_by(user_id=user1.conversing).all()
+            #user_name=user_invitee.party_name
+            userList.append(user_invitee)
+            print(user_invitee.party_name)
+
+        db.session.commit()
+
+        return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
+
+    if current_user.type == 'P'
+        for user in conversing:
+            user_invitee=SponsorUser.query.filter_by(user_id=user1.conversing).all()
+            user_name=user_invitee.sponsor_name
+            userList.append(user_name)
+            print(user_name)
     if form.validate_on_submit():
-        if form.accepted.data==0:
-            conversing.status="in-touch"
-        else:
-            conversing.status="Not Accepted"
-
-    return render_template ('requestsPage.html', title = 'requests', form=form, userList=userList)
-
-
-
-app.route("/invite", methods= ['POST', 'GET'])
-@login_required
-def invite():
-    form=InviteForm()
-    if form.validate_on_submit:
-        conversing = Conversing(user1 = current_user.id, user2=form.user2_id.data, status='sent')
-        db.session.add(conversing)
+        if form.invite_status==1:
+            conversing.status='In-touch'
+        elif if form.invite_status==0:
+            conversing.status='Not Accepted'
         db.session.commit()
-    return redirect(url_for('inviteRecieved'))
+
+        return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
 
 
 
-@app.route("/invites", methods= ['POST', 'GET'])
-@login_required
-def connection():
-    userList=[]
-    form = InviteForm()
+#app.route("/invite", methods= ['POST', 'GET'])
+#@login_required
+#def invite():
+    #form=InviteForm()
+    #if form.validate_on_submit:
+        #conversing = Conversing(user1 = current_user.id, user2=form.user2_id.data, status='Sent')
+        #db.session.add(conversing)
+        #d#b.session.commit()
+    #return redirect(url_for('inviteRecieved'))
 
-    if(current_user.type == 'P'):
-        for sponsorUser in SponsorUser.query.all():
-            userList.append(sponsorUser)
 
-    if(current_user.type == 'S'):
-        for partyUser in PartyUser.query.all():
-            userList.append(partyUser)
 
-    if form.validate_on_submit:
-        conversing = Conversing(user1 = current_user.id, user2 = form.user2_id.data, status='sent')
-        print(conversing)
-        print(request.form)
+#@app.route("/invites", methods= ['POST', 'GET'])
+#@login_required
+#def connection():
+    #userList=[]
+    #f#orm = InviteForm()
 
-        db.session.add(conversing)
-        db.session.commit()
-    return render_template ('invitesPage.html', title = 'invites', userList=userList, form=form)
+    #if(current_user.type == 'P'):
+        #for sponsorUser in SponsorUser.query.all():
+            #userList.append(sponsorUser)
+
+    #if(current_user.type == 'S'):
+        #for partyUser in PartyUser.query.all():
+            #userList.append(partyUser)
+
+    #if form.validate_on_submit:
+        #c#onversing = Conversing(user1 = current_user.id, user2 = form.user2_id.data, status='sent')
+        #print(conversing)
+        #print(request.form)
+
+        #db.session.add(conversing)
+    #    #db.session.commit()
+    #return render_template ('invitesPage.html', title = 'invites', userList=userList, form=form)
 
 
 
@@ -368,16 +383,26 @@ def work():
 @app.route("/user/<user2_id>", methods = ['GET', 'POST'])
 @login_required
 def user2_account(user2_id):
+    form=InviteForm()
     if current_user.type == 'P':
 
         sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
+            if form.validate_on_submit():
+                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+                db.session.add(conversing)
+                db.session.commit()
+
         return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user)
 
     elif current_user.type == 'S':
 
         partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
+            if form.validate_on_submit():
+                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+                db.session.add(conversing)
+                db.session.commit()
         return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user)
 
 

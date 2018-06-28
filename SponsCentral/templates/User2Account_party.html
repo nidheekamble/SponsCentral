@@ -31,6 +31,12 @@
     <div class="content-section">
       <div class="media">
         <img class="rounded-circle account-img" src="{{ party_logo }}">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.invite(class="btn btn-outline-info") }}
+            </div>
+
         <div class="media-body">
           <h2 class="account-heading"> {{ partyUser.party_name }}</h2>
           <p class="text-secondary"><b> Type: </b> {{ partyUser.party_type }}</p>
@@ -54,10 +60,12 @@
             }
           </style>
           <div id="map" class="content-section" style="position: center"></div>
-          
+
           <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKlMl1HFw1wNG4sEDWzEe1Mnth9qWPyI8&callback=initMap">
           </script>
+
+
         </div>
       </div>
     </div>

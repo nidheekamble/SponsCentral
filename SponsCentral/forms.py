@@ -128,10 +128,12 @@ class ChatBoxText(FlaskForm):
     send = SubmitField('Send')
 
 class RequestForm(FlaskForm):
-    accepted = HiddenField()
-    accept= SubmitField('Accept')
-    decline = SubmitField('Decline')
+    #accepted = HiddenField()
+    #accept= SubmitField('Accept')
+    #decline = SubmitField('Decline')
+    invite_status = RadioField('You have an invite!', choices=[('1','Accept'),('0','Decline')])
+    submit=SubmitField('Submit')
 
 class InviteForm(FlaskForm):
-    user2_id = HiddenField()
-    send = SubmitField('Send')
+    #user2_id = HiddenField()
+    invite = SubmitField('Invite')
