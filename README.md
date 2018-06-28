@@ -40,7 +40,7 @@ The following APIs have been integrated in the project:
  
 These are the APIs which have been tried to be used, but are only partially implemented currently:
 
- * Google Distance Matrix API
+ * Facebook login API
  * Google Sign-In API
  
 
