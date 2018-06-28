@@ -290,7 +290,7 @@ def inviteRecieved():
     form = RequestForm()
     conversing = Conversing.query.filter_by(user2 = current_user.id).all()
     print(conversing)
-    if current_user.type == 'S'
+    if current_user.type == 'S':
         for user in conversing:
             user_invitee=PartyUser.query.filter_by(user_id=user1.conversing).all()
             #user_name=user_invitee.party_name
@@ -301,7 +301,7 @@ def inviteRecieved():
 
         return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
 
-    if current_user.type == 'P'
+    if current_user.type == 'P':
         for user in conversing:
             user_invitee=SponsorUser.query.filter_by(user_id=user1.conversing).all()
             user_name=user_invitee.sponsor_name
@@ -310,7 +310,7 @@ def inviteRecieved():
     if form.validate_on_submit():
         if form.invite_status==1:
             conversing.status='In-touch'
-        elif if form.invite_status==0:
+        elif  form.invite_status==0:
             conversing.status='Not Accepted'
         db.session.commit()
 
@@ -388,10 +388,10 @@ def user2_account(user2_id):
 
         sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
-            if form.validate_on_submit():
-                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-                db.session.add(conversing)
-                db.session.commit()
+        if form.validate_on_submit():
+            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+            db.session.add(conversing)
+            db.session.commit()
 
         return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user)
 
@@ -399,10 +399,10 @@ def user2_account(user2_id):
 
         partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
-            if form.validate_on_submit():
-                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-                db.session.add(conversing)
-                db.session.commit()
+        if form.validate_on_submit():
+            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+            db.session.add(conversing)
+            db.session.commit()
         return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user)
 
 
