@@ -286,10 +286,12 @@ def banking():
 @app.route("/requests", methods= ['POST', 'GET'])
 @login_required
 def inviteRecieved():
+
     userList=[]
     form = RequestForm()
     conversing = Conversing.query.filter_by(user2 = current_user.id).all()
     print(conversing)
+
     if current_user.type == 'S':
         for user in conversing:
             user_invitee=PartyUser.query.filter_by(user_id=user1.conversing).all()
@@ -298,15 +300,15 @@ def inviteRecieved():
             print(user_invitee.party_name)
 
         db.session.commit()
-
         return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
 
     if current_user.type == 'P':
         for user in conversing:
             user_invitee=SponsorUser.query.filter_by(user_id=user1.conversing).all()
-            user_name=user_invitee.sponsor_name
-            userList.append(user_name)
-            print(user_name)
+            #user_name=user_invitee.sponsor_name
+            userList.append(user_invitee)
+            print(user_invitee.sponsor_name)
+
     if form.validate_on_submit():
         if form.invite_status==1:
             conversing.status='In-touch'
@@ -383,15 +385,15 @@ def work():
 @app.route("/user/<user2_id>", methods = ['GET', 'POST'])
 @login_required
 def user2_account(user2_id):
-    form=InviteForm()
+    #form=InviteForm()
     if current_user.type == 'P':
 
         sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
-            db.session.commit()
+        #if form.validate_on_submit():
+            #conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+            #db.session.add(conversing)
+            #db.session.commit()
 
         return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user)
 
@@ -399,10 +401,10 @@ def user2_account(user2_id):
 
         partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
-            db.session.commit()
+        #if form.validate_on_submit():
+            #conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+            #db.session.add(conversing)
+            #db.session.commit()
         return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user)
 
 

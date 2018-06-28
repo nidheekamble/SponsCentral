@@ -1,7 +1,6 @@
-
-<html>
 {% extends "layout.html" %}
 {% block content %}
+<html>
   <head>
     <script>
           // Initialize and add the map
@@ -31,11 +30,6 @@
     <div class="content-section">
       <div class="media">
         <img class="rounded-circle account-img" src="{{ party_logo }}">
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{ form.invite(class="btn btn-outline-info") }}
-            </div>
         <div class="media-body">
           <h2 class="account-heading">{{ sponsorUser.sponsor_name }}</h2>
           <p class="text-secondary"><b>Type:</b> {{ sponsorUser.sponsor_type }}</p>
