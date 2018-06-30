@@ -1,4 +1,4 @@
-{% endblock content %}
+
 {% extends "layout.html" %}
 {% block content %}
     <div class="content-section">
@@ -24,7 +24,10 @@
                             {{ form.invite_status(class="form-control form-control-lg") }}
                         {% endif %}
                     {% endfor %}
+                </ol>
                 </div>
+
+            </fieldset>
 
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
