@@ -3,7 +3,7 @@ import secrets
 from SponsCentral import app, db, bcrypt
 from PIL import Image
 from flask import Flask, session, escape, render_template, url_for, flash, redirect, request
-from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountForm, ChatBoxText, RequestForm, InviteForm
+from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountFormParty,UpdateAccountFormSponsor, ChatBoxText, RequestForm, InviteForm
 from SponsCentral.models import PartyUser, SponsorUser, User, Region, Conversing, Conversation
 import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
@@ -171,34 +171,70 @@ def logout():
 def account():
     if current_user.type == 'P':
 
-        form = UpdateAccountForm()
+        form = UpdateAccountFormParty()
         partyUser = PartyUser.query.filter_by(user_id=current_user.id).first()
         if form.validate_on_submit():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
                 partyUser.party_logo = picture_file
             current_user.email = form.email.data
+            partyUser.party_name=form.party_name.data
+            partyUser.party_type=form.party_type.data
+            partyUser.party_kind=form.party_kind.data
+            partyUser.party_fromAmount=form.party_fromAmount.data
+            partyUser.party_toAmount=form.party_toAmount.data
+            partyUser.party_about=form.party_about.data
+            partyUser.party_address=form.party_address.data
+            partyUser.party_contactNo1=form.party_contactNo1.data
+            partyUser.party_contactNo2=form.party_contactNo2.data
             db.session.commit()
             flash('Your account has been updated!', 'success')
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
+            form.party_name.data=partyUser.party_name
+            form.party_type.data=partyUser.party_type
+            form.party_kind.data=partyUser.party_kind
+            form.party_fromAmount.data=partyUser.party_fromAmount
+            form.party_toAmount.data=partyUser.party_toAmount
+            form.party_about.data=partyUser.party_about
+            form.party_address.data=partyUser.party_address
+            form.party_contactNo1.data=partyUser.party_contactNo1
+            form.party_contactNo2.data=partyUser.party_contactNo2
         party_logo = url_for('static', filename='profile_pics/' + partyUser.party_logo)
         return render_template('accountParty.html', title='Account',party_logo=party_logo, form=form)
 
     elif current_user.type == 'S':
-        form = UpdateAccountForm()
+        form = UpdateAccountFormSponsor()
         sponsorUser=SponsorUser.query.filter_by(user_id=current_user.id).first()
         if form.validate_on_submit():
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
                 sponsorUser.sponsor_logo = picture_file
             current_user.email = form.email.data
+            sponsorUser.sponsor_name=form.sponsor_name.data
+            sponsorUser.sponsor_type=form.sponsor_type.data
+            sponsorUser.sponsor_kind=form.sponsor_kind.data
+            sponsorUser.sponsor_fromAmount=form.sponsor_fromAmount.data
+            sponsorUser.sponsor_toAmount=form.sponsor_toAmount.data
+            sponsorUser.sponsor_about=form.sponsor_about.data
+            sponsorUser.sponsor_address=form.sponsor_address.data
+            sponsorUser.sponsor_contactNo1=form.sponsor_contactNo1.data
+            sponsorUser.sponsor_contactNo2=form.sponsor_contactNo2.data
             db.session.commit()
             flash('Your account has been updated!', 'success')
             return redirect(url_for('account'))
         elif request.method == 'GET':
             form.email.data = current_user.email
+            form.sponsor_name.data=sponsorUser.sponsor_name
+            form.sponsor_type.data=sponsorUser.sponsor_type
+            form.sponsor_kind.data=sponsorUser.sponsor_kind
+            form.sponsor_fromAmount.data=sponsorUser.sponsor_fromAmount
+            form.sponsor_toAmount.data=sponsorUser.sponsor_toAmount
+            form.sponsor_about.data=sponsorUser.sponsor_about
+            form.sponsor_address.data=sponsorUser.sponsor_address
+            form.sponsor_contactNo1.data=sponsorUser.sponsor_contactNo1
+            form.sponsor_contactNo2.data=sponsorUser.sponsor_contactNo2
         sponsor_logo = url_for('static', filename='profile_pics/' + sponsorUser.sponsor_logo)
         return render_template('accountSponsor.html', title='Account',sponsor_logo=sponsor_logo, form=form)
 
@@ -388,6 +424,7 @@ def work():
 def user2_account(user2_id):
     #form=InviteForm()
     print(user2_id)
+    print(1000)
     if current_user.type == 'P':
         form=InviteForm()
         sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
