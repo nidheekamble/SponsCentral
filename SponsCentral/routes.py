@@ -387,25 +387,25 @@ def work():
 def user2_account(user2_id):
     #form=InviteForm()
     if current_user.type == 'P':
-
+        form=InviteForm()
         sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
-        #if form.validate_on_submit():
-            #conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            #db.session.add(conversing)
-            #db.session.commit()
+        if form.validate_on_submit():
+            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+            db.session.add(conversing)
+            db.session.commit()
 
-        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user)
+        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,form=form)
 
     elif current_user.type == 'S':
-
+        form=InviteForm()
         partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
         db.session.commit()
         #if form.validate_on_submit():
             #conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
             #db.session.add(conversing)
             #db.session.commit()
-        return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user)
+        return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form)
 
 
 
