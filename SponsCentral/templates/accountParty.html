@@ -12,9 +12,7 @@ s{% extends "layout.html" %}
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Account Info</legend>
-                {{
-                    image_file
-                }}
+                {{image_file}}
                 <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}
                     {% if form.email.errors %}
@@ -164,10 +162,6 @@ s{% extends "layout.html" %}
                         {{ form.party_toAmount(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-
-
-
-
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}

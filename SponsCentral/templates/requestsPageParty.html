@@ -9,7 +9,7 @@
                     <ol>
                         {% for user in userList %}
                             <li>
-                                <a href="/user/{{ user.user_id }}"><h5>{{ user.party_name }}</h5></a>
+                                <a href="/user/{{ user.user_id }}"><h5>{{ user.sponsor_name }}</h5></a>
                             </li>
                             Select Invite Status
                                 {% if form.invite_status.errors %}

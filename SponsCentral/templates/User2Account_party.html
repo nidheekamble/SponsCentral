@@ -1,7 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-<html>
-  <head>
     <script>
         // Initialize and add the map
         function initMap()
@@ -30,46 +28,44 @@
   <body>
     <div class="content-section">
         <form method="POST" action="">
-            
-            <div class="form-group">
-                {{ form.invite(class="btn btn-outline-info") }}
-            </div>
-            <div class="media">
-                <img class="rounded-circle account-img" src="{{ party_logo }}">
-                <div class="media-body">
-                    <h2 class="account-heading"> {{ partyUser.party_name }}</h2>
-                    <p class="text-secondary"><b> Type: </b> {{ partyUser.party_type }}</p>
-                    <p class="text-secondary"><b> About {{partyUser.party_name}}: </b> {{ partyUser.party_about }}</p>
-                    <p class="text-secondary"><b> Accepting: </b> {{ partyUser.party_kind }}, in the <b> range </b> {{ partyUser.party_fromAmount}} to {{ partyUser.party_toAmount}} Rs</p>
-                    <p class="text-secondary"><b> Contact {{partyUser.party_name}} at: </b><br>
-                        {{ partyUser.party_contactNo1 }} <br>
-                        {{ partyUser.party_contactNo2 }} <br>
-                        Email: {{ current_user.email }}
-                    </p>
-                    <p class="text-secondary"><b> Address: </b> {{ partyUser.party_address}}</p>
-                    <hr>
-                    <p class="text-secondary">See how near {{ partyUser.party_name}} is from you:</p>
-                    <style>
-                    #map
-                    {
-                        height: 50%;
-                        width: 100%;
-                        left: 25%;
-                        right: 25%;
-                    }
-                    </style>
-                    <div id="map" class="content-section" style="position: center"></div>
-
-                    <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKlMl1HFw1wNG4sEDWzEe1Mnth9qWPyI8&callback=initMap">
-                    </script>
-
-
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <div class="form-group">
+                    {{ form.invite(class="btn btn-outline-info") }}
                 </div>
-            </div>
+                    <div class="media">
+                        <img class="rounded-circle account-img" src="{{ party_logo }}">
+                            <div class="media-body">
+                                <h2 class="account-heading"> {{ partyUser.party_name }}</h2>
+                                <p class="text-secondary"><b> Type: </b> {{ partyUser.party_type }}</p>
+                                <p class="text-secondary"><b> About {{partyUser.party_name}}: </b> {{ partyUser.party_about }}</p>
+                                <p class="text-secondary"><b> Accepting: </b> {{ partyUser.party_kind }}, in the <b> range </b> {{ partyUser.party_fromAmount}} to {{ partyUser.party_toAmount}} Rs</p>
+                                <p class="text-secondary"><b> Contact {{partyUser.party_name}} at: </b><br>
+                                    {{ partyUser.party_contactNo1 }} <br>
+                                    {{ partyUser.party_contactNo2 }} <br>
+                                    Email: {{ current_user.email }}
+                                </p>
+                                <p class="text-secondary"><b> Address: </b> {{ partyUser.party_address}}</p>
+                                <hr>
+                                <p class="text-secondary">See how near {{ partyUser.party_name}} is from you:</p>
+                                <style>
+                                    #map
+                                    {
+                                        height: 50%;
+                                        width: 100%;
+                                        left: 25%;
+                                        right: 25%;
+                                    }
+                                </style>
+                                <div id="map" class="content-section" style="position: center"></div>
+                                <script async defer
+                                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKlMl1HFw1wNG4sEDWzEe1Mnth9qWPyI8&callback=initMap">
+                                </script>
+                            </div>
+                    </div>
+            </fieldset>
+        </form>
     </div>
-  </body>
-</html>
 
 
 {% endblock content %}

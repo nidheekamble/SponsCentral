@@ -20,10 +20,6 @@ def home():
     return render_template('home.html')
 
 
-@app.route("/about")
-def about():
-    return render_template('about.html', title='About')
-
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -31,7 +27,6 @@ def register():
     if form.validate_on_submit():
         if current_user.is_authenticated:
             return redirect(url_for('home'))
-
         if form.type.data == 'P':
             if form.validate_on_submit():
                 pw = (form.password.data)
@@ -40,7 +35,6 @@ def register():
                     a = ord(char) #ASCII
                     s = s+a #sum of ASCIIs acts as the salt
                 hashed_password = (str)((hashlib.sha512((str(s).encode('utf-8'))+((form.password.data).encode('utf-8')))).hexdigest())
-
                 #hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
                 user = User( email= form.email.data , password= hashed_password, type= form.type.data )
                 db.session.add(user)
@@ -84,8 +78,6 @@ def registerParty():
     if form.validate_on_submit():
         user = User.query.all().pop()
         partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data, user_id=user.id)
-
-
         geolocator = Nominatim()
         location = geolocator.geocode(partyUser.party_address)
         partyUser.party_latitude = location.latitude
@@ -170,7 +162,6 @@ def logout():
 @login_required
 def account():
     if current_user.type == 'P':
-
         form = UpdateAccountFormParty()
         partyUser = PartyUser.query.filter_by(user_id=current_user.id).first()
         if form.validate_on_submit():
@@ -241,14 +232,10 @@ def account():
 
 
 def nearbyPartyFunc():
-
     sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
-
     lat = sponsorUser.sponsor_latitude
     lng = sponsorUser.sponsor_longitude
-
     extent = 6000 #radius distance in meters, centered at sponsor address
-
     list_parties = []
     for party in PartyUser.query.all():
         list_parties.append(party)
@@ -266,16 +253,19 @@ def nearbyPartyFunc():
 
 
 
+@app.route('/nearbyParty', methods = ['GET', 'POST']) #sponsor looking for parties
+@login_required
+def nearbyPartyRoute():
+    nearbyParties, lat, lng, elements = nearbyPartyFunc()
+    return render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
+
+
 
 def nearbySponsorFunc():
-
     partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
-
     lat = partyUser.party_latitude
     lng = partyUser.party_longitude
-
     extent = 6000 #radius distance in meters, centered at party address
-
     list_sponsors = []
     for sponsor in SponsorUser.query.all():
         list_sponsors.append(sponsor)
@@ -293,68 +283,14 @@ def nearbySponsorFunc():
 
 
 
-@app.route('/nearbyParty', methods = ['GET', 'POST']) #sponsor looking for parties
-@login_required
-
-def nearbyPartyRoute():
-    nearbyParties, lat, lng, elements = nearbyPartyFunc()
-    return render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
-
 
 
 @app.route('/nearbySponsor', methods = ['GET','POST']) #parties looking for sponsors
 @login_required
-
 def nearbySponsorRoute():
     nearbySponsors, lat, lng, elements = nearbySponsorFunc()
     #print (elements)
     return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
-
-
-
-@app.route('/banking', methods = ['GET','POST']) #parties looking for sponsors
-@login_required
-def banking():
-    return render_template('banking.html', title='banking')
-
-
-
-@app.route("/requests", methods= ['POST', 'GET'])
-@login_required
-def inviteRecieved():
-
-    userList=[]
-    form = RequestForm()
-    conversing = Conversing.query.filter_by(user2 = current_user.id).all()
-    print(conversing)
-    print("10001")
-
-    if current_user.type == 'S':
-        for user in conversing:
-            user_invitee=PartyUser.query.filter_by(user_id=user.user1).first()
-            #user_name=user_invitee.party_name
-            userList.append(user_invitee)
-            print(user_invitee.party_name)
-
-        db.session.commit()
-        return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
-
-    if current_user.type == 'P':
-        for user in conversing:
-            user_invitee=SponsorUser.query.filter_by(user_id=user.user1).first()
-            #user_name=user_invitee.sponsor_name
-            userList.append(user_invitee)
-            print(user_invitee.sponsor_name)
-
-    if form.validate_on_submit():
-        if form.invite_status==1:
-            conversing.status='In-touch'
-        elif  form.invite_status==0:
-            conversing.status='Not Accepted'
-        db.session.commit()
-
-        return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
-
 
 
 #app.route("/invite", methods= ['POST', 'GET'])
@@ -395,6 +331,70 @@ def inviteRecieved():
 
 
 
+
+@app.route("/user/<user2_id>", methods = ['GET', 'POST'])
+@login_required
+def user2_account(user2_id):
+    #form=InviteForm()
+    print(user2_id)
+    print(1000)
+    if current_user.type == 'P':
+        form=InviteForm()
+        sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
+        if form.validate_on_submit():
+            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+            db.session.add(conversing)
+            db.session.commit()
+        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,form=form)
+
+    elif current_user.type == 'S':
+        form=InviteForm()
+        partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
+        if form.validate_on_submit():
+            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+            db.session.add(conversing)
+            db.session.commit()
+        return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form)
+
+
+@app.route("/requests", methods= ['POST', 'GET'])
+@login_required
+def inviteRecieved():
+
+    userList=[]
+    form = RequestForm()
+    conversing = Conversing.query.filter_by(user2 = current_user.id).all()
+    print(conversing)
+    print(10001)
+
+    if current_user.type == 'S':
+        for user in conversing:
+            user_invitee=PartyUser.query.filter_by(user_id=user.user1).first()
+            #user_name=user_invitee.party_name
+            userList.append(user_invitee)
+            print(user_invitee.party_name)
+        if form.validate_on_submit():
+            if form.invite_status==1:
+                conversing.status='In-touch'
+            elif  form.invite_status==0:
+                conversing.status='Not Accepted'
+        return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
+
+    if current_user.type == 'P':
+        for user in conversing:
+            user_invitee=SponsorUser.query.filter_by(user_id=user.user1).first()
+            #user_name=user_invitee.sponsor_name
+            userList.append(user_invitee)
+            print(user_invitee.sponsor_name)
+        if form.validate_on_submit():
+            if form.invite_status==1:
+                conversing.status='In-touch'
+            elif  form.invite_status==0:
+                conversing.status='Not Accepted'
+        return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
+
+
+
 @app.route("/chatbox", methods= ['POST', 'GET'])
 @login_required
 def chatbox():
@@ -409,42 +409,6 @@ def chatbox():
         db.session.commit()
         messages.append(conversation)
     return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
-
-@app.route("/MeetTheTeam")
-def team():
-    return render_template('MeetTheTeam.html')
-
-@app.route("/WhatWeDo")
-def work():
-    return render_template('WhatWeDo.html')
-
-
-@app.route("/user/<user2_id>", methods = ['GET', 'POST'])
-@login_required
-def user2_account(user2_id):
-    #form=InviteForm()
-    print(user2_id)
-    print(1000)
-    if current_user.type == 'P':
-        form=InviteForm()
-        sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
-        db.session.commit()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
-            db.session.commit()
-
-        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,form=form)
-
-    elif current_user.type == 'S':
-        form=InviteForm()
-        partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
-        db.session.commit()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
-            db.session.commit()
-        return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form)
 
 
 
@@ -620,3 +584,23 @@ def filterKind(kind):
 
         elements = len(filteredParties)
         return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+
+
+@app.route("/about")
+def about():
+    return render_template('about.html', title='About')
+
+
+@app.route("/MeetTheTeam")
+def team():
+    return render_template('MeetTheTeam.html')
+
+@app.route("/WhatWeDo")
+def work():
+    return render_template('WhatWeDo.html')
+
+
+@app.route('/banking', methods = ['GET','POST']) #parties looking for sponsors
+@login_required
+def banking():
+    return render_template('banking.html', title='banking')

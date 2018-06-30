@@ -70,7 +70,7 @@
         </script>
 
 
-    <!--APURVA ---
+    <!--APURVA --->
         This is the div that is to be positioned to the right of the map-->
 
 
@@ -78,7 +78,7 @@
     <h5> The map displays the following user locations (click on the ones you want to view separately): </h5>
     <ol>
         {% for place in nearby_list %}
-          <li><a href="{{url_for('user2_account( {{place[4]}} )')}}"><h5> {{ place[0] }} </h5></a>
+          <li><a href="{{url_for('user2_account', user2_id=place[4])}}"><h5> {{ place[0] }} </h5></a>
             <b>Address: </b> {{ place[3] }} </li> <br>
         {% endfor %}
     </ol>

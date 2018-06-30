@@ -19,9 +19,9 @@
           method: 'share',
           href: 'https://developers.facebook.com/docs/'
         }, function(response){});
-                  
-        FB.AppEvents.logPageView();   
-          
+
+        FB.AppEvents.logPageView();
+
       };
 
       (function(d, s, id){
@@ -130,11 +130,13 @@
                     {{ form.remember(class="form-check-input") }}
                     {{ form.remember.label(class="form-check-label") }}
                 </div>
-            </fieldset>
+
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
-
+            </fieldset>
+        </form>
+    </div>
 <!--GOOGLE API SIGN IN -->
             <script>
             function attachClickHandler(){
@@ -153,6 +155,7 @@
                     console.log(error);
                 };
             }
+        }
             </script>
 
         <meta name="google-signin-client_id" content="234892471054-9eo6d6c41cjn4qvpe9lpj6od5m1f04n3.apps.googleusercontent.com">
@@ -191,7 +194,7 @@
             auth2.signOut();
         }
         </script>
-<!---END OF GOOGLE API SNIPPET-->
+<!--END OF GOOGLE API SNIPPET-->
 
 <br>
 
