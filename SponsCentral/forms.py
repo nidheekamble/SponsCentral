@@ -164,8 +164,12 @@ class UpdateAccountFormSponsor(FlaskForm):
 
 class ChatBoxText(FlaskForm):
     #partyUser = PartyUser.query.filter_by(user_id=current_user.id).first()
+
+
+
     text = StringField('Enter Text', validators=[DataRequired(), Length(min=1, max=500)])
     send = SubmitField('Send')
+
 
 class RequestForm(FlaskForm):
     #accepted = HiddenField()

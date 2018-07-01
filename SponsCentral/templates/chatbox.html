@@ -2,9 +2,10 @@
 {% block content %}
 <div class="content-section">
     <div>
-        {{conversation}}
+
         {% for message in messages %}
-            <p>{{message.text}}</p>
+            <p>{{ message[0] }}</p>
+            <b>{{ message[1] }} </b>
         {% endfor %}
     </div>
     <form method="POST" action="/chatbox" enctype="multipart/form-data">

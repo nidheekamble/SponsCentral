@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div id="list" class="row">
+        <h5> Chat with your associates: </h5>
+        <ol>
+            {% for user in associated_users_list %}
+            <li><a href="{{url_for('chat', chatwith_id=user[0])}}"><h5> {{ user[1] }} </h5></a>
+
+                {% endfor %}
+        </ol>
+    </div>
+
+{% endblock content %}

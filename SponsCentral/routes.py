@@ -389,28 +389,85 @@ def inviteRecieved():
         if form.validate_on_submit():
             if form.invite_status==1:
                 conversing.status='In-touch'
+                db.session.commit()
             elif  form.invite_status==0:
                 conversing.status='Not Accepted'
+                db.session.commit()
         return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
 
 
 
-@app.route("/chatbox", methods= ['POST', 'GET'])
+@app.route("/chatwith", methods= ['POST', 'GET'])#Whom do you want to chat with?
 @login_required
-def chatbox():
-    conversing= Conversing.query.filter(or_(user1=current_user.id, user2= current_user.id )).all()#just for now
-    messages=[""]
-    for conversation in Conversation.query.filter_by(conversing_id = conversing.id):#just for now
-        messages.append(conversation)
-    form = ChatBoxText()
-    if form.validate_on_submit():
-        conversation= Conversation(text = form.text.data, conversing_id= conversing.id )#just for now
-        db.session.add(conversation)
-        db.session.commit()
-        messages.append(conversation)
+def chatwith():
+    #conversing= Conversing.query.filter(or_(user1=current_user.id, user2= current_user.id )).all()#just for now
+    #messages=[""]
+    #for conversation in Conversation.query.filter_by(conversing_id = conversing.id):#just for now
+    #    messages.append(conversation)
+    #form = ChatBoxText()
+    #if form.validate_on_submit():
+    #    conversation= Conversation(text = form.text.data, conversing_id= conversing.id )#just for now
+    #    db.session.add(conversation)
+    #    db.session.commit()
+    #    messages.append(conversation)
+    #return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
+    associated_users_list=[]
+    conversing= Conversing.query.filter(or_(user1==current_user.id,user2==current_user.id))
+    for nowuser in conversing :
+        if nowuser.user1== current_user.id:
+            if nowuser.status=='In-touch':
+                if current_user.type == 'P':
+                    sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user2).first()
+                    associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
+                    associated_users_list.append(associated_user)
+                elif current_user.type == 'S':
+                    partyUser= PartyUser.query.filter_by(user_id=nowuser.user2).first()
+                    associated_user=[partyUser.user_id,partyUser.party_name]
+                    associated_users_list.append(associated_user)
+        if nowuser.user2== current_user.id:
+            if nowuser.status=='In-touch':
+                if current_user.type == 'P':
+                    sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user1).first()
+                    associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
+                    associated_users_list.append(associated_user)
+                elif current_user.type == 'S':
+                    partyUser= PartyUser.query.filter_by(user_id=nowuser.user1).first()
+                    associated_user=[partyUser.user_id,partyUser.party_name]
+                    associated_users_list.append(associated_user)
+
+
+    return render_template ('chatlist.html', title = 'Chat with', associated_users_list=associated_users_list)
+
+    #return associated_users_choices
+@app.route("/chatbox/<chatwith_id>", methods= ['POST', 'GET'])#Whom do you want to chat with?
+@login_required
+def chat(chatwith_id):
+
+    conversing= Conversing.query.filter(or_(user1==current_user.id,user2==current_user.id))
+    for nowuser in conversing:
+        if nowuser.user1== chatwith_id:
+            form = ChatBoxText()
+            if form.validate_on_submit() :
+                conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )#just for now
+                db.session.add(conversation)
+                db.session.commit()
+            messages=[]
+            for conversation in Conversation.query.filter_by(conversing_id = nowuser.id):#just for now
+                messages.append(conversation.text,conversation.time)
+
+
+        elif nowuser.user2==chatwith_id:
+            form = ChatBoxText()
+        #just for now
+            if form.validate_on_submit() :
+                conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )#just for now
+                db.session.add(conversation)
+                db.session.commit()
+            messages=[]
+            for conversation in Conversation.query.filter_by(conversing_id = nowuser.id):#just for now
+                messages.append(conversation.text,conversation.time)
+
     return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
-
-
 
 
 @app.route("/filterType/<type>", methods = ['GET', 'POST'])
