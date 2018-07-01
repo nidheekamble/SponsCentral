@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <div>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                {% for user in userList %}
+                    <p>{{user}}</p>
+                    {{user.user_id}}
+                    {{ form.send(class="btn btn-outline-info") }}
+                    {% if form.send %}
+                        {{form.user2_id(value=user.user_id)}}
+                    {% endif %}
+                {% endfor %}
+
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock content %}

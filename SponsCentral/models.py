@@ -60,13 +60,6 @@ class SponsorUser(db.Model):
     def __repr__(self):
         return f"SponsorUser('{self.sponsor_name}','{self.sponsor_type}','{self.sponsor_kind}','{self.sponsor_contactNo1}','{self.sponsor_contactNo2}','{self.sponsor_address}','{self.sponsor_about}','{self.sponsor_fromAmount}','{self.sponsor_toAmount}','{self.sponsor_logo}')"
 
-class Region(db.Model):
-    region_id=db.Column(db.Integer,primary_key=True)
-    region_name=db.Column(db.String(50),nullable=False)
-    state=db.Column(db.String(40),nullable=False)
-    city=db.Column(db.String(40),nullable=False)
-    latitude = db.Column(db.Float(precision = 12  ,scale=7) , nullable= False)
-    longitude = db.Column(db.Float(precision = 12 , scale =7) , nullable= False)
 
 class Conversing(db.Model):
     id = db.Column(db.Integer, primary_key=True)

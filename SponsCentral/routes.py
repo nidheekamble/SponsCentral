@@ -4,7 +4,7 @@ from SponsCentral import app, db, bcrypt
 from PIL import Image
 from flask import Flask, session, escape, render_template, url_for, flash, redirect, request
 from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountFormParty,UpdateAccountFormSponsor, ChatBoxText, RequestForm, InviteForm
-from SponsCentral.models import PartyUser, SponsorUser, User, Region, Conversing, Conversation
+from SponsCentral.models import PartyUser, SponsorUser, User, Conversing, Conversation
 import hashlib #for SHA512
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.orm import Session
