@@ -401,6 +401,7 @@ def inviteRecieved():
 
 
 
+
 @app.route("/shortlist/<user2_id>", methods= ['POST', 'GET'])
 @login_required
 def display_shortlist(user2_id):
@@ -409,19 +410,41 @@ def display_shortlist(user2_id):
 
     if current_user.type == 'S':
         shortlisted_user=PartyUser.query.filter_by(user_id=user2_id).first()
-        shortlist.append(shortlisted_user)
-        print("hua")
+
+        flag=0
+        for user in shortlist:
+            if user.user_id==user2_id:
+                flag=1
+                print("nahin hua")
+                break
+
+        if flag==0:
+                shortlist.append(shortlisted_user)
+                print("hua")
+        print(shortlist)
         #session.expunge(shortlisted_user)
         db.session.commit()
         return render_template ('shortlistPageSponsor.html', title = 'Shortlist', userList=shortlist, form=form)
 
+
     elif current_user.type =='P':
         shortlisted_user=SponsorUser.query.filter_by(user_id=user2_id).first()
-        shortlist.append(shortlisted_user)
-        print("hua")
+
+        flag=0
+        for user in shortlist:
+            if user.user_id==user2_id:
+                flag=1
+                print("nahin hua")
+                break
+
+        if flag==0:
+                shortlist.append(shortlisted_user)
+                print("hua")
+        print(shortlist)
         #session.expunge(shortlisted_user)
         db.session.commit()
         return render_template ('shortlistPageParty.html', title = 'Shortlist', userList=shortlist, form=form)
+
 
 
 
@@ -526,8 +549,9 @@ def chat(chatwith_id):
                     messages.append(message)
 
 
-
     return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
+
+
 
 
 @app.route("/filterType/<type>", methods = ['GET', 'POST'])
@@ -701,6 +725,7 @@ def filterKind(kind):
 
         elements = len(filteredParties)
         return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+
 
 
 @app.route("/about")
