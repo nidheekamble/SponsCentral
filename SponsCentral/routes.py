@@ -1,6 +1,7 @@
 import os
 import secrets
 from SponsCentral import app, db, bcrypt
+from SponsCentral.globalVar import shortlist
 from PIL import Image
 from flask import Flask, session, escape, render_template, url_for, flash, redirect, request
 from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountFormParty,UpdateAccountFormSponsor, ChatBoxText, RequestForm, InviteForm
@@ -335,7 +336,7 @@ def nearbySponsorRoute():
 @app.route("/user/<user2_id>", methods = ['GET', 'POST'])
 @login_required
 def user2_account(user2_id):
-    #form=InviteForm()
+
     print(user2_id)
     print(1000)
     if current_user.type == 'P':
@@ -396,6 +397,32 @@ def inviteRecieved():
                 conversing.status='Not Accepted'
                 db.session.commit()
         return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
+
+
+
+
+@app.route("/shortlist/<user2_id>", methods= ['POST', 'GET'])
+@login_required
+def display_shortlist(user2_id):
+
+    form = InviteForm()
+
+    if current_user.type == 'S':
+        shortlisted_user=PartyUser.query.filter_by(user_id=user2_id).first()
+        shortlist.append(shortlisted_user)
+        print("hua")
+        #session.expunge(shortlisted_user)
+        db.session.commit()
+        return render_template ('shortlistPageSponsor.html', title = 'Shortlist', userList=shortlist, form=form)
+
+    elif current_user.type =='P':
+        shortlisted_user=SponsorUser.query.filter_by(user_id=user2_id).first()
+        shortlist.append(shortlisted_user)
+        print("hua")
+        #session.expunge(shortlisted_user)
+        db.session.commit()
+        return render_template ('shortlistPageParty.html', title = 'Shortlist', userList=shortlist, form=form)
+
 
 
 
