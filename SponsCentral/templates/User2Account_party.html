@@ -1,7 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
+<head>
     <script>
         // Initialize and add the map
+
+        
         function initMap()
         {
           var loc = {lat: {{current_user.sponsor_latitude}}, lng: {{current_user.sponsor_longitude}}};
@@ -22,8 +25,17 @@
         }
 
 
-          </script>
-  </head>
+    </script>
+     <style>
+        #map
+        {
+            height: 50%;
+            width: 100%;
+            left: 25%;
+            right: 25%;
+        }
+    </style>
+</head>
 
   <body>
     <div class="content-section">
@@ -49,15 +61,7 @@
                                 <p class="text-secondary"><b> Address: </b> {{ partyUser.party_address}}</p>
                                 <hr>
                                 <p class="text-secondary">See how near {{ partyUser.party_name}} is from you:</p>
-                                <style>
-                                    #map
-                                    {
-                                        height: 50%;
-                                        width: 100%;
-                                        left: 25%;
-                                        right: 25%;
-                                    }
-                                </style>
+                                
                                 <div id="map" class="content-section" style="position: center"></div>
                                 <script async defer
                                     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKlMl1HFw1wNG4sEDWzEe1Mnth9qWPyI8&callback=initMap">

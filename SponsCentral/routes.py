@@ -79,6 +79,8 @@ def registerParty():
     if form.validate_on_submit():
         user = User.query.all().pop()
         partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data, user_id=user.id)
+
+        partyUser.party_address.replace('\n',' ')
         geolocator = Nominatim()
         location = geolocator.geocode(partyUser.party_address)
         partyUser.party_latitude = location.latitude
@@ -104,6 +106,7 @@ def registerSponsor():
         user = User.query.all().pop()
         sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data, user_id=user.id)
 
+        sponsorUser.sponsor_address.replace('\n',' ')
         geolocator = Nominatim()
         location = geolocator.geocode(sponsorUser.sponsor_address)
         sponsorUser.sponsor_latitude = location.latitude
