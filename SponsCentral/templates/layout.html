@@ -74,6 +74,7 @@
                           {% elif current_user.type == 'S' %}
                               <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbyPartyRoute') }}"><h6>Maps</h6></a></button></li>
                           {% endif %}
+                          <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('display_shortlist') }}"><h6>Shortlist</h6></a></button></li>
                           <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('inviteRecieved') }}"><h6>Requests</h6></a></button></li>
                           <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('chatwith') }}"><h6>Chat</h6></a></button></li>
 
@@ -91,7 +92,7 @@
           <p class="footer-company-motto">Connect. Select. Sponsor.</p>
 
           <p class="footer-links">
-            <a href="#">About Us</a>
+            <a href="{{ url_for('about') }}">About Us</a>
             ·
             <a href="{{ url_for('team') }}">Meet The Team</a>
             ·
