@@ -6,12 +6,12 @@
             <ol>
                 {% for user in userList %}
                     <li>
-                        <a href="/user/{{ user.user_id }}"><h5><b>{{ user.sponsor_name }}</b>,</a> Address: {{user.sponsor_address}}</h5>
+                        <a href="/user/{{ user.user_id }}"><h5><b>{{ user.sponsor_name }},</a> Address:</b> {{user.sponsor_address}}</h5>
                         <form method="POST" action="">
                             {{ form.hidden_tag() }}
                             <fieldset>
                             <div class="form-group">
-                                {{ form.invite(class="btn btn-outline-info") }}
+                                {{ form.invite(class="btn btn-outline-info")}}
                             </div>
                             </fieldset>
                         </form>

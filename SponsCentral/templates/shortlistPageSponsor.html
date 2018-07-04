@@ -6,7 +6,7 @@
             <ol>
                 {% for user in userList %}
                     <li>
-                        <a href="/user/{{ user.user_id }}"><h5><b>{{ user.party_name }}</b>,</a> Address: {{user.party_address}}</h5>
+                        <a href="/user/{{ user.user_id }}"><h5><b>{{ user.party_name }},</a> Address:</b> {{user.party_address}}</h5>
                         <form method="POST" action="">
                             {{ form.hidden_tag() }}
                             <fieldset>
@@ -15,7 +15,7 @@
                             </div>
                             </fieldset>
                         </form>
-                    </li>
+                    </li><br>
                 {% endfor %}
             </ol>
             Invite them now!
