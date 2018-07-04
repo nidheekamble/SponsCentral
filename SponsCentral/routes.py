@@ -480,7 +480,7 @@ def chat(chatwith_id):
         if current_user.type=='P':
             if nowuser.user1== current_user.id:
 
-                sponsorUser=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
+                sponsorUser=SponsorUser.query.filter_by(user_id=chatwith_id).first()
                 messages=[[sponsorUser.sponsor_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
@@ -491,7 +491,7 @@ def chat(chatwith_id):
                     messages.append(message)
 
             elif  nowuser.user2==current_user.id:
-                sponsorUser=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
+                sponsorUser=SponsorUser.query.filter_by(user_id=chatwith_id).first()
                 messages=[[sponsorUser.sponsor_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
