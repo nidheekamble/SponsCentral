@@ -7,14 +7,14 @@
             <fieldset>
                 <div class="form-group">
                     {{ form.invite(class="btn btn-outline-info") }}
-                    <a class="btn btn-outline-info" href="{{url_for('shortlisted', user2_id=sponsorUser.user_id)}}"><h6>Shortlist</h6></a></li>
+                    <a class="btn btn-outline-info" href="{{ url_for('shortlisted', user2_id=sponsorUser.user_id)}}"><h6>Shortlist</h6></a></li>
                 </div>
                     <div class="media">
                         <img class="rounded-circle account-img" src="{{ party_logo }}">
                             <div class="media-body">
-                                <h2 class="account-heading">{{ sponsorUser.sponsor_name }}</h2>
+                                <h2 class="account-heading"> {{ sponsorUser.sponsor_name }}</h2>
                                 <p class="text-secondary"><b>Type:</b> {{ sponsorUser.sponsor_type }}</p>
-                                <p class="text-secondary"><b> Address: </b> {{ sponsorUser.sponsor_address}}</p>
+                                <p class="text-secondary"><b>Address: </b> {{ sponsorUser.sponsor_address}}. <a href="{{url_for('individual_address', otherUser_id = sponsorUser.user_id)}}">View it on map </a></p>
                                 <p class="text-secondary"><b> About {{sponsorUser.sponsor_name}}: </b>{{ sponsorUser.sponsor_about }}</p>
                                 <p class="text-secondary"><b> Offering: </b> {{ sponsorUser.sponsor_kind }} in the <b> range </b> {{ sponsorUser.sponsor_fromAmount}} to {{ sponsorUser.sponsor_toAmount}} Rs</p>
                                 <p class="text-secondary"><b> Contact {{ sponsorUser.sponsor_name }} at: </b><br>

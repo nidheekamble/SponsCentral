@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <hr>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -46,9 +47,6 @@
             // The marker, positioned at loc
             var marker = new google.maps.Marker({position: loc, map: map});
 
-
-            var infowindow = new google.maps.InfoWindow();
-
             var marker, i=0;
 
             {% for i in range (0,elements): %}
@@ -68,14 +66,14 @@
 
 
         </script>
+        <hr>
 
 
     <!--APURVA --->
     <!-- This is the div that is to be positioned to the right of the map-->
 
-
-    <div id="list" class="row">
-    <h5> The map displays the following user locations (click on the ones you want to view separately): </h5>
+    <div class = "content-section">
+    <h5><b> The map displays the following user locations (click on the ones you want to view separately): </b></h5><br>
     <ol>
         {% for place in nearby_list %}
           <li><a href="{{url_for('user2_account', user2_id=place[4])}}"><h5> {{ place[0] }} </h5></a>

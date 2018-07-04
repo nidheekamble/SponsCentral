@@ -468,6 +468,31 @@ def display_shortlist():
 
 
 
+@app.route("/individual_address/<otherUser_id>", methods = ['GET', 'POST'])
+@login_required
+def individual_address(otherUser_id):
+
+    if current_user.type == 'P':
+        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
+        lat = partyUser.party_latitude
+        lng = partyUser.party_longitude
+
+        otherUser = SponsorUser.query.filter_by(user_id=otherUser_id).first()
+        lat2 = otherUser.sponsor_latitude
+        lng2 = otherUser.sponsor_longitude
+
+    elif current_user.type == 'S':
+
+        sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
+        lat = sponsorUser.sponsor_latitude
+        lng = sponsorUser.sponsor_longitude
+
+        otherUser = PartyUser.query.filter_by(user_id=otherUser_id).first()
+        lat2 = otherUser.party_latitude
+        lng2 = otherUser.party_longitude
+
+    return render_template ('API.html', title = 'Compare Your Location', lat=lat, lng=lng, lat2=lat2, lng2=lng2)
+
 
 @app.route("/chatwith", methods= ['POST', 'GET'])#Whom do you want to chat with?
 @login_required
