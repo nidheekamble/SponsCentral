@@ -349,7 +349,8 @@ def user2_account(user2_id):
             conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
             db.session.add(conversing)
             db.session.commit()
-        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,form=form)
+
+        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user, form=form)
 
     elif current_user.type == 'S':
         form=InviteForm()
@@ -358,6 +359,7 @@ def user2_account(user2_id):
             conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
             db.session.add(conversing)
             db.session.commit()
+
         return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form)
 
 
@@ -384,6 +386,7 @@ def inviteRecieved():
                 elif  form.invite_status.data=='0':
                     user.status='Not Accepted'
                     db.session.commit()
+
         return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
 
     if current_user.type == 'P':
@@ -399,6 +402,7 @@ def inviteRecieved():
             elif  form.invite_status==0:
                 conversing.status='Not Accepted'
                 db.session.commit()
+
         return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
 
 
@@ -407,7 +411,7 @@ def inviteRecieved():
 
 @app.route("/shortlist/<user2_id>", methods= ['POST', 'GET'])
 @login_required
-def display_shortlist(user2_id):
+def shortlisted(user2_id):
 
     form = InviteForm()
 
@@ -415,15 +419,15 @@ def display_shortlist(user2_id):
         shortlisted_user=PartyUser.query.filter_by(user_id=user2_id).first()
 
         flag=0
-        for user in shortlist:
-            if user.user_id==user2_id:
+        for partyUser in shortlist:
+            if partyUser.user_id == shortlisted_user.user_id:
                 flag=1
                 print("nahin hua")
                 break
-
         if flag==0:
-                shortlist.append(shortlisted_user)
-                print("hua")
+            shortlist.append(shortlisted_user)
+            print("hua")
+
         print(shortlist)
         #session.expunge(shortlisted_user)
         db.session.commit()
@@ -434,20 +438,33 @@ def display_shortlist(user2_id):
         shortlisted_user=SponsorUser.query.filter_by(user_id=user2_id).first()
 
         flag=0
-        for user in shortlist:
-            if user.user_id==user2_id:
+        for sponsorUser in shortlist:
+            if sponsorUser.user_id == shortlisted_user.user_id:
                 flag=1
                 print("nahin hua")
                 break
-
         if flag==0:
-                shortlist.append(shortlisted_user)
-                print("hua")
+            shortlist.append(shortlisted_user)
+            print("hua")
+
         print(shortlist)
         #session.expunge(shortlisted_user)
         db.session.commit()
         return render_template ('shortlistPageParty.html', title = 'Shortlist', userList=shortlist, form=form)
 
+
+
+@app.route("/display_shortlist", methods = ['GET','POST'])
+@login_required
+def display_shortlist():
+
+	form = InviteForm()
+
+	if current_user.type == 'S':
+		return render_template ('shortlistPageSponsor.html', title = 'Shortlist', userList=shortlist, form=form)
+
+	elif current_user.type == 'P':
+		return render_template ('shortlistPageParty.html', title = 'Shortlist', userList=shortlist, form=form)
 
 
 
@@ -494,6 +511,8 @@ def chatwith():
 
     return render_template ('chatlist.html', title = 'Chat with', associated_users_list=associated_users_list)
 
+
+
     #return associated_users_choices
 @app.route("/chatbox/<chatwith_id>", methods= ['POST', 'GET'])#Whom do you want to chat with?
 @login_required
@@ -506,7 +525,7 @@ def chat(chatwith_id):
         if current_user.type=='P':
             if nowuser.user1== current_user.id:
 
-                sponsorUser=SponsorUser.query.filter_by(user_id=chatwith_id).first()
+                sponsorUser=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
                 messages=[[sponsorUser.sponsor_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
@@ -517,7 +536,7 @@ def chat(chatwith_id):
                     messages.append(message)
 
             elif  nowuser.user2==current_user.id:
-                sponsorUser=SponsorUser.query.filter_by(user_id=chatwith_id).first()
+                sponsorUser=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
                 messages=[[sponsorUser.sponsor_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
