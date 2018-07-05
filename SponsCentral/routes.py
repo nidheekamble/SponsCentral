@@ -13,7 +13,7 @@ from math import sqrt
 #from googlemaps import Client as GoogleMaps
 import requests
 from geopy.geocoders import Nominatim
-from sqlalchemy import or_
+from sqlalchemy import or_ , and_
 
 @app.route("/")
 @app.route("/home")
@@ -340,27 +340,43 @@ def nearbySponsorRoute():
 @login_required
 def user2_account(user2_id):
 
-    print(user2_id)
-    print(1000)
-    if current_user.type == 'P':
-        form=InviteForm()
-        sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
-            db.session.commit()
+    conversing=Conversing.query.filter(and_(Conversing.user1==current_user.id,Conversing.user2==user2_id)).first()
+    if conversing==None:
 
-        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user, form=form)
+        if current_user.type == 'P':
 
-    elif current_user.type == 'S':
-        form=InviteForm()
-        partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
-            db.session.commit()
+            form=InviteForm()
+            sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
+            flag=1
+            if form.validate_on_submit():
+                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+                db.session.add(conversing)
+                db.session.commit()
 
-        return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form)
+            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,form=form,flag=flag)
+
+        elif current_user.type == 'S':
+
+            form=InviteForm()
+            partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
+            flag=1
+            if form.validate_on_submit():
+                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+                db.session.add(conversing)
+                db.session.commit()
+
+            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form,flag=flag)
+
+    else:
+        if current_user.type == 'P':
+            flag=0
+            sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
+            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,flag=flag)
+
+        elif current_user.type == 'S':
+            flag=0
+            partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
+            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,flag=flag)
 
 
 @app.route("/requests", methods= ['POST', 'GET'])

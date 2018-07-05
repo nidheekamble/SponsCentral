@@ -2,19 +2,22 @@
 {% block content %}
 <body>
     <div class="content-section">
+        {% if flag %}
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset>
                 <div class="form-group">
                     {{ form.invite(class="btn btn-outline-info") }}
-                    <a class="btn btn-outline-info" href="{{ url_for('shortlisted', user2_id=sponsorUser.user_id)}}"><h6>Shortlist</h6></a></li>
+                    <button class="btn btn-outline-info"><a href="{{ url_for('display_shortlist', user2_id=sponsorUser.user_id) }}"><h6>Shortlist</h6></a></button></li>
                 </div>
+            </fieldset>
+        </form>
+        {% endif %}
                     <div class="media">
                         <img class="rounded-circle account-img" src="{{ party_logo }}">
                             <div class="media-body">
-                                <h2 class="account-heading"> {{ sponsorUser.sponsor_name }}</h2>
+                                <h2 class="account-heading">{{ sponsorUser.sponsor_name }}</h2>
                                 <p class="text-secondary"><b>Type:</b> {{ sponsorUser.sponsor_type }}</p>
-                                <p class="text-secondary"><b>Address: </b> {{ sponsorUser.sponsor_address}}. <a href="{{url_for('individual_address', otherUser_id = sponsorUser.user_id)}}">View it on map </a></p>
                                 <p class="text-secondary"><b> About {{sponsorUser.sponsor_name}}: </b>{{ sponsorUser.sponsor_about }}</p>
                                 <p class="text-secondary"><b> Offering: </b> {{ sponsorUser.sponsor_kind }} in the <b> range </b> {{ sponsorUser.sponsor_fromAmount}} to {{ sponsorUser.sponsor_toAmount}} Rs</p>
                                 <p class="text-secondary"><b> Contact {{ sponsorUser.sponsor_name }} at: </b><br>
@@ -22,10 +25,16 @@
                                     {{ sponsorUser.sponsor_contactNo2 }}<br>
                                     Email: {{ current_user.email }}
                                 </p>
+                                <p class="text-secondary"><b> Address: </b> {{ sponsorUser.sponsor_address}}</p>
+                                <hr>
+                                <p class="text-secondary">See how near {{sponsorUser.sponsor_name}} is from you:</p>
+
+                            <div id="map" class="content-section" style="position: center"></div>
+                            <script async defer
+                                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKlMl1HFw1wNG4sEDWzEe1Mnth9qWPyI8&callback=initMap">
+                            </script>
                         </div>
                     </div>
-                </fieldset>
-            </form>
         </div>
-    </body>
+</body>
 {% endblock content %}
