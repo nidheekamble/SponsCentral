@@ -1,38 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
-  <head>
-    <script>
-          // Initialize and add the map
-          function initMap()
-          {
-            var loc = {lat: {{current_user.party_latitude}}, lng: {{current_user.party_longitude}}};
-            // map opens, centered at this location
-            var map = new google.maps.Map(
-                document.getElementById('map'), {zoom: 13, center: loc});
-            // The marker, positioned at loc
-            var marker = new google.maps.Marker({position: loc, map: map});
-
-            var marker;
-            marker = new google.maps.Marker
-                (
-                    {
-                        position: new google.maps.LatLng({{sponsorUser.sponsor_latitude}}, {{sponsorUser.sponsor_longitude}})
-                        map: map
-                    }
-                );
-          }
-
-
-    </script>
-  </head>
-  <body>
+<body>
     <div class="content-section">
+        {% if flag %}
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset>
                 <div class="form-group">
                     {{ form.invite(class="btn btn-outline-info") }}
+                    <button class="btn btn-outline-info"><a href="{{ url_for('display_shortlist', user2_id=sponsorUser.user_id) }}"><h6>Shortlist</h6></a></button></li>
                 </div>
+            </fieldset>
+        </form>
+        {% endif %}
                     <div class="media">
                         <img class="rounded-circle account-img" src="{{ party_logo }}">
                             <div class="media-body">
@@ -48,23 +28,13 @@
                                 <p class="text-secondary"><b> Address: </b> {{ sponsorUser.sponsor_address}}</p>
                                 <hr>
                                 <p class="text-secondary">See how near {{sponsorUser.sponsor_name}} is from you:</p>
-                                <style>
-                                    #map
-                                    {
-                                        height: 50%;
-                                        width: 100%;
-                                        left: 25%;
-                                        right: 25%;
-                                    }
-                                </style>
+
                             <div id="map" class="content-section" style="position: center"></div>
                             <script async defer
                                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKlMl1HFw1wNG4sEDWzEe1Mnth9qWPyI8&callback=initMap">
                             </script>
                         </div>
                     </div>
-                </fieldset>
-            </form>
         </div>
-    </body>
+</body>
 {% endblock content %}

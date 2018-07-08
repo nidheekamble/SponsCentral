@@ -1,6 +1,7 @@
 import os
 import secrets
 from SponsCentral import app, db, bcrypt
+from SponsCentral.globalVar import shortlist
 from PIL import Image
 from flask import Flask, session, escape, render_template, url_for, flash, redirect, request
 from SponsCentral.forms import RegistrationFormParty, RegistrationFormSponser, LoginForm, SelectForm,UpdateAccountFormParty,UpdateAccountFormSponsor, ChatBoxText, RequestForm, InviteForm
@@ -12,7 +13,7 @@ from math import sqrt
 #from googlemaps import Client as GoogleMaps
 import requests
 from geopy.geocoders import Nominatim
-from sqlalchemy import or_
+from sqlalchemy import or_ , and_
 
 @app.route("/")
 @app.route("/home")
@@ -78,6 +79,8 @@ def registerParty():
     if form.validate_on_submit():
         user = User.query.all().pop()
         partyUser=PartyUser(party_name=form.party_name.data,party_type=form.party_type.data,party_kind=form.party_kind.data,party_contactNo1=form.party_contactNo1.data,party_contactNo2=form.party_contactNo2.data,party_address=form.party_address.data,party_about=form.party_about.data,party_fromAmount=form.party_fromAmount.data ,party_toAmount=form.party_toAmount.data, user_id=user.id)
+
+        partyUser.party_address.replace('\n',' ')
         geolocator = Nominatim()
         location = geolocator.geocode(partyUser.party_address)
         partyUser.party_latitude = location.latitude
@@ -103,6 +106,7 @@ def registerSponsor():
         user = User.query.all().pop()
         sponsorUser=SponsorUser(sponsor_name=form.sponsor_name.data,sponsor_type=form.sponsor_type.data,sponsor_kind=form.sponsor_kind.data,sponsor_contactNo1=form.sponsor_contactNo1.data,sponsor_contactNo2=form.sponsor_contactNo2.data,sponsor_address=form.sponsor_address.data, sponsor_about=form.sponsor_about.data,sponsor_fromAmount=form.sponsor_fromAmount.data ,sponsor_toAmount=form.sponsor_toAmount.data, user_id=user.id)
 
+        sponsorUser.sponsor_address.replace('\n',' ')
         geolocator = Nominatim()
         location = geolocator.geocode(sponsorUser.sponsor_address)
         sponsorUser.sponsor_latitude = location.latitude
@@ -335,26 +339,44 @@ def nearbySponsorRoute():
 @app.route("/user/<user2_id>", methods = ['GET', 'POST'])
 @login_required
 def user2_account(user2_id):
-    #form=InviteForm()
-    print(user2_id)
-    print(1000)
-    if current_user.type == 'P':
-        form=InviteForm()
-        sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
-            db.session.commit()
-        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,form=form)
 
-    elif current_user.type == 'S':
-        form=InviteForm()
-        partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
-            db.session.commit()
-        return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form)
+    conversing=Conversing.query.filter(and_(Conversing.user1==current_user.id,Conversing.user2==user2_id)).first()
+    if conversing==None:
+
+        if current_user.type == 'P':
+
+            form=InviteForm()
+            sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
+            flag=1
+            if form.validate_on_submit():
+                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+                db.session.add(conversing)
+                db.session.commit()
+
+            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,form=form,flag=flag)
+
+        elif current_user.type == 'S':
+
+            form=InviteForm()
+            partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
+            flag=1
+            if form.validate_on_submit():
+                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+                db.session.add(conversing)
+                db.session.commit()
+
+            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form,flag=flag)
+
+    else:
+        if current_user.type == 'P':
+            flag=0
+            sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
+            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,flag=flag)
+
+        elif current_user.type == 'S':
+            flag=0
+            partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
+            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,flag=flag)
 
 
 @app.route("/requests", methods= ['POST', 'GET'])
@@ -373,11 +395,14 @@ def inviteRecieved():
             #user_name=user_invitee.party_name
             userList.append(user_invitee)
             print(user_invitee.party_name)
-        if form.validate_on_submit():
-            if form.invite_status==1:
-                conversing.status='In-touch'
-            elif  form.invite_status==0:
-                conversing.status='Not Accepted'
+            if form.validate_on_submit():
+                if form.invite_status.data=='1':
+                    user.status='In-touch'
+                    db.session.commit()
+                elif  form.invite_status.data=='0':
+                    user.status='Not Accepted'
+                    db.session.commit()
+
         return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
 
     if current_user.type == 'P':
@@ -393,81 +418,198 @@ def inviteRecieved():
             elif  form.invite_status==0:
                 conversing.status='Not Accepted'
                 db.session.commit()
+
         return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
 
+
+
+
+
+@app.route("/shortlist/<user2_id>", methods= ['POST', 'GET'])
+@login_required
+def shortlisted(user2_id):
+
+    form = InviteForm()
+
+    if current_user.type == 'S':
+        shortlisted_user=PartyUser.query.filter_by(user_id=user2_id).first()
+
+        flag=0
+        for partyUser in shortlist:
+            if partyUser.user_id == shortlisted_user.user_id:
+                flag=1
+                print("nahin hua")
+                break
+        if flag==0:
+            shortlist.append(shortlisted_user)
+            print("hua")
+
+        print(shortlist)
+        #session.expunge(shortlisted_user)
+        db.session.commit()
+        return render_template ('shortlistPageSponsor.html', title = 'Shortlist', userList=shortlist, form=form)
+
+
+    elif current_user.type =='P':
+        shortlisted_user=SponsorUser.query.filter_by(user_id=user2_id).first()
+
+        flag=0
+        for sponsorUser in shortlist:
+            if sponsorUser.user_id == shortlisted_user.user_id:
+                flag=1
+                print("nahin hua")
+                break
+        if flag==0:
+            shortlist.append(shortlisted_user)
+            print("hua")
+
+        print(shortlist)
+        #session.expunge(shortlisted_user)
+        db.session.commit()
+        return render_template ('shortlistPageParty.html', title = 'Shortlist', userList=shortlist, form=form)
+
+
+
+@app.route("/display_shortlist", methods = ['GET','POST'])
+@login_required
+def display_shortlist():
+
+	form = InviteForm()
+
+	if current_user.type == 'S':
+		return render_template ('shortlistPageSponsor.html', title = 'Shortlist', userList=shortlist, form=form)
+
+	elif current_user.type == 'P':
+		return render_template ('shortlistPageParty.html', title = 'Shortlist', userList=shortlist, form=form)
+
+
+
+@app.route("/individual_address/<otherUser_id>", methods = ['GET', 'POST'])
+@login_required
+def individual_address(otherUser_id):
+
+    if current_user.type == 'P':
+        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
+        lat = partyUser.party_latitude
+        lng = partyUser.party_longitude
+
+        otherUser = SponsorUser.query.filter_by(user_id=otherUser_id).first()
+        lat2 = otherUser.sponsor_latitude
+        lng2 = otherUser.sponsor_longitude
+
+    elif current_user.type == 'S':
+
+        sponsorUser = SponsorUser.query.filter_by(user_id= current_user.id).first()
+        lat = sponsorUser.sponsor_latitude
+        lng = sponsorUser.sponsor_longitude
+
+        otherUser = PartyUser.query.filter_by(user_id=otherUser_id).first()
+        lat2 = otherUser.party_latitude
+        lng2 = otherUser.party_longitude
+
+    return render_template ('API.html', title = 'Compare Your Location', lat=lat, lng=lng, lat2=lat2, lng2=lng2)
 
 
 @app.route("/chatwith", methods= ['POST', 'GET'])#Whom do you want to chat with?
 @login_required
 def chatwith():
-    #conversing= Conversing.query.filter(or_(user1=current_user.id, user2= current_user.id )).all()#just for now
-    #messages=[""]
-    #for conversation in Conversation.query.filter_by(conversing_id = conversing.id):#just for now
-    #    messages.append(conversation)
-    #form = ChatBoxText()
-    #if form.validate_on_submit():
-    #    conversation= Conversation(text = form.text.data, conversing_id= conversing.id )#just for now
-    #    db.session.add(conversation)
-    #    db.session.commit()
-    #    messages.append(conversation)
-    #return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
     associated_users_list=[]
-    conversing= Conversing.query.filter(or_(user1==current_user.id,user2==current_user.id))
-    for nowuser in conversing :
-        if nowuser.user1== current_user.id:
-            if nowuser.status=='In-touch':
-                if current_user.type == 'P':
-                    sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user2).first()
-                    associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
-                    associated_users_list.append(associated_user)
-                elif current_user.type == 'S':
-                    partyUser= PartyUser.query.filter_by(user_id=nowuser.user2).first()
-                    associated_user=[partyUser.user_id,partyUser.party_name]
-                    associated_users_list.append(associated_user)
-        if nowuser.user2== current_user.id:
-            if nowuser.status=='In-touch':
-                if current_user.type == 'P':
-                    sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user1).first()
-                    associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
-                    associated_users_list.append(associated_user)
-                elif current_user.type == 'S':
-                    partyUser= PartyUser.query.filter_by(user_id=nowuser.user1).first()
-                    associated_user=[partyUser.user_id,partyUser.party_name]
-                    associated_users_list.append(associated_user)
+    conversing= Conversing.query.filter(or_(Conversing.user1==current_user.id,Conversing.user2==current_user.id)).all()
+    conversing2= Conversing.query.filter(or_(Conversing.user1==current_user.id,Conversing.user2==current_user.id)).first()
 
 
-    return render_template ('chatlist.html', title = 'Chat with', associated_users_list=associated_users_list)
+    if conversing2 == None:
+        print('10001')
+        return render_template ('chatError.html', title = 'Chat Error',current_user=current_user)
+    else:
+        for nowuser in conversing :
+            print('1000')
+            print(nowuser.status)
+            if nowuser.user1== current_user.id:
+                if nowuser.status=='In-touch':
+                    if current_user.type == 'P':
+                        sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user2).first()
+                        associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
+                        associated_users_list.append(associated_user)
+                    elif current_user.type == 'S':
+                        partyUser= PartyUser.query.filter_by(user_id=nowuser.user2).first()
+                        associated_user=[partyUser.user_id,partyUser.party_name]
+                        associated_users_list.append(associated_user)
+                elif nowuser.user2== current_user.id:
+                    if nowuser.status=='In-touch':
+                        if current_user.type == 'P':
+                            sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user1).first()
+                            associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
+                            associated_users_list.append(associated_user)
+                        elif current_user.type == 'S':
+                            partyUser= PartyUser.query.filter_by(user_id=nowuser.user1).first()
+                            associated_user=[partyUser.user_id,partyUser.party_name]
+                            associated_users_list.append(associated_user)
+        return render_template ('chatlist.html', title = 'Chat with', associated_users_list=associated_users_list)
+
+
 
     #return associated_users_choices
 @app.route("/chatbox/<chatwith_id>", methods= ['POST', 'GET'])#Whom do you want to chat with?
 @login_required
 def chat(chatwith_id):
-
-    conversing= Conversing.query.filter(or_(user1==current_user.id,user2==current_user.id))
+    print(chatwith_id)
+    form=ChatBoxText()
+    messages=[]
+    conversing= Conversing.query.filter(or_(Conversing.user1==chatwith_id,Conversing.user2==chatwith_id)).all()
     for nowuser in conversing:
-        if nowuser.user1== chatwith_id:
-            form = ChatBoxText()
-            if form.validate_on_submit() :
-                conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )#just for now
-                db.session.add(conversation)
-                db.session.commit()
-            messages=[]
-            for conversation in Conversation.query.filter_by(conversing_id = nowuser.id):#just for now
-                messages.append(conversation.text,conversation.time)
+        if current_user.type=='P':
+            if nowuser.user1== current_user.id:
 
+                sponsorUser=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
+                messages=[[sponsorUser.sponsor_name]]
+                if form.validate_on_submit() :
+                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
+                    db.session.add(conversation)
+                    db.session.commit()
+                for conversation in Conversation.query.filter_by(conversing_id = nowuser.id).all():#just for now
+                    message=[conversation.text,conversation.time,sponsorUser.sponsor_name]
+                    messages.append(message)
 
-        elif nowuser.user2==chatwith_id:
-            form = ChatBoxText()
-        #just for now
-            if form.validate_on_submit() :
-                conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )#just for now
-                db.session.add(conversation)
-                db.session.commit()
-            messages=[]
-            for conversation in Conversation.query.filter_by(conversing_id = nowuser.id):#just for now
-                messages.append(conversation.text,conversation.time)
+            elif  nowuser.user2==current_user.id:
+                sponsorUser=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
+                messages=[[sponsorUser.sponsor_name]]
+                if form.validate_on_submit() :
+                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
+                    db.session.add(conversation)
+                    db.session.commit()
+                for conversation in Conversation.query.filter_by(conversing_id = nowuser.id).all():#just for now
+                    message=[conversation.text,conversation.time,partyUser.party_name]#just for now
+                    messages.append(message)
+
+        elif current_user.type=='S':
+            if nowuser.user1== current_user.id :
+                partyUser=PartyUser.query.filter_by(user_id=chatwith_id).first()
+                messages=[[partyUser.party_name]]
+                if form.validate_on_submit() :
+                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
+                    db.session.add(conversation)
+                    db.session.commit()
+                for conversation in Conversation.query.filter_by(conversing_id = nowuser.id).all():
+                    message=[conversation.text,conversation.time,sponsorUser.sponsor_name]
+                    messages.append(message)
+
+            elif nowuser.user2==current_user.id :
+                partyUser=PartyUser.query.filter_by(user_id=chatwith_id).first()
+                messages=[[partyUser.party_name]]
+                if form.validate_on_submit() :
+                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
+                    db.session.add(conversation)
+                    db.session.commit()
+                for conversation in Conversation.query.filter_by(conversing_id = nowuser.id).all():
+                        #partyUser=PartyUser.query.filter_by(user_id=chatwith_id).first()#just for now
+                    message=[conversation.text,conversation.time,partyUser.party_name]#just for now
+                    messages.append(message)
+
 
     return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
+
+
 
 
 @app.route("/filterType/<type>", methods = ['GET', 'POST'])
@@ -641,6 +783,7 @@ def filterKind(kind):
 
         elements = len(filteredParties)
         return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+
 
 
 @app.route("/about")

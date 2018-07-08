@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <div class="form-group">
+        <h5><b> You've shortlisted the following parties: </b></h5> <hr>
+            <ol>
+                {% for user in userList %}
+                    <li>
+                        <a href="/user/{{ user.user_id }}"><h5><b>{{ user.party_name }},</a> Address:</b> {{user.party_address}}</h5>
+                        <form method="POST" action="">
+                            {{ form.hidden_tag() }}
+                            <fieldset>
+                            <div class="form-group">
+                                {{ form.invite(class="btn btn-outline-info") }}
+                            </div>
+                            </fieldset>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ol>
+            Invite them now! <br> <hr>
+            Or go back to Maps to search for more: <a class="btn btn-outline-info" href="{{url_for('nearbyPartyRoute')}}"><h6>Back to searching</h6></a>
+        </div>
+    </div>
+{% endblock content %}
