@@ -1,17 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
+
+{% if userList == [] %}
+    <h4> You have no requests. </h4><br>
+    {% if current_user.type == 'P' %}
+        <a class="btn btn-outline-info" href="{{url_for('nearbySponsorRoute')}}"><h6>Invite someone instead</h6></a>
+    {% elif current_user.type == 'S' %}
+        <a class="btn btn-outline-info" href="{{url_for('nearbyPartyRoute')}}"><h6>Invite someone instead</h6></a>
+    {% endif %}
+
+{% else %}
     <div class="content-section">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-
                 <div class="form-group">
-                    <ol>
+                    <ul>
                         {% for user in userList %}
                             <li>
-                                <a href="/user/{{ user.user_id }}"><h5>{{ user.party_name }}</h5></a>
+                                <a href="/user/{{ user.user_id }}"><h4><b>{{ user.party_name }}</b></h4></a>
                             </li>
-                            Select Invite Status
+                            <h6>Select Invite Status</h6>
                                 {% if form.invite_status.errors %}
                                     {{ form.invite_status(class="form-control form-control-lg is-invalid") }}
                                     <div class="invalid-feedback">
@@ -23,7 +32,7 @@
                                     {{ form.invite_status(class="form-control form-control-lg") }}
                                 {% endif %}
                         {% endfor %}
-                    </ol>
+                    </ul>
                 </div>
             </fieldset>
             <div class="form-group">
@@ -31,4 +40,5 @@
             </div>
         </form>
     </div>
+{% endif %}
 {% endblock content %}

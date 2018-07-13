@@ -61,9 +61,10 @@
           {% endwith %}
           {% block content %}{% endblock %}
         </div>
-        <div class="col-md-4">
-          <div class="content-section">
-           <h3>Let's start</h3> <hr>
+        {% if current_user.type == 'P' or current_user.type == 'S' %}
+              <div class="col-md-4">
+                <div class="content-section">
+                  <h3>Let's start</h3> <hr>
                   <p class='text-muted'>Whom do you want to connect with today?</p>
                     <div class="btn-group">
                         <ul class="list-group">
@@ -72,24 +73,25 @@
                           {% elif current_user.type == 'S' %}
                               <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbyPartyRoute') }}"><h6>Maps</h6></a></button></li>
                           {% endif %}
+                          <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('display_shortlist') }}"><h6>Shortlist</h6></a></button></li>
                           <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('inviteRecieved') }}"><h6>Requests</h6></a></button></li>
                           <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('chatwith') }}"><h6>Chat</h6></a></button></li>
 
                           <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('banking') }}"><h6>Banking</h6></a></button></li>
-                      
-                  </ul>
+                        </ul>
               </div>
           </div>
         </div>
       </div>
     </main>
+    {% endif %}
 
     <footer class="footer-basic-centered">
 
           <p class="footer-company-motto">Connect. Select. Sponsor.</p>
 
           <p class="footer-links">
-            <a href="#">About Us</a>
+            <a href="{{ url_for('about') }}">About Us</a>
             ·
             <a href="{{ url_for('team') }}">Meet The Team</a>
             ·

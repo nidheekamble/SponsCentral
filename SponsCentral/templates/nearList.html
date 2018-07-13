@@ -73,10 +73,10 @@
         <!-- This is the div that is to be positioned to the right of the map-->
 
         <div class = "content-section col-md-3">
-            <legend class="border-bottom mb-4">Filter</legend>
+            <legend class="border-bottom mb-4">Customize your search</legend>
         
-        <ol>
-            <h7><b>Amount</b></h7><br>
+        <ol><h5><b>Filter by</b> (click on the respective filter to apply it) :</h5><hr>
+            <h7><b>Amount</b></h7>
                  <div class="content-section">
                     <form method="POST" action="" enctype="multipart/form-data">
                         <fieldset class="form-group">
@@ -85,69 +85,45 @@
                         </fieldset>
                     </form>
                 </div>
-                <!--<ol><div data-role="main" class="ui-content">
+                <div data-role="main" class="ui-content">
                     <form method="post" action="/action_page_post.php">
                       <div data-role="rangeslider">
-                        <label for="price-min">Price:</label>
-                        <input type="range" name="price-min" id="price-min" value="200" min="0" max="1000">
-                        <label for="price-max">Price:</label>
+                        <label for="price-min"><h5>From Amount:</h5></label>
+                        <input type="range" name="price-min" id="price-min" value="200" min="0" max="1000"><br>
+                        <label for="price-max"><h5>To Amount:</h5></label>
                         <input type="range" name="price-max" id="price-max" value="800" min="0" max="1000">
                       </div>
-                        
-                        <p>Select your range</p>
                       </form>
-                </div></ol>-->
+                </div>
+
+            <hr>
 
             <h7><b>Cash or Kind</b></h7><br>
-                <ol>
-                    <form>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">Cash</label>
-                        </div>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">Kind</label>
-                        </div>
-                    </form>
-                </ol>
+
+                <h5><a href ="{{url_for('filterKind', kind='C')}}">Cash</a></h5>
+                <h5><a href ="{{url_for('filterKind', kind='K')}}">Kind</a></h5>
+
+            <hr> 
 
             {% if current_user.type == 'S' %}
             <h7><b>Fest Type</b></h7><br>
-                <ol>
-                    <form>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">Technical</label>
-                        </div>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">Sports</label>
-                        </div>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">Cultural</label>
-                        </div>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">Other</label>
-                        </div>
-                    </form>
-                </ol>
+
+                <h5><a href ="{{url_for('filterType', type='T')}}">Technical</a></h5>
+                <h5><a href ="{{url_for('filterType', type='S')}}">Sports</a></h5>
+                <h5><a href ="{{url_for('filterType', type='C')}}">Cultural</a></h5>
+                <h5><a href ="{{url_for('filterType', type='O')}}">Other</a></h5>
 
             {% elif current_user.type == 'P' %}
             <h7><b>Company Type</b></h7><br>
-                <ol>
-                    <form>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">Finance</label>
-                        </div>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">IT</label>
-                        </div>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">Banking</label>
-                        </div>
-                        <div class="radio">
-                          <label><input type="radio" name="optradio">Other</label>
-                        </div>
-                    </form>
-                </ol>
+                        
+                <h5><a href ="{{url_for('filterType', type='F')}}">Finance</a></h5>
+                <h5><a href ="{{url_for('filterType', type='IT')}}">IT</a></h5>
+                <h5><a href ="{{url_for('filterType', type='B')}}">Banking</a></h5>
+                <h5><a href ="{{url_for('filterType', type='O')}}">Other</a></h5>
+                        
             {% endif %}
+
+            <hr>
             
         </ol>
         </div>
@@ -156,18 +132,19 @@
         </div>
         <div class = "content-section col-md-3">
             <legend class="border-bottom mb-4">User locations </legend>
-            <h6>(click on the ones you want to view separately): </h6><br>
+            <h5><b>Click on the ones you want to view separately: </b></h5><hr><br>
         <ol>
-            {% for place in nearby_list %}
-              <li><a href="{{url_for('user2_account', user2_id=place[4])}}"><h5> {{ place[0] }} </h5></a>
-                <b>Address: </b> {{ place[3] }} </li> <br>
-            {% endfor %}
+            {% if nearby_list == [] %}
+                <h5> Looks like your criterion did not match any users. Try a different filter </h5>
+            {% else %}
+                {% for place in nearby_list %}
+                  <li><a href="{{url_for('user2_account', user2_id=place[4])}}"><h5> {{ place[0] }} </h5></a>
+                    <b>Address: </b> {{ place[3] }} </li> <br>
+                {% endfor %}
+            {% endif %}
         </ol>
         </div>
     </div>
-    <!--Loading API from the mentioned URL
-    async attribute allows the browser to render the page while the API loads
-    the 'callback' parameter will execute the initMap() function -->
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKlMl1HFw1wNG4sEDWzEe1Mnth9qWPyI8&callback=initMap">
     </script>

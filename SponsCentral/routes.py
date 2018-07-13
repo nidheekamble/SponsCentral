@@ -371,11 +371,13 @@ def user2_account(user2_id):
         if current_user.type == 'P':
             flag=0
             sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
+            db.session.commit()
             return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,flag=flag)
 
         elif current_user.type == 'S':
             flag=0
             partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
+            db.session.commit()
             return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,flag=flag)
 
 
@@ -403,7 +405,7 @@ def inviteRecieved():
                     user.status='Not Accepted'
                     db.session.commit()
 
-        return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
+        return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList, current_user = current_user)
 
     if current_user.type == 'P':
         for user in conversing:
@@ -419,7 +421,7 @@ def inviteRecieved():
                 conversing.status='Not Accepted'
                 db.session.commit()
 
-        return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
+        return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList, current_user=current_user)
 
 
 

@@ -46,7 +46,10 @@
 		  <div class="message-sender center-block">
 		    <div class="row">
 		      <div class="col-xs-8 col-md-6">
+		      	{% if current_user.type == 'P' %}
 		        <img src="{{ party_logo }}" class="message-photo">
+		        {% else %}
+		        <img src="{{ sponsor_logo }}" class="message-photo">
 		        <h4 class="message-name">Mr. X</h4>
 		      </div>
 		      <div class="col-xs-4 col-md-6 text-right message-date">Date here</div>
