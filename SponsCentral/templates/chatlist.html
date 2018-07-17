@@ -1,13 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
     <div id="list" class="row">
-        <h5> Chat with your associates: </h5>
+        {% if assosciated_users_list != [] %}
+        <h4> Chat with your associates: </h4>
         <ol>
             {% for user in associated_users_list %}
             <li><a href="{{url_for('chat', chatwith_id=user[0])}}"><h5> {{ user[1] }} </h5></a>
 
                 {% endfor %}
         </ol>
+        {% else %}
+        <h4> Your invites haven't been accepted yet. </h4>
+        {% endif %}
     </div>
 
 {% endblock content %}

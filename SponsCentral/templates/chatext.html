@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style >
+		.message-sender {
+		  background: #b3ffff;
+		  padding: 40px;
+		  max-width: 600px;
+		  margin-bottom: 10px;
+		}
+
+		.message-receiver {
+		  background: #00cccc;
+		  padding: 40px;
+		  max-width: 600px;
+		  margin-bottom: 10px;
+		}
+
+		.messaging {
+		  max-width: 600px;
+		  margin-top: 20px;
+		}
+
+		.message-text {
+		  margin-top: 10px;
+		}
+
+		.message-photo {
+		  width: 40px;
+		  height: 40px;
+		  border-radius: 50%;
+		  object-fit: cover;
+		  object-position: center center;
+		  display: inline-block;
+		}
+
+		.message-name {
+		  margin-left: 10px;
+		  display: inline-block;
+		}
+	</style>
+</head>
+<body >
+	<h2 class="text-center">Chat</h2>
+		<div class="container">
+		  <div class="message-sender center-block">
+		    <div class="row">
+		      <div class="col-xs-8 col-md-6">
+		      	{% if current_user.type == 'P' %}
+		        <img src="{{ party_logo }}" class="message-photo">
+		        {% else %}
+		        <img src="{{ sponsor_logo }}" class="message-photo">
+		        <h4 class="message-name">Mr. X</h4>
+		      </div>
+		      <div class="col-xs-4 col-md-6 text-right message-date">Date here</div>
+		    </div>
+		    <div class="row message-text">
+		        text over here text over here text over here text over here text over here text over here text over here text over here text over here 
+		    </div>
+		  </div>
+		  <div class="message-receiver center-block">
+		    <div class="row">
+		      <div class="col-xs-8 col-md-6">
+		        <img src= class="message-photo">
+		        <h4 class="message-name">Mr. Y</h4>
+		      </div>
+		      <div class="col-xs-4 col-md-6 text-right message-date">Date here</div>
+		    </div>
+		    <div class="row message-text ">
+		        text over here text over here text over here text over here text over here text over here text over here text over here text over here 
+		    </div>
+		  </div>
+		  <div class="messaging center-block">
+		    <div class="row">
+		      <div class="col-md-12">
+		        <div class="input-group">
+		          <input type="text" class="form-control">
+		          <span class="input-group-btn">
+		            <button class="btn btn-default" type="button">Send</button>
+		          </span>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+</body>
+
+

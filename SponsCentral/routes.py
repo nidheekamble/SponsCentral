@@ -13,7 +13,7 @@ from math import sqrt
 #from googlemaps import Client as GoogleMaps
 import requests
 from geopy.geocoders import Nominatim
-from sqlalchemy import or_
+from sqlalchemy import or_ , and_
 
 @app.route("/")
 @app.route("/home")
@@ -340,27 +340,45 @@ def nearbySponsorRoute():
 @login_required
 def user2_account(user2_id):
 
-    print(user2_id)
-    print(1000)
-    if current_user.type == 'P':
-        form=InviteForm()
-        sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
+    conversing=Conversing.query.filter(and_(Conversing.user1==current_user.id,Conversing.user2==user2_id)).first()
+    if conversing==None:
+
+        if current_user.type == 'P':
+
+            form=InviteForm()
+            sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
+            flag=1
+            if form.validate_on_submit():
+                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+                db.session.add(conversing)
+                db.session.commit()
+
+            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,form=form,flag=flag)
+
+        elif current_user.type == 'S':
+
+            form=InviteForm()
+            partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
+            flag=1
+            if form.validate_on_submit():
+                conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
+                db.session.add(conversing)
+                db.session.commit()
+
+            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form,flag=flag)
+
+    else:
+        if current_user.type == 'P':
+            flag=0
+            sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
             db.session.commit()
+            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,flag=flag)
 
-        return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user, form=form)
-
-    elif current_user.type == 'S':
-        form=InviteForm()
-        partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
-        if form.validate_on_submit():
-            conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
-            db.session.add(conversing)
+        elif current_user.type == 'S':
+            flag=0
+            partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
             db.session.commit()
-
-        return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form)
+            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,flag=flag)
 
 
 @app.route("/requests", methods= ['POST', 'GET'])
@@ -387,7 +405,7 @@ def inviteRecieved():
                     user.status='Not Accepted'
                     db.session.commit()
 
-        return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
+        return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList, current_user = current_user)
 
     if current_user.type == 'P':
         for user in conversing:
@@ -403,7 +421,7 @@ def inviteRecieved():
                 conversing.status='Not Accepted'
                 db.session.commit()
 
-        return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
+        return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList, current_user=current_user)
 
 
 
@@ -497,44 +515,39 @@ def individual_address(otherUser_id):
 @app.route("/chatwith", methods= ['POST', 'GET'])#Whom do you want to chat with?
 @login_required
 def chatwith():
-    #conversing= Conversing.query.filter(or_(user1=current_user.id, user2= current_user.id )).all()#just for now
-    #messages=[""]
-    #for conversation in Conversation.query.filter_by(conversing_id = conversing.id):#just for now
-    #    messages.append(conversation)
-    #form = ChatBoxText()
-    #if form.validate_on_submit():
-    #    conversation= Conversation(text = form.text.data, conversing_id= conversing.id )#just for now
-    #    db.session.add(conversation)
-    #    db.session.commit()
-    #    messages.append(conversation)
-    #return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
     associated_users_list=[]
     conversing= Conversing.query.filter(or_(Conversing.user1==current_user.id,Conversing.user2==current_user.id)).all()
-    for nowuser in conversing :
-        print(nowuser.status)
-        if nowuser.user1== current_user.id:
-            if nowuser.status=='In-touch':
-                if current_user.type == 'P':
-                    sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user2).first()
-                    associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
-                    associated_users_list.append(associated_user)
-                elif current_user.type == 'S':
-                    partyUser= PartyUser.query.filter_by(user_id=nowuser.user2).first()
-                    associated_user=[partyUser.user_id,partyUser.party_name]
-                    associated_users_list.append(associated_user)
-        if nowuser.user2== current_user.id:
-            if nowuser.status=='In-touch':
-                if current_user.type == 'P':
-                    sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user1).first()
-                    associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
-                    associated_users_list.append(associated_user)
-                elif current_user.type == 'S':
-                    partyUser= PartyUser.query.filter_by(user_id=nowuser.user1).first()
-                    associated_user=[partyUser.user_id,partyUser.party_name]
-                    associated_users_list.append(associated_user)
+    conversing2= Conversing.query.filter(or_(Conversing.user1==current_user.id,Conversing.user2==current_user.id)).first()
 
 
-    return render_template ('chatlist.html', title = 'Chat with', associated_users_list=associated_users_list)
+    if conversing2 == None:
+        print('10001')
+        return render_template ('chatError.html', title = 'Chat Error',current_user=current_user)
+    else:
+        for nowuser in conversing :
+            print('1000')
+            print(nowuser.status)
+            if nowuser.user1== current_user.id:
+                if nowuser.status=='In-touch':
+                    if current_user.type == 'P':
+                        sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user2).first()
+                        associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
+                        associated_users_list.append(associated_user)
+                    elif current_user.type == 'S':
+                        partyUser= PartyUser.query.filter_by(user_id=nowuser.user2).first()
+                        associated_user=[partyUser.user_id,partyUser.party_name]
+                        associated_users_list.append(associated_user)
+                elif nowuser.user2== current_user.id:
+                    if nowuser.status=='In-touch':
+                        if current_user.type == 'P':
+                            sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user1).first()
+                            associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
+                            associated_users_list.append(associated_user)
+                        elif current_user.type == 'S':
+                            partyUser= PartyUser.query.filter_by(user_id=nowuser.user1).first()
+                            associated_user=[partyUser.user_id,partyUser.party_name]
+                            associated_users_list.append(associated_user)
+        return render_template ('chatlist.html', title = 'Chat with', associated_users_list=associated_users_list)
 
 
 
@@ -596,7 +609,7 @@ def chat(chatwith_id):
                     messages.append(message)
 
 
-    return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
+    return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages, current_user=current_user)
 
 
 
@@ -656,7 +669,10 @@ def filterFrom(lowerBound):
         lng = partyUser.party_longitude
 
         nearbySponsors = nearbySponsorFunc()
-        filteredList = SponsorUser.query.filter_by(sponsor_fromAmount=lowerBound).all()
+        filteredList = []
+        for sponsor in nearbySponsors:
+            if sponsor.sponsor_fromAmount>=lowerBound:
+                filteredList.append(sponsor)
         filteredSponsors = []
 
         for sponsor in filteredList:
@@ -675,7 +691,10 @@ def filterFrom(lowerBound):
         lng = sponsorUser.sponsor_longitude
 
         nearbyParties = nearbyPartyFunc()
-        filteredList = PartyUser.query.filter_by(party_fromAmount=lowerBound).all()
+        filteredList = []
+        for party in nearbyParties:
+            if party.party_fromAmount>=lowerBound:
+                filteredList.append(party)
         filteredParties = []
 
         for party in filteredList:
@@ -700,7 +719,10 @@ def filterTo(upperBound):
         lng = partyUser.party_longitude
 
         nearbySponsors = nearbySponsorFunc()
-        filteredList = SponsorUser.query.filter_by(sponsor_toAmount=upperBound).all()
+        filteredList = []
+        for sponsor in nearbySponsors:
+            if sponsor.sponsor_toAmount<=upperBound:
+                filteredList.append(sponsor)
         filteredSponsors = []
 
         for sponsor in filteredList:
@@ -719,7 +741,10 @@ def filterTo(upperBound):
         lng = sponsorUser.sponsor_longitude
 
         nearbyParties = nearbyPartyFunc()
-        filteredList = PartyUser.query.filter_by(party_toAmount=upperBound).all()
+        filteredList = []
+        for party in nearbyParties:
+            if party.party_toAmount<=upperBound:
+                filteredList.append(party)
         filteredParties = []
 
         for party in filteredList:
@@ -792,4 +817,10 @@ def work():
 @app.route('/banking', methods = ['GET','POST']) #parties looking for sponsors
 @login_required
 def banking():
-    return render_template('banking.html', title='banking')
+    return render_template('banking.html', title='Banking')
+    
+
+@app.route('/email', methods = ['GET', 'POST'])
+@login_required
+def email():
+    return render_template('email.html', title='Email')

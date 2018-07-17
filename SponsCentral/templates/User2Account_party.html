@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
+
 <body>
     <div class="content-section">
+        {% if flag %}
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset>
@@ -9,6 +11,9 @@
                     {{ form.invite(class="btn btn-outline-info") }}
                     <a class="btn btn-outline-info" href="{{ url_for('shortlisted', user2_id=partyUser.user_id) }}"><h6>Shortlist</h6></a></li>
                 </div>
+            </fieldset>
+        </form>
+        {% endif %}
                     <div class="media">
                         <img class="rounded-circle account-img" src="{{ party_logo }}">
                             <div class="media-body">
@@ -20,12 +25,11 @@
                                 <p class="text-secondary"><b> Contact {{partyUser.party_name}} at: </b><br>
                                     {{ partyUser.party_contactNo1 }} <br>
                                     {{ partyUser.party_contactNo2 }} <br>
-                                    Email: {{ current_user.email }}
+                                    <!--YEH EMAIL CHANGE KARNA HAI-->
+                                    Email: <a href="{{ url_for('email') }}">{{ current_user.email }} </a> 
                                 </p>
-                        </div>
+                            </div>
                     </div>
-                </fieldset>
-            </form>
-        </div>
-    </body>
+    </div>
+</body>
 {% endblock content %}
