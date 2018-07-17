@@ -609,7 +609,7 @@ def chat(chatwith_id):
                     messages.append(message)
 
 
-    return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages)
+    return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages, current_user=current_user)
 
 
 
@@ -669,7 +669,10 @@ def filterFrom(lowerBound):
         lng = partyUser.party_longitude
 
         nearbySponsors = nearbySponsorFunc()
-        filteredList = SponsorUser.query.filter_by(sponsor_fromAmount=lowerBound).all()
+        filteredList = []
+        for sponsor in nearbySponsors:
+            if sponsor.sponsor_fromAmount>=lowerBound:
+                filteredList.append(sponsor)
         filteredSponsors = []
 
         for sponsor in filteredList:
@@ -688,7 +691,10 @@ def filterFrom(lowerBound):
         lng = sponsorUser.sponsor_longitude
 
         nearbyParties = nearbyPartyFunc()
-        filteredList = PartyUser.query.filter_by(party_fromAmount=lowerBound).all()
+        filteredList = []
+        for party in nearbyParties:
+            if party.party_fromAmount>=lowerBound:
+                filteredList.append(party)
         filteredParties = []
 
         for party in filteredList:
@@ -713,7 +719,10 @@ def filterTo(upperBound):
         lng = partyUser.party_longitude
 
         nearbySponsors = nearbySponsorFunc()
-        filteredList = SponsorUser.query.filter_by(sponsor_toAmount=upperBound).all()
+        filteredList = []
+        for sponsor in nearbySponsors:
+            if sponsor.sponsor_toAmount<=upperBound:
+                filteredList.append(sponsor)
         filteredSponsors = []
 
         for sponsor in filteredList:
@@ -732,7 +741,10 @@ def filterTo(upperBound):
         lng = sponsorUser.sponsor_longitude
 
         nearbyParties = nearbyPartyFunc()
-        filteredList = PartyUser.query.filter_by(party_toAmount=upperBound).all()
+        filteredList = []
+        for party in nearbyParties:
+            if party.party_toAmount<=upperBound:
+                filteredList.append(party)
         filteredParties = []
 
         for party in filteredList:
@@ -805,4 +817,10 @@ def work():
 @app.route('/banking', methods = ['GET','POST']) #parties looking for sponsors
 @login_required
 def banking():
-    return render_template('banking.html', title='banking')
+    return render_template('banking.html', title='Banking')
+    
+
+@app.route('/email', methods = ['GET', 'POST'])
+@login_required
+def email():
+    return render_template('email.html', title='Email')

@@ -4,18 +4,11 @@
         <hr>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="shortcut icon" href="static/logo.ico">
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='background.css') }}">
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-        </script>
-     
-        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='footer.css') }}">
         <style>
             /* this div element contains the map. Sets size of the div */
             #map
@@ -77,14 +70,6 @@
         
         <ol><h5><b>Filter by</b> (click on the respective filter to apply it) :</h5><hr>
             <h7><b>Amount</b></h7>
-                 <div class="content-section">
-                    <form method="POST" action="" enctype="multipart/form-data">
-                        <fieldset class="form-group">
-                            <div class="form-group">
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
                 <div data-role="main" class="ui-content">
                     <form method="post" action="/action_page_post.php">
                       <div data-role="rangeslider">
@@ -95,6 +80,22 @@
                       </div>
                       </form>
                 </div>
+
+
+          <!--YE CODE DAALNA HAI AMOUNT WALE FILTER MEIN --------
+            THE TEXT BETWEEN <A> AND </A> IS TEMPORARY. IT WILL BE CHANGED.
+
+            {% if current_user.type == 'P' %}
+                {{ partyUser = PartyUser.query.filter_by(user_id=current_user.id) }} ---- IS LINE MEIN ERROR AA RAHA THA----
+                    <h5><a href ="{{ url_for('filterFrom', lowerBound=partyUser.party_fromAmount) }}">From pAmount:</a></h5>
+                    <h5><a href ="{{ url_for('filterTo', upperBound=partyUser.party_toAmount) }}">To pAmount:</a></h5>
+
+             {% elif current_user.type == 'S' %}
+                {{ sponsorUser = SponsorUser.query.filter_by(user_id=current_user.id) }}
+                    <h5><a href ="{{ url_for('filterFrom', lowerBound=sponsorUser.sponsor_fromAmount) }}">From sAmount:</a></h5>
+                    <h5><a href ="{{ url_for('filterTo', upperBound=sponsorUser.sponsor_toAmount) }}">To sAmount:</a></h5>
+
+            {% endif %}-->
 
             <hr>
 
@@ -145,6 +146,24 @@
         </ol>
         </div>
     </div>
+
+     <footer class="footer-basic-centered">
+
+          <p class="footer-company-motto">Connect. Select. Sponsor.</p>
+
+          <p class="footer-links">
+            <a href="{{ url_for('about') }}">About Us</a>
+            ·
+            <a href="{{ url_for('team') }}">Meet The Team</a>
+            ·
+            <a href="{{ url_for('work') }}">What We Do</a>
+          </p>
+
+          <p class="footer-company-name">© 2018 Copyright: Spons.Central</p>
+
+        </footer>
+
+
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKlMl1HFw1wNG4sEDWzEe1Mnth9qWPyI8&callback=initMap">
     </script>
