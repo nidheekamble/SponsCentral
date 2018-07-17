@@ -13,7 +13,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
         </script>
-     
+
         <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
         <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
         <style>
@@ -74,7 +74,7 @@
 
         <div class = "content-section col-md-3">
             <legend class="border-bottom mb-4">Customize your search</legend>
-        
+
         <ol><h5><b>Filter by</b> (click on the respective filter to apply it) :</h5><hr>
             <h7><b>Amount</b></h7>
                  <div class="content-section">
@@ -103,7 +103,7 @@
                 <h5><a href ="{{url_for('filterKind', kind='C')}}">Cash</a></h5>
                 <h5><a href ="{{url_for('filterKind', kind='K')}}">Kind</a></h5>
 
-            <hr> 
+            <hr>
 
             {% if current_user.type == 'S' %}
             <h7><b>Fest Type</b></h7><br>
@@ -115,16 +115,16 @@
 
             {% elif current_user.type == 'P' %}
             <h7><b>Company Type</b></h7><br>
-                        
+
                 <h5><a href ="{{url_for('filterType', type='F')}}">Finance</a></h5>
                 <h5><a href ="{{url_for('filterType', type='IT')}}">IT</a></h5>
                 <h5><a href ="{{url_for('filterType', type='B')}}">Banking</a></h5>
                 <h5><a href ="{{url_for('filterType', type='O')}}">Other</a></h5>
-                        
+
             {% endif %}
 
             <hr>
-            
+
         </ol>
         </div>
         <div class="col-md-6 container p-3">
