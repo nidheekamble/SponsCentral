@@ -76,7 +76,7 @@
             <legend class="border-bottom mb-4">Customize your search</legend>
 
         <ol><h5><b>Filter by</b> (click on the respective filter to apply it) :</h5><hr>
-            <h7><b>Amount</b></h7>
+            <u><h5><b>Amount</b></h5></u>
                  <div class="content-section">
                     <form method="POST" action="" enctype="multipart/form-data">
                         <fieldset class="form-group">
@@ -90,15 +90,15 @@
                       <div data-role="rangeslider">
                         <label for="price-min"><h5>From Amount:</h5></label>
                         <input type="range" name="price-min" id="price-min" value="200" min="0" max="1000"><br>
-                        <label for="price-max"><h5>To Amount:</h5></label>
-                        <input type="range" name="price-max" id="price-max" value="800" min="0" max="1000">
+                        <label for="price-max"><h5>To Amount:</h5></label><br>
+                        <input type="range" name="price-max" id="price-max" value="800" min="0" max="1000"><br>
                       </div>
                       </form>
                 </div>
 
             <hr>
 
-            <h7><b>Cash or Kind</b></h7><br>
+            <u><h5><b>Cash or Kind</b></h5><br></u>
 
                 <h5><a href ="{{url_for('filterKind', kind='C')}}">Cash</a></h5>
                 <h5><a href ="{{url_for('filterKind', kind='K')}}">Kind</a></h5>
@@ -106,7 +106,7 @@
             <hr>
 
             {% if current_user.type == 'S' %}
-            <h7><b>Fest Type</b></h7><br>
+            <u><h7><b>Fest Type</b></h7><br></u>
 
                 <h5><a href ="{{url_for('filterType', type='T')}}">Technical</a></h5>
                 <h5><a href ="{{url_for('filterType', type='S')}}">Sports</a></h5>
@@ -114,7 +114,7 @@
                 <h5><a href ="{{url_for('filterType', type='O')}}">Other</a></h5>
 
             {% elif current_user.type == 'P' %}
-            <h7><b>Company Type</b></h7><br>
+            <u><h5><b>Company Type</b></h5><br></u>
 
                 <h5><a href ="{{url_for('filterType', type='F')}}">Finance</a></h5>
                 <h5><a href ="{{url_for('filterType', type='IT')}}">IT</a></h5>
