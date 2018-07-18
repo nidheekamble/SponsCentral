@@ -249,7 +249,7 @@ def nearbyPartyFunc():
 
     for party in list_parties:
         if sqrt(((party.party_latitude - lat) ** 2) + ((party.party_longitude - lng) ** 2)) < extent:
-            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id]
+            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id, party.party_fromAmount, party.party_toAmount]
             nearbyParties.append(party_data)
 
     elements = len(nearbyParties)
@@ -261,7 +261,8 @@ def nearbyPartyFunc():
 @login_required
 def nearbyPartyRoute():
     nearbyParties, lat, lng, elements = nearbyPartyFunc()
-    return render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements)
+    sponsorUser = SponsorUser.query.filter_by(user_id=current_user.id).first()
+    return render_template('nearList.html', nearby_list = nearbyParties, lat = lat, lng = lng, elements = elements, sponsorUser = sponsorUser)
 
 
 
@@ -279,7 +280,7 @@ def nearbySponsorFunc():
 
     for sponsor in list_sponsors:
         if sqrt(((sponsor.sponsor_latitude - lat) ** 2) + ((sponsor.sponsor_longitude - lng) ** 2)) < extent:
-            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id]
+            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id, sponsor.sponsor_fromAmount, sponsor.sponsor_toAmount]
             nearbySponsors.append(sponsor_data)
 
     elements = len(nearbySponsors)
@@ -293,8 +294,8 @@ def nearbySponsorFunc():
 @login_required
 def nearbySponsorRoute():
     nearbySponsors, lat, lng, elements = nearbySponsorFunc()
-    #print (elements)
-    return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
+    partyUser = PartyUser.query.filter_by(user_id=current_user.id).first()
+    return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements, partyUser = partyUser)
 
 
 @app.route("/user/<user2_id>", methods = ['GET', 'POST'])
@@ -595,7 +596,7 @@ def filterType(type):
             filteredSponsors.append(sponsor_data)
 
         elements = len(filteredSponsors)
-        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements)
+        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements, partyUser = partyUser)
 
     elif current_user.type == 'S':
 
@@ -613,7 +614,7 @@ def filterType(type):
             filteredParties.append(party_data)
 
         elements = len(filteredParties)
-        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements, sponsorUser = sponsorUser)
 
 
 
@@ -641,7 +642,8 @@ def filterFrom(lowerBound):
             filteredSponsors.append(sponsor_data)
 
         elements = len(filteredSponsors)
-        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements)
+
+        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements, partyUser = partyUser)
 
 
     elif current_user.type == 'S':
@@ -663,7 +665,7 @@ def filterFrom(lowerBound):
             filteredParties.append(party_data)
 
         elements = len(filteredParties)
-        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements, sponsorUser = sponsorUser)
 
 
 
@@ -691,7 +693,7 @@ def filterTo(upperBound):
             filteredSponsors.append(sponsor_data)
 
         elements = len(filteredSponsors)
-        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements)
+        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements, partyUser = partyUser)
 
 
     elif current_user.type == 'S':
@@ -713,7 +715,7 @@ def filterTo(upperBound):
             filteredParties.append(party_data)
 
         elements = len(filteredParties)
-        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements, sponsorUser = sponsorUser)
 
 
 
@@ -738,7 +740,7 @@ def filterKind(kind):
             filteredSponsors.append(sponsor_data)
 
         elements = len(filteredSponsors)
-        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements)
+        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements, partyUser = partyUser)
 
 
     elif current_user.type == 'S':
@@ -757,7 +759,7 @@ def filterKind(kind):
             filteredParties.append(party_data)
 
         elements = len(filteredParties)
-        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements)
+        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements, sponsorUser = sponsorUser)
 
 
 

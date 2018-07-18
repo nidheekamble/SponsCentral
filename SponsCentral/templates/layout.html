@@ -8,6 +8,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <link rel="shortcut icon" href="static/logo.ico">
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='sidebar.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='background.css') }}">
@@ -30,7 +32,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+              <a class="nav-item nav-link" href="{{ url_for('work') }}">Home</a>
               <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
             </div>
             <!-- Navbar Right Side -->
@@ -63,8 +65,8 @@
         </div>
         {% if current_user.type == 'P' or current_user.type == 'S' %}
               <div class="col-md-4">
-                <div class="content-section">
-                  <h3>Let's start</h3> <hr>
+                <div class="content-section" align=center>
+                  <h2>Let's start</h2> <hr>
                   <p class='text-muted'>Whom do you want to connect with today?</p>
                     <div class="btn-group">
                         <ul class="list-group">

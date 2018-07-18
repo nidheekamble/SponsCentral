@@ -13,7 +13,7 @@
             /* this div element contains the map. Sets size of the div */
             #map
             {
-                min-height: 80vh;
+                height: 100%;
             }
             html, body
             {
@@ -62,85 +62,120 @@
             <hr>
 
 
-        <!--APURVA --->
-        <!-- This is the div that is to be positioned to the right of the map-->
-
-        <div class = "content-section col-md-3">
-            <legend class="border-bottom mb-4">Customize your search</legend>
-
-        <ol><h5><b>Filter by</b> (click on the respective filter to apply it) :</h5><hr>
-            <h7><b>Amount</b></h7>
+        <div class = "content-section col-md-3 card card-bg"  align=center>
+            <legend class="border-bottom mb-4 navbar navbar-dark"><h4> Filter By: </h4></legend>
+            <h7><b>Amount</b></h7><hr>
                 <div data-role="main" class="ui-content">
                     <form method="post" action="/action_page_post.php">
-                      <div data-role="rangeslider">
-                        <label for="price-min"><h5>From Amount:</h5></label>
-                        <input type="range" name="price-min" id="price-min" value="200" min="0" max="1000"><br>
-                        <label for="price-max"><h5>To Amount:</h5></label>
-                        <input type="range" name="price-max" id="price-max" value="800" min="0" max="1000">
+                      <div>
+                        
+
+                    {% if current_user.type == 'P' %}
+
+                    		<h6> <b>Companies offering patronage in the range:</b></h6> <br>
+
+                            <div class="form-group">
+			                    <a class="btn btn-outline-info" href="{{ url_for('filterFrom', lowerBound=partyUser.party_fromAmount) }}"><h6> Rs. {{partyUser.party_fromAmount}} onwards</h6></a>
+			                </div>
+
+			                <div class="form-group">
+			                    <a class="btn btn-outline-info"href ="{{ url_for('filterTo', upperBound=partyUser.party_toAmount) }}"><h6>Till Rs. {{partyUser.party_toAmount}} </h6></a>
+			                </div>
+
+                    {% elif current_user.type == 'S' %}
+
+                    		<h6> <b>Fests looking for patronage in the range:</b></h6> <br>
+
+                            <div class="form-group">
+			                    <a class="btn btn-outline-info" href="{{ url_for('filterFrom', lowerBound=sponsorUser.sponsor_fromAmount) }}"><h6> Rs.{{sponsorUser.sponsor_fromAmount}} onwards</h6></a>
+			                </div>
+
+			                <div class="form-group">
+			                    <a class="btn btn-outline-info"href ="{{ url_for('filterTo', upperBound=sponsorUser.sponsor_toAmount) }}"><h6>Till Rs. {{sponsorUser.sponsor_toAmount}}</h6></a>
+			                </div>
+
+                    {% endif %}
+
                       </div>
-                      </form>
+                    </form>
                 </div>
 
 
-          <!--YE CODE DAALNA HAI AMOUNT WALE FILTER MEIN -
-
-
-            {% if current_user.type == 'P' %}
-
-                    <h5><a href ="{{ url_for('filterFrom', lowerBound=partyUser.party_fromAmount) }}">From pAmount:</a></h5>
-                    <h5><a href ="{{ url_for('filterTo', upperBound=partyUser.party_toAmount) }}">To pAmount:</a></h5>
-
-            {% elif current_user.type == 'S' %}
-
-                    <h5><a href ="{{ url_for('filterFrom', lowerBound=sponsorUser.sponsor_fromAmount) }}">From sAmount:</a></h5>
-                    <h5><a href ="{{ url_for('filterTo', upperBound=sponsorUser.sponsor_toAmount) }}">To sAmount:</a></h5>
-
-            {% endif %}-->
-
             <hr>
 
-            <h7><b>Cash or Kind</b></h7><br>
+            <h7><b>Cash or Kind</b></h7><hr>
 
-                <h5><a href ="{{url_for('filterKind', kind='C')}}">Cash</a></h5>
-                <h5><a href ="{{url_for('filterKind', kind='K')}}">Kind</a></h5>
+                <div class="form-group">
+                    <a class="btn btn-outline-info"  href ="{{url_for('filterKind', kind='C')}}"><h6>Cash</h6></a>
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-outline-info"  href ="{{url_for('filterKind', kind='K')}}"><h6>Kind</h6></a>
+                </div>
 
             <hr>
 
             {% if current_user.type == 'S' %}
-            <h7><b>Fest Type</b></h7><br>
+            <h7><b>Fest Type</b></h7><hr>
 
-                <h5><a href ="{{url_for('filterType', type='T')}}">Technical</a></h5>
-                <h5><a href ="{{url_for('filterType', type='S')}}">Sports</a></h5>
-                <h5><a href ="{{url_for('filterType', type='C')}}">Cultural</a></h5>
-                <h5><a href ="{{url_for('filterType', type='O')}}">Other</a></h5>
+                <div class="form-group">
+                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='T')}}"><h6>Technical</h6></a>
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='S')}}"><h6>Sports</h6></a>
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='C')}}"><h6>Cultural</h6></a>
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='O')}}"><h6>Others</h6></a>
+                </div>
 
             {% elif current_user.type == 'P' %}
-            <h7><b>Company Type</b></h7><br>
+            <h7><b>Company Type</b></h7><hr>
 
-                <h5><a href ="{{url_for('filterType', type='F')}}">Finance</a></h5>
-                <h5><a href ="{{url_for('filterType', type='IT')}}">IT</a></h5>
-                <h5><a href ="{{url_for('filterType', type='B')}}">Banking</a></h5>
-                <h5><a href ="{{url_for('filterType', type='O')}}">Other</a></h5>
+                <div class="form-group">
+                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='F')}}"><h6>Finance</h6></a>
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='IT')}}"><h6>Information Technology</h6></a>
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='B')}}"><h6>Banking</h6></a>
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='O')}}"><h6>Other</h6></a>
+                </div>
 
             {% endif %}
 
             <hr>
 
-        </ol>
+
+        <br>
         </div>
-        <div class="col-md-6 container p-3">
+        <div class="col-md-8 container p-3 card">
             <div id="map" class="container mx-auto w-100"></div>
         </div>
-        <div class = "content-section col-md-3">
-            <legend class="border-bottom mb-4">User locations </legend>
+  
+
+        <div class = "content-section card">
+            <legend class="border-bottom mb-4"><h2> User locations </h2></legend>
             <h5><b>Click on the ones you want to view separately: </b></h5><hr><br>
         <ol>
             {% if nearby_list == [] %}
                 <h5> Looks like your criterion did not match any users. Try a different filter </h5>
             {% else %}
                 {% for place in nearby_list %}
-                  <li><a href="{{url_for('user2_account', user2_id=place[4])}}"><h5> {{ place[0] }} </h5></a>
-                    <b>Address: </b> {{ place[3] }} </li> <br>
+                  <h3><li><a href="{{url_for('user2_account', user2_id=place[4])}}"> {{ place[0] }} </h3></a>
+                    <b>Address: </b> {{ place[3] }} </li>
+                    <hr>
                 {% endfor %}
             {% endif %}
         </ol>
