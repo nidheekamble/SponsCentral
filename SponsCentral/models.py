@@ -78,6 +78,6 @@ class Conversation(db.Model):
     time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     conversing_id = db.Column(db.Integer, db.ForeignKey('conversing.id'))
     conversing= db.relationship("Conversing", uselist=False, back_populates ="conversation" )
+    sender_id = db.Column(db.Integer, unique = False , nullable= False )
     def __repr__(self):
         return f"Conversation('{self.text}','{self.time}','{self.conversing_id}')"
-

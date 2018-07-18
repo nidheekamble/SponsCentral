@@ -1,6 +1,22 @@
 {% extends "layout.html" %}
 {% block content %}
+<head>
+    <style >
+        .message-sender {
+          background: #b3ffff;
+          padding: 40px;
+          max-width: 600px;
+          margin-bottom: 10px;
+        }
 
+        .message-receiver {
+          background: #00cccc;
+          padding: 40px;
+          max-width: 600px;
+          margin-bottom: 10px;
+        }
+        </style>
+    </head>
     <div class="content-section">
 
         <form method="POST" action="">
@@ -8,10 +24,21 @@
             <fieldset class="form-group">
 
                 <div class="form-group">
-                    
+
                     {% for message in messages %}
-                    <p>{{message[0]}}</p>
+                        {% if current_user.id == message[2] %}
+                            <div class = "message-sender">
+                                <u><h3><p>{{message[2]}}</p></h3></u>
+                                <p>{{message[0]}}</p>
                                             <p>{{message[1]}}</p>
+                            </div>
+                        {% elif current_user.id == message[2] %}
+                            <div class = "message-receiver">
+                                <u><h3><p>{{message[2]}}</p></h3></u>
+                                <p>{{message[0]}}</p>
+                                                        <p>{{message[1]}}</p>
+                            </div>
+                        {% endif %}
                     {% endfor %}
 
                     {% if form.text.errors %}

@@ -297,45 +297,6 @@ def nearbySponsorRoute():
     return render_template('nearList.html', nearby_list = nearbySponsors, lat = lat, lng = lng, elements = elements)
 
 
-#app.route("/invite", methods= ['POST', 'GET'])
-#@login_required
-#def invite():
-    #form=InviteForm()
-    #if form.validate_on_submit:
-        #conversing = Conversing(user1 = current_user.id, user2=form.user2_id.data, status='Sent')
-        #db.session.add(conversing)
-        #d#b.session.commit()
-    #return redirect(url_for('inviteRecieved'))
-
-
-
-#@app.route("/invites", methods= ['POST', 'GET'])
-#@login_required
-#def connection():
-    #userList=[]
-    #f#orm = InviteForm()
-
-    #if(current_user.type == 'P'):
-        #for sponsorUser in SponsorUser.query.all():
-            #userList.append(sponsorUser)
-
-    #if(current_user.type == 'S'):
-        #for partyUser in PartyUser.query.all():
-            #userList.append(partyUser)
-
-    #if form.validate_on_submit:
-        #c#onversing = Conversing(user1 = current_user.id, user2 = form.user2_id.data, status='sent')
-        #print(conversing)
-        #print(request.form)
-
-        #db.session.add(conversing)
-    #    #db.session.commit()
-    #return render_template ('invitesPage.html', title = 'invites', userList=userList, form=form)
-
-
-
-
-
 @app.route("/user/<user2_id>", methods = ['GET', 'POST'])
 @login_required
 def user2_account(user2_id):
@@ -537,16 +498,16 @@ def chatwith():
                         partyUser= PartyUser.query.filter_by(user_id=nowuser.user2).first()
                         associated_user=[partyUser.user_id,partyUser.party_name]
                         associated_users_list.append(associated_user)
-                elif nowuser.user2== current_user.id:
-                    if nowuser.status=='In-touch':
-                        if current_user.type == 'P':
-                            sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user1).first()
-                            associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
-                            associated_users_list.append(associated_user)
-                        elif current_user.type == 'S':
-                            partyUser= PartyUser.query.filter_by(user_id=nowuser.user1).first()
-                            associated_user=[partyUser.user_id,partyUser.party_name]
-                            associated_users_list.append(associated_user)
+            elif nowuser.user2== current_user.id:
+                if nowuser.status=='In-touch':
+                    if current_user.type == 'P':
+                        sponsorUser= SponsorUser.query.filter_by(user_id=nowuser.user1).first()
+                        associated_user=[sponsorUser.user_id,sponsorUser.sponsor_name]
+                        associated_users_list.append(associated_user)
+                    elif current_user.type == 'S':
+                        partyUser= PartyUser.query.filter_by(user_id=nowuser.user1).first()
+                        associated_user=[partyUser.user_id,partyUser.party_name]
+                        associated_users_list.append(associated_user)
         return render_template ('chatlist.html', title = 'Chat with', associated_users_list=associated_users_list)
 
 
@@ -566,22 +527,22 @@ def chat(chatwith_id):
                 sponsorUser=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
                 messages=[[sponsorUser.sponsor_name]]
                 if form.validate_on_submit() :
-                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
+                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id  )
                     db.session.add(conversation)
                     db.session.commit()
                 for conversation in Conversation.query.filter_by(conversing_id = nowuser.id).all():#just for now
-                    message=[conversation.text,conversation.time,sponsorUser.sponsor_name]
+                    message=[conversation.text,conversation.time, sender_id]
                     messages.append(message)
 
             elif  nowuser.user2==current_user.id:
                 sponsorUser=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
                 messages=[[sponsorUser.sponsor_name]]
                 if form.validate_on_submit() :
-                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
+                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id  )
                     db.session.add(conversation)
                     db.session.commit()
                 for conversation in Conversation.query.filter_by(conversing_id = nowuser.id).all():#just for now
-                    message=[conversation.text,conversation.time,partyUser.party_name]#just for now
+                    message=[conversation.text,conversation.time, sender_id]#just for now
                     messages.append(message)
 
         elif current_user.type=='S':
@@ -589,23 +550,23 @@ def chat(chatwith_id):
                 partyUser=PartyUser.query.filter_by(user_id=chatwith_id).first()
                 messages=[[partyUser.party_name]]
                 if form.validate_on_submit() :
-                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
+                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id )
                     db.session.add(conversation)
                     db.session.commit()
                 for conversation in Conversation.query.filter_by(conversing_id = nowuser.id).all():
-                    message=[conversation.text,conversation.time,sponsorUser.sponsor_name]
+                    message=[conversation.text,conversation.time, sender_id]
                     messages.append(message)
 
             elif nowuser.user2==current_user.id :
                 partyUser=PartyUser.query.filter_by(user_id=chatwith_id).first()
                 messages=[[partyUser.party_name]]
                 if form.validate_on_submit() :
-                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id )
+                    conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id  )
                     db.session.add(conversation)
                     db.session.commit()
                 for conversation in Conversation.query.filter_by(conversing_id = nowuser.id).all():
                         #partyUser=PartyUser.query.filter_by(user_id=chatwith_id).first()#just for now
-                    message=[conversation.text,conversation.time,partyUser.party_name]#just for now
+                    message=[conversation.text,conversation.time, sender_id]#just for now
                     messages.append(message)
 
 
@@ -818,7 +779,7 @@ def work():
 @login_required
 def banking():
     return render_template('banking.html', title='Banking')
-    
+
 
 @app.route('/email', methods = ['GET', 'POST'])
 @login_required
