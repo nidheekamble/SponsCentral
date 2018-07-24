@@ -32,8 +32,19 @@
     <!--The div element for the map -->
         <div id="map" class="content-section"></div>
         <hr>
-        <!--APURVA : PLEASE POSITION THE OUTPUT OF LINE 36 IN THE CENTER -->
-        <h2><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp See how near they are from you </b><h2>
+        
+        <div class="container" text-align="center">
+
+            <h4 align="center"><b>[See how near they are from you] </b></h4>
+
+                {% if current_user.type == 'P' %}
+                    <a class="btn btn-outline-info" href="{{url_for('nearbySponsorRoute')}}"><h4 align="center">Back to searching</h4></a>
+                {% elif current_user.type == 'S' %}
+                    <a class="btn btn-outline-info" href="{{url_for('nearbyPartyRoute')}}"><h4 align="center">Back to searching</h4></a>
+                {% endif %}
+
+        </div>
+
         <script>
         // Initialize and add the map
         function initMap()
@@ -59,6 +70,7 @@
         }
 
         </script>
+
 
     <!--Loading API from the mentioned URL
     async attribute allows the browser to render the page while the API loads

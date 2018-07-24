@@ -22,6 +22,11 @@
                 padding: 0;
             }
         </style>
+        <div class="card-bg">
+            <h2 align="center" >Here you go.</h2>
+            <h6 align="center">Scroll down to see the list of profiles displayed on map, and click on the ones you wish to view separately. </h6>
+        </div>
+        <hr>
     </head>
     <body>
     <!--The div element for the map -->
@@ -62,7 +67,7 @@
             <hr>
 
 
-        <div class = "content-section col-md-3 card card-bg"  align=center>
+        <div class = "content-section col-md-3 card"  align=center>
             <legend class="border-bottom mb-4 navbar navbar-dark"><h4> Filter By: </h4></legend>
             <h7><b>Amount</b></h7><hr>
                 <div data-role="main" class="ui-content">
@@ -110,7 +115,7 @@
                 </div>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info"  href ="{{url_for('filterKind', kind='K')}}"><h6>Kind</h6></a>
+                    <a class="btn btn-outline-info"  href ="{{url_for('filterKind', kind='k')}}"><h6>Kind</h6></a>
                 </div>
 
             <hr>
@@ -166,8 +171,8 @@
   
 
         <div class = "content-section card">
-            <legend class="border-bottom mb-4"><h2> User locations </h2></legend>
-            <h5><b>Click on the ones you want to view separately: </b></h5><hr><br>
+            <legend class="border-bottom mb-4"><h2 class="card-bg"> User locations </h2></legend>
+            <h5>(Click on usernames to view the respective profiles)</h5><hr><br>
         <ol>
             {% if nearby_list == [] %}
                 <h5> Looks like your criterion did not match any users. Try a different filter </h5>

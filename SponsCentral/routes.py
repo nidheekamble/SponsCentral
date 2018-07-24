@@ -471,7 +471,8 @@ def individual_address(otherUser_id):
         lat2 = otherUser.party_latitude
         lng2 = otherUser.party_longitude
 
-    return render_template ('API.html', title = 'Compare Your Location', lat=lat, lng=lng, lat2=lat2, lng2=lng2)
+    return render_template ('API.html', title = 'Compare Your Location', lat=lat, lng=lng, lat2=lat2, lng2=lng2, current_user=current_user)
+
 
 
 @app.route("/chatwith", methods= ['POST', 'GET'])#Whom do you want to chat with?
