@@ -27,12 +27,15 @@
 
                     {% for message in messages %}
                         {% if current_user.id == message[2] %}
-                            <div class = "message-sender">
-                                <u><h3><p>{{message[2]}}</p></h3></u>
-                                <p>{{message[0]}}</p>
-                                            <p>{{message[1]}}</p>
-                            </div>
-                        {% elif current_user.id == message[2] %}
+                            {% if current_user.type== 'P' %}
+                                <div class = "message-sender">
+                                    <u><h3><p>{{user.party_name}}</p></h3></u>
+                                    <p>{{message[0]}}</p>
+                                                <p>{{message[1]}}</p>
+                                </div>
+                            {% else %}
+                            {% endif %}
+                        {% else %}
                             <div class = "message-receiver">
                                 <u><h3><p>{{message[2]}}</p></h3></u>
                                 <p>{{message[0]}}</p>

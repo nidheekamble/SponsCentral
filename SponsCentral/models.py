@@ -80,4 +80,4 @@ class Conversation(db.Model):
     conversing= db.relationship("Conversing", uselist=False, back_populates ="conversation" )
     sender_id = db.Column(db.Integer, unique = False , nullable= False )
     def __repr__(self):
-        return f"Conversation('{self.text}','{self.time}','{self.conversing_id}')"
+        return f"Conversation('{self.text}','{self.time}','{self.conversing_id}', '{self.sender_id}')"
