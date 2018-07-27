@@ -510,6 +510,8 @@ def chatwith():
                         partyUser= PartyUser.query.filter_by(user_id=nowuser.user1).first()
                         associated_user=[partyUser.user_id,partyUser.party_name]
                         associated_users_list.append(associated_user)
+        if associated_users_list==[]:
+            return render_template ('chatError.html', title = 'No Users')
         return render_template ('chatlist.html', title = 'Chat with', associated_users_list=associated_users_list)
 
 
@@ -571,7 +573,6 @@ def chat(chatwith_id):
                     message=[conversation.text,conversation.time, conversation.sender_id]
                     messages.append(message)
 
-
     return render_template('chatbox.html', title= 'ChatBox', form=form, messages=messages, current_user=current_user, user=user)
 
 
@@ -608,107 +609,6 @@ def filterType(type):
 
         nearbyParties = nearbyPartyFunc()
         filteredList = PartyUser.query.filter_by(party_type=type).all()
-        filteredParties = []
-
-        for party in filteredList:
-            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id]
-            filteredParties.append(party_data)
-
-        elements = len(filteredParties)
-        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements, sponsorUser = sponsorUser)
-
-
-
-
-@app.route("/filterFrom/<lowerBound>", methods = ['GET', 'POST'], endpoint='filterFrom')
-@login_required
-def filterFrom(lowerBound):
-
-    if current_user.type == 'P':
-
-        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
-
-        lat = partyUser.party_latitude
-        lng = partyUser.party_longitude
-
-        nearbySponsors = nearbySponsorFunc()
-        filteredList = []
-        for sponsor in nearbySponsors:
-            if sponsor.sponsor_fromAmount>=lowerBound:
-                filteredList.append(sponsor)
-        filteredSponsors = []
-
-        for sponsor in filteredList:
-            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id]
-            filteredSponsors.append(sponsor_data)
-
-        elements = len(filteredSponsors)
-
-        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements, partyUser = partyUser)
-
-
-    elif current_user.type == 'S':
-
-        sponsorUser = SponsorUser.query.filter_by(user_id=current_user.id).first()
-
-        lat = sponsorUser.sponsor_latitude
-        lng = sponsorUser.sponsor_longitude
-
-        nearbyParties = nearbyPartyFunc()
-        filteredList = []
-        for party in nearbyParties:
-            if party.party_fromAmount>=lowerBound:
-                filteredList.append(party)
-        filteredParties = []
-
-        for party in filteredList:
-            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id]
-            filteredParties.append(party_data)
-
-        elements = len(filteredParties)
-        return render_template('nearList.html', nearby_list = filteredParties, lat = lat, lng = lng, elements = elements, sponsorUser = sponsorUser)
-
-
-
-
-@app.route("/filterTo/<upperBound>", methods = ['GET', 'POST'])
-@login_required
-def filterTo(upperBound):
-
-    if current_user.type == 'P':
-
-        partyUser = PartyUser.query.filter_by(user_id= current_user.id).first()
-
-        lat = partyUser.party_latitude
-        lng = partyUser.party_longitude
-
-        nearbySponsors = nearbySponsorFunc()
-        filteredList = []
-        for sponsor in nearbySponsors:
-            if sponsor.sponsor_toAmount<=upperBound:
-                filteredList.append(sponsor)
-        filteredSponsors = []
-
-        for sponsor in filteredList:
-            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id]
-            filteredSponsors.append(sponsor_data)
-
-        elements = len(filteredSponsors)
-        return render_template('nearList.html', nearby_list = filteredSponsors, lat = lat, lng = lng, elements = elements, partyUser = partyUser)
-
-
-    elif current_user.type == 'S':
-
-        sponsorUser = SponsorUser.query.filter_by(user_id=current_user.id).first()
-
-        lat = sponsorUser.sponsor_latitude
-        lng = sponsorUser.sponsor_longitude
-
-        nearbyParties = nearbyPartyFunc()
-        filteredList = []
-        for party in nearbyParties:
-            if party.party_toAmount<=upperBound:
-                filteredList.append(party)
         filteredParties = []
 
         for party in filteredList:

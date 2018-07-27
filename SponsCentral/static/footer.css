@@ -2,8 +2,6 @@
 	background-color: #444444;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
 	box-sizing: border-box;
-	max-height: 50px;
-	overflow-y: hidden;
 	width: 100%;
 	text-align: center;
 	font: normal 18px sans-serif;
@@ -41,6 +39,10 @@
 
 .card-bg{
 	background-color: #a7cdf2;
+}
+
+.btn-bg{
+	background-color: #e0f5ff;
 }
 
 /* If you don't want the footer to be responsive, remove these media queries */

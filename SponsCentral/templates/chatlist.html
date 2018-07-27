@@ -1,11 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div id="list" class="row">
+    <div id="list" class="content-section card">
         {% if assosciated_users_list != [] %}
-        <h4> Chat with your associates: </h4>
+        <h3><b> Chat with your associates: </b></h3>
+        <hr>
         <ol>
             {% for user in associated_users_list %}
-            <li><a href="{{url_for('chat', chatwith_id=user[0])}}"><h5> {{ user[1] }} </h5></a>
+            <h4 class = "list-group-item list-group-item-light"><a href="{{url_for('chat', chatwith_id=user[0])}}"> <b> {{ user[1] }} </b> </a> </h4>
 
                 {% endfor %}
         </ol>

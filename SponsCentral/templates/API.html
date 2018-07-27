@@ -17,7 +17,7 @@
             /* this div element contains the map. Sets size of the div */
             #map
             {
-                height: 80%;
+                height: 70%;
                 width: 100%;
             }
             html, body
@@ -35,13 +35,13 @@
         
         <div class="container" text-align="center">
 
-            <h4 align="center"><b>[See how near they are from you] </b></h4>
-
+            <h4 align="center">See how near they are from you. <hr> 
                 {% if current_user.type == 'P' %}
                     <a class="btn btn-outline-info" href="{{url_for('nearbySponsorRoute')}}"><h4 align="center">Back to searching</h4></a>
                 {% elif current_user.type == 'S' %}
-                    <a class="btn btn-outline-info" href="{{url_for('nearbyPartyRoute')}}"><h4 align="center">Back to searching</h4></a>
+                    <a class="btn btn-outline-info " href="{{url_for('nearbyPartyRoute')}}"><h4 align="center">Back to searching</h4></a>
                 {% endif %}
+            </h4>
 
         </div>
 

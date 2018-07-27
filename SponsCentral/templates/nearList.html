@@ -22,9 +22,9 @@
                 padding: 0;
             }
         </style>
-        <div class="card-bg">
+        <div class="list-group-item-light">
             <h2 align="center" >Here you go.</h2>
-            <h6 align="center">Scroll down to see the list of profiles displayed on map, and click on the ones you wish to view separately. </h6>
+            <h5 align="center">Scroll down to see the list of profiles displayed on map, and click on the ones you wish to view separately. </h5>
         </div>
         <hr>
     </head>
@@ -69,93 +69,55 @@
 
         <div class = "content-section col-md-3 card"  align=center>
             <legend class="border-bottom mb-4 navbar navbar-dark"><h4> Filter By: </h4></legend>
-            <h7><b>Amount</b></h7><hr>
-                <div data-role="main" class="ui-content">
-                    <form method="post" action="/action_page_post.php">
-                      <div>
 
-
-                    {% if current_user.type == 'P' %}
-
-                    		<h6> <b>Companies offering patronage in the range:</b></h6> <br>
-
-                            <div class="form-group">
-			                    <a class="btn btn-outline-info" href="{{ url_for('filterFrom', lowerBound=partyUser.party_fromAmount) }}"><h6> Rs. {{partyUser.party_fromAmount}} onwards</h6></a>
-			                </div>
-
-			                <div class="form-group">
-			                    <a class="btn btn-outline-info"href ="{{ url_for('filterTo', upperBound=partyUser.party_toAmount) }}"><h6>Till Rs. {{partyUser.party_toAmount}} </h6></a>
-			                </div>
-
-                    {% elif current_user.type == 'S' %}
-
-                    		<h6> <b>Fests looking for patronage in the range:</b></h6> <br>
-
-                            <div class="form-group">
-			                    <a class="btn btn-outline-info" href="{{ url_for('filterFrom', lowerBound=sponsorUser.sponsor_fromAmount) }}"><h6> Rs.{{sponsorUser.sponsor_fromAmount}} onwards</h6></a>
-			                </div>
-
-			                <div class="form-group">
-			                    <a class="btn btn-outline-info"href ="{{ url_for('filterTo', upperBound=sponsorUser.sponsor_toAmount) }}"><h6>Till Rs. {{sponsorUser.sponsor_toAmount}}</h6></a>
-			                </div>
-
-                    {% endif %}
-
-                      </div>
-                    </form>
-                </div>
-
-
-            <hr>
-
-            <h7><b>Cash or Kind</b></h7><hr>
+            <h5><b>Cash or Kind</b></h5>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info"  href ="{{url_for('filterKind', kind='C')}}"><h6>Cash</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light"  href ="{{url_for('filterKind', kind='C')}}"><h6>Cash</h6></a>
                 </div>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info"  href ="{{url_for('filterKind', kind='k')}}"><h6>Kind</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light"  href ="{{url_for('filterKind', kind='k')}}"><h6>Kind</h6></a>
                 </div>
 
             <hr>
 
             {% if current_user.type == 'S' %}
-            <h7><b>Fest Type</b></h7><hr>
+            <h5><b>Fest Type</b></h5>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='T')}}"><h6>Technical</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light" href ="{{url_for('filterType', type='T')}}"><h6>Technical</h6></a>
                 </div>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='S')}}"><h6>Sports</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light" href ="{{url_for('filterType', type='S')}}"><h6>Sports</h6></a>
                 </div>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='C')}}"><h6>Cultural</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light" href ="{{url_for('filterType', type='C')}}"><h6>Cultural</h6></a>
                 </div>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='O')}}"><h6>Others</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light" href ="{{url_for('filterType', type='O')}}"><h6>Others</h6></a>
                 </div>
 
             {% elif current_user.type == 'P' %}
-            <h7><b>Company Type</b></h7><hr>
+            <h5><b>Company Type</b></h5>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='F')}}"><h6>Finance</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light" href ="{{url_for('filterType', type='F')}}"><h6>Finance</h6></a>
                 </div>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='IT')}}"><h6>Information Technology</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light" href ="{{url_for('filterType', type='IT')}}"><h6>Information Technology</h6></a>
                 </div>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='B')}}"><h6>Banking</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light" href ="{{url_for('filterType', type='B')}}"><h6>Banking</h6></a>
                 </div>
 
                 <div class="form-group">
-                    <a class="btn btn-outline-info" href ="{{url_for('filterType', type='O')}}"><h6>Other</h6></a>
+                    <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light" href ="{{url_for('filterType', type='O')}}"><h6>Other</h6></a>
                 </div>
 
             {% endif %}
@@ -169,18 +131,21 @@
             <div id="map" class="container mx-auto w-100"></div>
         </div>
 
+        <br>
 
-        <div class = "content-section card">
-            <legend class="border-bottom mb-4"><h2 class="card-bg"> User locations </h2></legend>
+        <div class = "content-section">
+            <h2 class="card-bg"> User locations </h2>
             <h5>(Click on usernames to view the respective profiles)</h5><hr><br>
         <ol>
             {% if nearby_list == [] %}
                 <h5> Looks like your criterion did not match any users. Try a different filter </h5>
             {% else %}
                 {% for place in nearby_list %}
-                  <h3><li><a href="{{url_for('user2_account', user2_id=place[4])}}"> {{ place[0] }} </h3></a>
-                    <b>Address: </b> {{ place[3] }} </li>
-                    <hr>
+                    <div class = "btn btn-outline-info list-group-item btn-bg list-group-item-light">
+                        <h3><li><a href="{{url_for('user2_account', user2_id=place[4])}}"><b> {{ place[0] }} </b></h3></a>
+                        <b>Address: </b> {{ place[3] }} </li> 
+                    </div>
+                    <br>
                 {% endfor %}
             {% endif %}
         </ol>

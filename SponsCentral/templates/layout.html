@@ -64,22 +64,22 @@
           {% block content %}{% endblock %}
         </div>
         {% if current_user.type == 'P' or current_user.type == 'S' %}
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="content-section" align=center>
                   <h2>Let's start</h2> <hr>
                   <p class='text-muted'>Whom do you want to connect with today?</p>
-                    <div class="btn-group">
+                    <div class="form-group">
                         <ul class="list-group">
                           {% if current_user.type == 'P' %}
-                              <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbySponsorRoute') }}"><h6>Maps</h6></a></button></li>
+                              <a class="btn btn-outline-info list-group-item btn-bg list-group-item-light" href="{{ url_for('nearbySponsorRoute') }}"><h6><b>Maps</b></h6></a><hr>
                           {% elif current_user.type == 'S' %}
-                              <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('nearbyPartyRoute') }}"><h6>Maps</h6></a></button></li>
+                              <li class="btn btn-outline-info list-group-item btn-bg list-group-item-light"><a href="{{ url_for('nearbyPartyRoute') }}"><h6><b>Maps</b></h6></a></li><hr>
                           {% endif %}
-                          <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('display_shortlist') }}"><h6>Shortlist</h6></a></button></li>
-                          <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('inviteRecieved') }}"><h6>Requests</h6></a></button></li>
-                          <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('chatwith') }}"><h6>Chat</h6></a></button></li>
+                          <li class="btn btn-outline-info list-group-item btn-bg list-group-item-light"><a href="{{ url_for('display_shortlist') }}"><h6><b>Shortlist</b></h6></a></li><hr>
+                          <li class="btn btn-outline-info list-group-item btn-bg list-group-item-light"><a href="{{ url_for('inviteRecieved') }}"><h6><b>Requests</b></h6></a></li><hr>
+                          <li class="btn btn-outline-info list-group-item btn-bg list-group-item-light"><a href="{{ url_for('chatwith') }}"><h6><b>Chat</b></h6></a></li><hr>
 
-                          <li class="list-group-item list-group-item-light"><button class="button"><a href="{{ url_for('banking') }}"><h6>Banking</h6></a></button></li>
+                          <li class="btn btn-outline-info list-group-item btn-bg list-group-item-light"><a href="{{ url_for('banking') }}"><h6><b>Banking</b></h6></a></li><hr>
                         </ul>
               </div>
           </div>
