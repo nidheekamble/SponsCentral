@@ -350,8 +350,8 @@ def user2_account(user2_id):
 def inviteRecieved():
 
     userList=[]
+    conversing= Conversing.query.filter(and_(Conversing.status=='Sent',Conversing.user2==current_user.id)).all()
     form = RequestForm()
-    conversing = Conversing.query.filter_by(user2 = current_user.id).all()
     print(conversing)
     print(10001)
 
@@ -361,6 +361,23 @@ def inviteRecieved():
             #user_name=user_invitee.party_name
             userList.append(user_invitee)
             print(user_invitee.party_name)
+
+            if form.validate_on_submit():
+                if form.invite_status.data=='1':
+                    user.status='In-touch'
+                    db.session.commit()
+                elif  form.invite_status.data=='0':
+                    user.status='Not Accepted'
+                    db.session.commit()
+        return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList)
+
+    if current_user.type == 'P':
+        for user in conversing:
+            user_invitee=SponsorUser.query.filter_by(user_id=user.user1).first()
+            #user_name=user_invitee.sponsor_name
+            userList.append(user_invitee)
+            print(user_invitee.sponsor_name)
+
             if form.validate_on_submit():
                 if form.invite_status.data=='1':
                     user.status='In-touch'
@@ -369,24 +386,7 @@ def inviteRecieved():
                     user.status='Not Accepted'
                     db.session.commit()
 
-        return render_template ('requestsPageSponsor.html', title = 'requests', form=form, userList=userList, current_user = current_user)
-
-    if current_user.type == 'P':
-        for user in conversing:
-            user_invitee=SponsorUser.query.filter_by(user_id=user.user1).first()
-            #user_name=user_invitee.sponsor_name
-            userList.append(user_invitee)
-            print(user_invitee.sponsor_name)
-        if form.validate_on_submit():
-            if form.invite_status==1:
-                conversing.status='In-touch'
-                db.session.commit()
-            elif  form.invite_status==0:
-                conversing.status='Not Accepted'
-                db.session.commit()
-
-        return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList, current_user=current_user)
-
+        return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList)
 
 
 
@@ -529,7 +529,7 @@ def chat(chatwith_id):
         if current_user.type=='P':
             if nowuser.user1== current_user.id:
 
-                user=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
+                user=SponsorUser.query.filter_by(user_id=chatwith_id).first()
                 messages=[[user.sponsor_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id  )
@@ -540,7 +540,7 @@ def chat(chatwith_id):
                     messages.append(message)
 
             elif  nowuser.user2==current_user.id:
-                user=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
+                user=SponsorUser.query.filter_by(user_id=chatwith_id).first()
                 messages=[[user.sponsor_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id  )

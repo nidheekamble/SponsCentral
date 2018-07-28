@@ -18,7 +18,13 @@
                         <img class="rounded-circle account-img" src="{{ party_logo }}">
                             <div class="media-body">
                                 <h2 class="account-heading"> {{ partyUser.party_name }}</h2>
-                                <p class="text-secondary"><b> Type: </b> {{ partyUser.party_type }}</p>
+                                <p class="text-secondary"><b> Type: </b>{% if partyUser.party_type == 'T'  %}</p>
+                                                                                Technical
+                                                                        {% elif partyUser.party_type == 'S' %}
+                                                                                Sports
+                                                                        {% else %}
+                                                                                Cultural
+                                                                        {% endif %}
                                 <p class="text-secondary"><b> Address: </b> {{ partyUser.party_address}}. <a href="{{url_for('individual_address', otherUser_id = partyUser.user_id)}}">View it on map </a></p>
                                 <p class="text-secondary"><b> About {{partyUser.party_name}}: </b> {{ partyUser.party_about }}</p>
                                 <p class="text-secondary"><b> Accepting: </b>{% if partyUser.party_kind == 'C' %}

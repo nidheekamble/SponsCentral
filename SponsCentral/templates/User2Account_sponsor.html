@@ -18,12 +18,18 @@
                         <img class="rounded-circle account-img" src="{{ party_logo }}">
                             <div class="media-body">
                                 <h2 class="account-heading"> {{ sponsorUser.sponsor_name }}</h2>
-                                <p class="text-secondary"><b>Type:</b> {{ sponsorUser.sponsor_type }}</p>
+                                <p class="text-secondary"><b>Type:</b> {% if sponsorUser.sponsor_type == 'IT'  %}</p>
+                                                                                IT
+                                                                        {% elif sponsorUser.sponsor_type == 'F' %}
+                                                                                Finance
+                                                                        {% else %}
+                                                                                Others
+                                                                        {% endif %}</p>
                                 <p class="text-secondary"><b>Address: </b> {{ sponsorUser.sponsor_address}}. <a href="{{url_for('individual_address', otherUser_id = sponsorUser.user_id)}}">View it on map </a></p>
                                 <p class="text-secondary"><b> About {{sponsorUser.sponsor_name}}: </b>{{ sponsorUser.sponsor_about }}</p>
                                 <p class="text-secondary"><b> Offering: </b>{% if sponsorUser.sponsor_kind == 'C' %}
                                                                                     Cash, in the <b> range </b> {{ sponsorUser.sponsor_fromAmount}} to {{ sponsorUser.sponsor_toAmount}} Rs</p>
-                                                                            {% else %} 
+                                                                            {% else %}
                                                                                     Kind
                                                                             {% endif %}
                                 <p class="text-secondary"><b> Contact {{ sponsorUser.sponsor_name }} at: </b><br>
