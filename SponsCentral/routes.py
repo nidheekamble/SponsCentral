@@ -307,38 +307,42 @@ def user2_account(user2_id):
 
             form=InviteForm()
             sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
+            user = User.query.filter_by(id  = sponsorUser.user_id).first()
             flag=1
             if form.validate_on_submit():
                 conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
                 db.session.add(conversing)
                 db.session.commit()
 
-            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,form=form,flag=flag)
+            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser,user = user,form=form,flag=flag)
 
         elif current_user.type == 'S':
 
             form=InviteForm()
             partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
+            user = User.query.filter_by(id  = partyUser.user_id).first()
             flag=1
             if form.validate_on_submit():
                 conversing=Conversing(user1=current_user.id,user2=user2_id,status='Sent')
                 db.session.add(conversing)
                 db.session.commit()
 
-            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,form=form,flag=flag)
+            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, user = user,form=form,flag=flag)
 
     else:
         if current_user.type == 'P':
             flag=0
             sponsorUser=SponsorUser.query.filter_by(user_id=user2_id).first()
-            db.session.commit()
-            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, current_user=current_user,flag=flag)
+            user = User.query.filter_by(id  = sponsorUser.user_id).first()
+
+            return render_template('User2Account_sponsor.html', title='Account', sponsorUser=sponsorUser, user = user,flag=flag)
 
         elif current_user.type == 'S':
             flag=0
             partyUser = PartyUser.query.filter_by(user_id=user2_id).first()
-            db.session.commit()
-            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, current_user=current_user,flag=flag)
+            user = User.query.filter_by(id  = partyUser.user_id).first()
+
+            return render_template('User2Account_party.html', title='Account', partyUser=partyUser, user = user,flag=flag)
 
 
 @app.route("/requests", methods= ['POST', 'GET'])
@@ -382,7 +386,6 @@ def inviteRecieved():
                 db.session.commit()
 
         return render_template ('requestsPageParty.html', title = 'requests', form=form, userList=userList, current_user=current_user)
-
 
 
 
