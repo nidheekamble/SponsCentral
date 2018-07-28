@@ -248,9 +248,8 @@ def nearbyPartyFunc():
     nearbyParties = []
 
     for party in list_parties:
-        if sqrt(((party.party_latitude - lat) * 2) + ((party.party_longitude - lng) * 2)) < extent:
-            party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id, party.party_fromAmount, party.party_toAmount]
-            nearbyParties.append(party_data)
+        party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id, party.party_fromAmount, party.party_toAmount]
+        nearbyParties.append(party_data)
 
     elements = len(nearbyParties)
     return nearbyParties, lat, lng, elements
@@ -279,9 +278,8 @@ def nearbySponsorFunc():
     nearbySponsors = []
 
     for sponsor in list_sponsors:
-        if sqrt(((sponsor.sponsor_latitude - lat) * 2) + ((sponsor.sponsor_longitude - lng) * 2)) < extent:
-            sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id, sponsor.sponsor_fromAmount, sponsor.sponsor_toAmount]
-            nearbySponsors.append(sponsor_data)
+        sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id, sponsor.sponsor_fromAmount, sponsor.sponsor_toAmount]
+        nearbySponsors.append(sponsor_data)
 
     elements = len(nearbySponsors)
     return nearbySponsors, lat, lng, elements
