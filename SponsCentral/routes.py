@@ -248,7 +248,7 @@ def nearbyPartyFunc():
     nearbyParties = []
 
     for party in list_parties:
-        if sqrt(((party.party_latitude - lat) ** 2) + ((party.party_longitude - lng) ** 2)) < extent:
+        if sqrt(((party.party_latitude - lat) * 2) + ((party.party_longitude - lng) * 2)) < extent:
             party_data = [party.party_name, party.party_latitude, party.party_longitude, party.party_address, party.user_id, party.party_fromAmount, party.party_toAmount]
             nearbyParties.append(party_data)
 
@@ -279,7 +279,7 @@ def nearbySponsorFunc():
     nearbySponsors = []
 
     for sponsor in list_sponsors:
-        if sqrt(((sponsor.sponsor_latitude - lat) ** 2) + ((sponsor.sponsor_longitude - lng) ** 2)) < extent:
+        if sqrt(((sponsor.sponsor_latitude - lat) * 2) + ((sponsor.sponsor_longitude - lng) * 2)) < extent:
             sponsor_data = [sponsor.sponsor_name, sponsor.sponsor_latitude, sponsor.sponsor_longitude, sponsor.sponsor_address, sponsor.user_id, sponsor.sponsor_fromAmount, sponsor.sponsor_toAmount]
             nearbySponsors.append(sponsor_data)
 
@@ -529,7 +529,7 @@ def chat(chatwith_id):
             if nowuser.user1== current_user.id:
 
                 user=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
-                messages=[[sponsorUser.sponsor_name]]
+                messages=[[user.sponsor_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id  )
                     db.session.add(conversation)
@@ -540,7 +540,7 @@ def chat(chatwith_id):
 
             elif  nowuser.user2==current_user.id:
                 user=SponsorUser.query.filter_by(user_id=nowuser.user2).first()
-                messages=[[sponsorUser.sponsor_name]]
+                messages=[[user.sponsor_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id  )
                     db.session.add(conversation)
@@ -552,7 +552,7 @@ def chat(chatwith_id):
         elif current_user.type=='S':
             if nowuser.user1== current_user.id :
                 user=PartyUser.query.filter_by(user_id=chatwith_id).first()
-                messages=[[partyUser.party_name]]
+                messages=[[user.party_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id )
                     db.session.add(conversation)
@@ -563,7 +563,7 @@ def chat(chatwith_id):
 
             elif nowuser.user2==current_user.id :
                 user=PartyUser.query.filter_by(user_id=chatwith_id).first()
-                messages=[[partyUser.party_name]]
+                messages=[[user.party_name]]
                 if form.validate_on_submit() :
                     conversation= Conversation(text = form.text.data, conversing_id= nowuser.id, sender_id= current_user.id  )
                     db.session.add(conversation)

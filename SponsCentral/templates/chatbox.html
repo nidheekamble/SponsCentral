@@ -28,19 +28,33 @@
                     {% for message in messages %}
                         {% if current_user.id == message[2] %}
                             {% if current_user.type== 'P' %}
-                                <div class = "message-sender">
-                                    <u><h3><p>{{user.party_name}}</p></h3></u>
-                                    <p>{{message[0]}}</p>
-                                                <p>{{message[1]}}</p>
+                                <div class = "message-sender" align="right">
+                                    <u><h3><p><b>{{user.party_name}}</b></p></h3></u>
+                                    <p><h5>{{message[0]}}</h5></p>
+                                                <h7>{{message[1]}}</h7>
                                 </div>
                             {% else %}
+                                    <div class = "message-sender" align="right">
+                                        <u><h3><p><b>{{user.sponsor_name}}</b></p></h3></u>
+                                        <p><h5>{{message[0]}}</h5></p>
+                                                    <h7>{{message[1]}}</h7>
+                                    </div>
                             {% endif %}
                         {% else %}
-                            <div class = "message-receiver">
-                                <u><h3><p>{{message[2]}}</p></h3></u>
-                                <p>{{message[0]}}</p>
-                                                        <p>{{message[1]}}</p>
+                            {% if current_user.type== 'S' %}
+                            <div class = "message-receiver" align="left">
+                                <u><h3><p><b>{{user.party_name}}</b></p></h3></u>
+                                <p><h5>{{message[0]}}</h5></p>
+                                            <h7>{{message[1]}}</h7>
                             </div>
+                            {% else %}
+                                <div class = "message-receiver" align="left">
+                                    <u><h3><p><b>{{user.sponsor_name}}</b></p></h3></u>
+                                    <p><h5>{{message[0]}}</h5></p>
+                                                <h7>{{message[1]}}</h7>
+
+                                </div>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
 

@@ -5,9 +5,9 @@
 <div class = "content-section card"><br>
     <h4> You have no requests. </h4><br>
     {% if current_user.type == 'P' %}
-        <a class="btn btn-outline-info" href="{{url_for('nearbySponsorRoute')}}"><h6>Invite someone instead</h6></a>
+        <a class="btn btn-outline-info" href="{{url_for('nearbySponsorRoute')}}"><b><h6>Invite someone instead</a></h6></b>
     {% elif current_user.type == 'S' %}
-        <a class="btn btn-outline-info" href="{{url_for('nearbyPartyRoute')}}"><h6>Invite someone instead</h6></a>
+        <a class="btn btn-outline-info" href="{{url_for('nearbyPartyRoute')}}"><b><h6>Invite someone instead</a></h6></b>
     {% endif %}
 </div>
 
