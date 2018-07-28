@@ -19,7 +19,7 @@ INTRODUCTION
  * To see the working model of the project, please visit the page:
    http://nidheekamble.pythonanywhere.com/
 
- * The aforementioned URL will host the project till the month of October 2018.
+ * The aforementioned URL will host the project till 28th October 2018.
 
 
 MODULES
@@ -38,10 +38,6 @@ The following APIs have been integrated in the project:
 
  * Google Maps API
 
-These are the APIs which have been tried to be used, but are only partially implemented currently:
-
- * Facebook login API
- * Google Sign-In API
 
 
  MAINTAINERS
