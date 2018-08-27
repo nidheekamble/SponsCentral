@@ -19,7 +19,7 @@ INTRODUCTION
  * To see the working model of the project, please visit the page:
    http://nidheekamble.pythonanywhere.com/
 
- * The aforementioned URL will host the project till 28th October 2018.
+ * The aforementioned URL will host the project till 27th November 2018.
 
 
 MODULES
