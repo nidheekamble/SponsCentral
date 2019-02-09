@@ -16,10 +16,9 @@ INTRODUCTION
  of looking for and seeking monetary patronage is simplified via queried searches, lists, conversational exchanges, and means for
  banking thus facilitated.
 
- * To see the working model of the project, please visit the page:
+ To see the working model of the project, please visit the page:
    http://nidheekamble.pythonanywhere.com/
 
- * The aforementioned URL will host the project till 11th December, 2018.
 
 
 MODULES
