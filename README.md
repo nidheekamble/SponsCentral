@@ -10,6 +10,7 @@ CONTENTS OF THIS FILE
 INTRODUCTION
 ------------
 
+![Image here](https://github.com/nidheekamble/SponsCentral/blob/master/SponsCentral/static/background_with_logo.jpg)
 
  FlaskApp: Spons.Central is a web application for centralizing sponsorship experience for sponsors and sponsees.
  Aimed at companies willing to fulfil their Corporate Social Responsibilities and college festivals searching for sponsors, the process
